@@ -1,0 +1,599 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		42943D892B6F179E000C7015 /* Zot321App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42943D882B6F179E000C7015 /* Zot321App.swift */; };
+		42943D8B2B6F179E000C7015 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42943D8A2B6F179E000C7015 /* ContentView.swift */; };
+		42943D8D2B6F179E000C7015 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42943D8C2B6F179E000C7015 /* Item.swift */; };
+		42943D8F2B6F17A9000C7015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42943D8E2B6F17A9000C7015 /* Assets.xcassets */; };
+		42943D922B6F17A9000C7015 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42943D912B6F17A9000C7015 /* Preview Assets.xcassets */; };
+		42943D9E2B6F17A9000C7015 /* Zot321Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42943D9D2B6F17A9000C7015 /* Zot321Tests.swift */; };
+		42943DA82B6F17A9000C7015 /* Zot321UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42943DA72B6F17A9000C7015 /* Zot321UITests.swift */; };
+		42943DAA2B6F17A9000C7015 /* Zot321UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42943DA92B6F17A9000C7015 /* Zot321UITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		42943D9A2B6F17A9000C7015 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42943D7D2B6F179E000C7015 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 42943D842B6F179E000C7015;
+			remoteInfo = Zot321;
+		};
+		42943DA42B6F17A9000C7015 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42943D7D2B6F179E000C7015 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 42943D842B6F179E000C7015;
+			remoteInfo = Zot321;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		42943D852B6F179E000C7015 /* Zot321.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zot321.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		42943D882B6F179E000C7015 /* Zot321App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zot321App.swift; sourceTree = "<group>"; };
+		42943D8A2B6F179E000C7015 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		42943D8C2B6F179E000C7015 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		42943D8E2B6F17A9000C7015 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		42943D912B6F17A9000C7015 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		42943D932B6F17A9000C7015 /* Zot321.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Zot321.entitlements; sourceTree = "<group>"; };
+		42943D942B6F17A9000C7015 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42943D992B6F17A9000C7015 /* Zot321Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Zot321Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		42943D9D2B6F17A9000C7015 /* Zot321Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zot321Tests.swift; sourceTree = "<group>"; };
+		42943DA32B6F17A9000C7015 /* Zot321UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Zot321UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		42943DA72B6F17A9000C7015 /* Zot321UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zot321UITests.swift; sourceTree = "<group>"; };
+		42943DA92B6F17A9000C7015 /* Zot321UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zot321UITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		42943D822B6F179E000C7015 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42943D962B6F17A9000C7015 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42943DA02B6F17A9000C7015 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		42943D7C2B6F179E000C7015 = {
+			isa = PBXGroup;
+			children = (
+				42943D872B6F179E000C7015 /* Zot321 */,
+				42943D9C2B6F17A9000C7015 /* Zot321Tests */,
+				42943DA62B6F17A9000C7015 /* Zot321UITests */,
+				42943D862B6F179E000C7015 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		42943D862B6F179E000C7015 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				42943D852B6F179E000C7015 /* Zot321.app */,
+				42943D992B6F17A9000C7015 /* Zot321Tests.xctest */,
+				42943DA32B6F17A9000C7015 /* Zot321UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		42943D872B6F179E000C7015 /* Zot321 */ = {
+			isa = PBXGroup;
+			children = (
+				42943D882B6F179E000C7015 /* Zot321App.swift */,
+				42943D8A2B6F179E000C7015 /* ContentView.swift */,
+				42943D8C2B6F179E000C7015 /* Item.swift */,
+				42943D8E2B6F17A9000C7015 /* Assets.xcassets */,
+				42943D932B6F17A9000C7015 /* Zot321.entitlements */,
+				42943D942B6F17A9000C7015 /* Info.plist */,
+				42943D902B6F17A9000C7015 /* Preview Content */,
+			);
+			path = Zot321;
+			sourceTree = "<group>";
+		};
+		42943D902B6F17A9000C7015 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				42943D912B6F17A9000C7015 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		42943D9C2B6F17A9000C7015 /* Zot321Tests */ = {
+			isa = PBXGroup;
+			children = (
+				42943D9D2B6F17A9000C7015 /* Zot321Tests.swift */,
+			);
+			path = Zot321Tests;
+			sourceTree = "<group>";
+		};
+		42943DA62B6F17A9000C7015 /* Zot321UITests */ = {
+			isa = PBXGroup;
+			children = (
+				42943DA72B6F17A9000C7015 /* Zot321UITests.swift */,
+				42943DA92B6F17A9000C7015 /* Zot321UITestsLaunchTests.swift */,
+			);
+			path = Zot321UITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		42943D842B6F179E000C7015 /* Zot321 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42943DAD2B6F17A9000C7015 /* Build configuration list for PBXNativeTarget "Zot321" */;
+			buildPhases = (
+				42943D812B6F179E000C7015 /* Sources */,
+				42943D822B6F179E000C7015 /* Frameworks */,
+				42943D832B6F179E000C7015 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Zot321;
+			productName = Zot321;
+			productReference = 42943D852B6F179E000C7015 /* Zot321.app */;
+			productType = "com.apple.product-type.application";
+		};
+		42943D982B6F17A9000C7015 /* Zot321Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42943DB02B6F17A9000C7015 /* Build configuration list for PBXNativeTarget "Zot321Tests" */;
+			buildPhases = (
+				42943D952B6F17A9000C7015 /* Sources */,
+				42943D962B6F17A9000C7015 /* Frameworks */,
+				42943D972B6F17A9000C7015 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42943D9B2B6F17A9000C7015 /* PBXTargetDependency */,
+			);
+			name = Zot321Tests;
+			productName = Zot321Tests;
+			productReference = 42943D992B6F17A9000C7015 /* Zot321Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		42943DA22B6F17A9000C7015 /* Zot321UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42943DB32B6F17A9000C7015 /* Build configuration list for PBXNativeTarget "Zot321UITests" */;
+			buildPhases = (
+				42943D9F2B6F17A9000C7015 /* Sources */,
+				42943DA02B6F17A9000C7015 /* Frameworks */,
+				42943DA12B6F17A9000C7015 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42943DA52B6F17A9000C7015 /* PBXTargetDependency */,
+			);
+			name = Zot321UITests;
+			productName = Zot321UITests;
+			productReference = 42943DA32B6F17A9000C7015 /* Zot321UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		42943D7D2B6F179E000C7015 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1520;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					42943D842B6F179E000C7015 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+					42943D982B6F17A9000C7015 = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = 42943D842B6F179E000C7015;
+					};
+					42943DA22B6F17A9000C7015 = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = 42943D842B6F179E000C7015;
+					};
+				};
+			};
+			buildConfigurationList = 42943D802B6F179E000C7015 /* Build configuration list for PBXProject "Zot321" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 42943D7C2B6F179E000C7015;
+			productRefGroup = 42943D862B6F179E000C7015 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42943D842B6F179E000C7015 /* Zot321 */,
+				42943D982B6F17A9000C7015 /* Zot321Tests */,
+				42943DA22B6F17A9000C7015 /* Zot321UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		42943D832B6F179E000C7015 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42943D922B6F17A9000C7015 /* Preview Assets.xcassets in Resources */,
+				42943D8F2B6F17A9000C7015 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42943D972B6F17A9000C7015 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42943DA12B6F17A9000C7015 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		42943D812B6F179E000C7015 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42943D8B2B6F179E000C7015 /* ContentView.swift in Sources */,
+				42943D8D2B6F179E000C7015 /* Item.swift in Sources */,
+				42943D892B6F179E000C7015 /* Zot321App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42943D952B6F17A9000C7015 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42943D9E2B6F17A9000C7015 /* Zot321Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42943D9F2B6F17A9000C7015 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42943DA82B6F17A9000C7015 /* Zot321UITests.swift in Sources */,
+				42943DAA2B6F17A9000C7015 /* Zot321UITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		42943D9B2B6F17A9000C7015 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 42943D842B6F179E000C7015 /* Zot321 */;
+			targetProxy = 42943D9A2B6F17A9000C7015 /* PBXContainerItemProxy */;
+		};
+		42943DA52B6F17A9000C7015 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 42943D842B6F179E000C7015 /* Zot321 */;
+			targetProxy = 42943DA42B6F17A9000C7015 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		42943DAB2B6F17A9000C7015 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		42943DAC2B6F17A9000C7015 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		42943DAE2B6F17A9000C7015 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Zot321/Zot321.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Zot321/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Zot321/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = hello.cpp.Zot321;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		42943DAF2B6F17A9000C7015 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Zot321/Zot321.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Zot321/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Zot321/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = hello.cpp.Zot321;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		42943DB12B6F17A9000C7015 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = hello.cpp.Zot321Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Zot321.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Zot321";
+			};
+			name = Debug;
+		};
+		42943DB22B6F17A9000C7015 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = hello.cpp.Zot321Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Zot321.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Zot321";
+			};
+			name = Release;
+		};
+		42943DB42B6F17A9000C7015 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = hello.cpp.Zot321UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Zot321;
+			};
+			name = Debug;
+		};
+		42943DB52B6F17A9000C7015 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = hello.cpp.Zot321UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Zot321;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		42943D802B6F179E000C7015 /* Build configuration list for PBXProject "Zot321" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42943DAB2B6F17A9000C7015 /* Debug */,
+				42943DAC2B6F17A9000C7015 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42943DAD2B6F17A9000C7015 /* Build configuration list for PBXNativeTarget "Zot321" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42943DAE2B6F17A9000C7015 /* Debug */,
+				42943DAF2B6F17A9000C7015 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42943DB02B6F17A9000C7015 /* Build configuration list for PBXNativeTarget "Zot321Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42943DB12B6F17A9000C7015 /* Debug */,
+				42943DB22B6F17A9000C7015 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42943DB32B6F17A9000C7015 /* Build configuration list for PBXNativeTarget "Zot321UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42943DB42B6F17A9000C7015 /* Debug */,
+				42943DB52B6F17A9000C7015 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 42943D7D2B6F179E000C7015 /* Project object */;
+}
