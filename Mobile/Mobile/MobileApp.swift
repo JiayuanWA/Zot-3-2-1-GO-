@@ -1,6 +1,6 @@
 //
-//  Zot321App.swift
-//  Zot321
+//  MobileApp.swift
+//  Mobile
 //
 //  Created by Wang on 2/3/24.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct Zot321App: App {
+struct MobileApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,

@@ -1,13 +1,13 @@
 //
-//  Zot321UITestsLaunchTests.swift
-//  Zot321UITests
+//  MobileUITestsLaunchTests.swift
+//  MobileUITests
 //
 //  Created by Wang on 2/3/24.
 //
 
 import XCTest
 
-final class Zot321UITestsLaunchTests: XCTestCase {
+final class MobileUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
