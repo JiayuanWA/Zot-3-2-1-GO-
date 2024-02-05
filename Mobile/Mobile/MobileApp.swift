@@ -3,6 +3,7 @@
 //  Mobile
 //
 //  Created by Wang on 2/3/24.
+
 //
 
 import SwiftUI
@@ -10,6 +11,8 @@ import SwiftData
 
 @main
 struct MobileApp: App {
+    @StateObject var manager = HealthKit()
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -25,7 +28,9 @@ struct MobileApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            
+            HomeView()
+                .environmentObject(manager)
         }
         .modelContainer(sharedModelContainer)
     }

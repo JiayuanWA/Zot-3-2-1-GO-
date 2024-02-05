@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42672BD72B7158580023CBE1 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42672BD62B7158580023CBE1 /* HomeView.swift */; };
+		42672BD92B7159100023CBE1 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42672BD82B7159100023CBE1 /* TabView.swift */; };
+		42672BDB2B715E540023CBE1 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42672BDA2B715E540023CBE1 /* Activity.swift */; };
+		42672BDD2B7160800023CBE1 /* HealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42672BDC2B7160800023CBE1 /* HealthKit.swift */; };
 		429B729C2B6F257400EAC0C4 /* MobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729B2B6F257400EAC0C4 /* MobileApp.swift */; };
 		429B729E2B6F257400EAC0C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729D2B6F257400EAC0C4 /* ContentView.swift */; };
 		429B72A02B6F257400EAC0C4 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729F2B6F257400EAC0C4 /* Item.swift */; };
@@ -35,6 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		42672BD62B7158580023CBE1 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		42672BD82B7159100023CBE1 /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
+		42672BDA2B715E540023CBE1 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
+		42672BDC2B7160800023CBE1 /* HealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKit.swift; sourceTree = "<group>"; };
 		429B72982B6F257400EAC0C4 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		429B729B2B6F257400EAC0C4 /* MobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileApp.swift; sourceTree = "<group>"; };
 		429B729D2B6F257400EAC0C4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -105,6 +113,10 @@
 				429B72A62B6F257400EAC0C4 /* Mobile.entitlements */,
 				429B72A72B6F257400EAC0C4 /* Info.plist */,
 				429B72A32B6F257400EAC0C4 /* Preview Content */,
+				42672BD62B7158580023CBE1 /* HomeView.swift */,
+				42672BD82B7159100023CBE1 /* TabView.swift */,
+				42672BDA2B715E540023CBE1 /* Activity.swift */,
+				42672BDC2B7160800023CBE1 /* HealthKit.swift */,
 			);
 			path = Mobile;
 			sourceTree = "<group>";
@@ -264,8 +276,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42672BDB2B715E540023CBE1 /* Activity.swift in Sources */,
 				429B729E2B6F257400EAC0C4 /* ContentView.swift in Sources */,
 				429B72A02B6F257400EAC0C4 /* Item.swift in Sources */,
+				42672BD72B7158580023CBE1 /* HomeView.swift in Sources */,
+				42672BDD2B7160800023CBE1 /* HealthKit.swift in Sources */,
+				42672BD92B7159100023CBE1 /* TabView.swift in Sources */,
 				429B729C2B6F257400EAC0C4 /* MobileApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -431,9 +447,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Mobile/Preview Content\"";
+				DEVELOPMENT_TEAM = Q78S6WYZXP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Mobile/Info.plist;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Please allow HealthKit access to enjoy full feature capabilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -461,9 +479,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Mobile/Preview Content\"";
+				DEVELOPMENT_TEAM = Q78S6WYZXP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Mobile/Info.plist;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Please allow HealthKit access to enjoy full feature capabilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
