@@ -7,7 +7,17 @@
 
 import SwiftUI
 
+
+struct ActivityData {
+    let id: Int
+    let title: String
+    let subtitle: String
+    let image: String
+    let amount: String
+}
 struct Activity: View {
+    @State var activity: ActivityData
+    
     var body: some View {
         ZStack {
             Color(uiColor: .systemGray6)
@@ -15,18 +25,18 @@ struct Activity: View {
             VStack{
                 HStack(alignment: .top){
                     VStack(alignment: .leading, spacing: 5){
-                        Text("Steps")
-                        Text("Today")
+                        Text(activity.title)
+                        Text(activity.subtitle)
                             .font(.caption)
                     }
                     Spacer()
-                    Image(systemName: "figure.walk")
+                    Image(systemName: activity.image)
                         .foregroundColor(.blue)
                     
                 }
                 .padding()
                 
-                Text("10,000")
+                Text(activity.amount)
                     .font(.system(size:24))
             }
 
@@ -36,5 +46,5 @@ struct Activity: View {
 }
 
 #Preview {
-    Activity()
+    Activity(activity: ActivityData(id:0, title: "Daily Steps", subtitle: "Goal: 10,0000", image: "figure.walk", amount: "2222"))
 }

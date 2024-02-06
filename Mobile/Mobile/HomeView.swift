@@ -18,12 +18,20 @@ struct HomeView: View {
         VStack {
             LazyVGrid(columns: Array(repeating: GridItem(spacing: 20), count:2)) {
                 
-                Activity()
-                Activity()
+                ForEach(manager.activities.sorted(by: { $0.value.id < $1.value.id}), id: \.key) {
+                    item in Activity(activity: item.value)
+                }
+                
                 
                 
             }
             .padding(.horizontal)
+        }
+        .onAppear{
+            manager.fetchSteps()
+            manager.fetchWalkingRunningDistance()
+            manager.fetchSleepData()
+            manager.fetchYesterdaySleepData()
         }
     }
 }
