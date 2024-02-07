@@ -1,0 +1,4 @@
+mysql_host: 'localhost'
+mysql_user: 'mytestuser'
+mysql_password: 'My6$Password'
+mysql_db: 'healthdb'
