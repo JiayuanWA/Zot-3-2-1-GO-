@@ -1,10 +1,4 @@
-//
-//  MobileApp.swift
-//  Mobile
-//
-//  Created by Wang on 2/3/24.
 
-//
 
 import SwiftUI
 import SwiftData
@@ -12,6 +6,7 @@ import SwiftData
 @main
 struct MobileApp: App {
     @StateObject var manager = HealthKit()
+    @StateObject var authManager = AuthManager()
     
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -27,11 +22,14 @@ struct MobileApp: App {
     }()
 
     var body: some Scene {
-        WindowGroup {
-            
-            HomeView()
-                .environmentObject(manager)
+            WindowGroup {
+                ContentView()
+                    .environmentObject(authManager)
+                if authManager.isLoggedIn {
+                    HomeView()
+                        .environmentObject(manager)
+                }
+            }
+            .modelContainer(sharedModelContainer)
         }
-        .modelContainer(sharedModelContainer)
-    }
 }

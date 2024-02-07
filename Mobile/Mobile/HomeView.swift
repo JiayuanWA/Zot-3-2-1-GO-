@@ -1,9 +1,3 @@
-//
-//  HomeView.swift
-//  Mobile
-//
-//  Created by Wang on 2/5/24.
-//
 
 import SwiftUI
 

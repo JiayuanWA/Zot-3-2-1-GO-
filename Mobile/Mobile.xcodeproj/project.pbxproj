@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4236C0672B73F0DD001DC6DC /* LogginCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4236C0662B73F0DD001DC6DC /* LogginCheck.swift */; };
 		42672BD72B7158580023CBE1 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42672BD62B7158580023CBE1 /* HomeView.swift */; };
 		42672BD92B7159100023CBE1 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42672BD82B7159100023CBE1 /* TabView.swift */; };
 		42672BDB2B715E540023CBE1 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42672BDA2B715E540023CBE1 /* Activity.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4236C0662B73F0DD001DC6DC /* LogginCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogginCheck.swift; sourceTree = "<group>"; };
 		42672BD62B7158580023CBE1 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		42672BD82B7159100023CBE1 /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
 		42672BDA2B715E540023CBE1 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				429B729B2B6F257400EAC0C4 /* MobileApp.swift */,
+				4236C0662B73F0DD001DC6DC /* LogginCheck.swift */,
 				429B729D2B6F257400EAC0C4 /* ContentView.swift */,
 				429B729F2B6F257400EAC0C4 /* Item.swift */,
 				429B72A12B6F257400EAC0C4 /* Assets.xcassets */,
@@ -278,6 +281,7 @@
 			files = (
 				42672BDB2B715E540023CBE1 /* Activity.swift in Sources */,
 				429B729E2B6F257400EAC0C4 /* ContentView.swift in Sources */,
+				4236C0672B73F0DD001DC6DC /* LogginCheck.swift in Sources */,
 				429B72A02B6F257400EAC0C4 /* Item.swift in Sources */,
 				42672BD72B7158580023CBE1 /* HomeView.swift in Sources */,
 				42672BDD2B7160800023CBE1 /* HealthKit.swift in Sources */,
