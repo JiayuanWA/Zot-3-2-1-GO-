@@ -37,7 +37,7 @@ struct Activity: View {
                 .padding()
                 
                 Text(activity.amount)
-                    .font(.system(size:24))
+                    .font(.system(size:20))
             }
 
         .cornerRadius(15)

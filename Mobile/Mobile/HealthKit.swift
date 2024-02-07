@@ -17,6 +17,9 @@ class HealthKit: ObservableObject {
     init() {
         let types: Set<HKObjectType> = [
             HKObjectType.characteristicType(forIdentifier: .biologicalSex)!,
+            HKObjectType.quantityType(forIdentifier: .height)!,
+            HKObjectType.quantityType(forIdentifier: .bodyMass)!,
+
             HKObjectType.characteristicType(forIdentifier: .dateOfBirth)!,
             HKObjectType.characteristicType(forIdentifier: .bloodType)!,
             HKObjectType.characteristicType(forIdentifier: .fitzpatrickSkinType)!,
@@ -132,7 +135,7 @@ class HealthKit: ObservableObject {
             // Check if there is actual sleep data before updating the ActivityData
             if totalTimeInBed > 0 {
                 let hours = totalTimeInBed / 3600
-                let activity = ActivityData(id: 2, title: "Sleep", subtitle: "Total time in bed (Yesterday)", image: "bed.double.circle", amount: String(format: "%.2f", hours) + " hours")
+                let activity = ActivityData(id: 3, title: "Sleep", subtitle: "Total time in bed (Yesterday)", image: "bed.double.circle", amount: String(format: "%.2f", hours) + " hours")
                 self.activities["yesterday Sleep"] = activity
                 print(hours)
             }
@@ -140,6 +143,50 @@ class HealthKit: ObservableObject {
         
         healthStore.execute(query)
     }
+    
+
+    
+    func fetchHeight() {
+        let heightType = HKQuantityType.quantityType(forIdentifier: .height)!
+        let predicate = HKQuery.predicateForSamples(withStart: .distantPast, end: Date(), options: .strictStartDate)
+        
+        let query = HKSampleQuery(sampleType: heightType, predicate: predicate, limit: 1, sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)]) { _, results, error in
+            guard let heightSample = results?.first as? HKQuantitySample, error == nil else {
+                print("Error fetching height")
+                return
+            }
+            
+            let heightValue = heightSample.quantity.doubleValue(for: HKUnit.meter())
+            let activity = ActivityData(id: 4, title: "Height", subtitle: "Height Value", image: "ruler", amount: String(format: "%.2f", heightValue) + " meters")
+            self.activities["height"] = activity
+            print(heightValue)
+        }
+        
+        healthStore.execute(query)
+    }
+
+    func fetchWeight() {
+        let weightType = HKQuantityType.quantityType(forIdentifier: .bodyMass)!
+        let predicate = HKQuery.predicateForSamples(withStart: .distantPast, end: Date(), options: .strictStartDate)
+        
+        let query = HKSampleQuery(sampleType: weightType, predicate: predicate, limit: 1, sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)]) { _, results, error in
+            guard let weightSample = results?.first as? HKQuantitySample, error == nil else {
+                print("Error fetching weight")
+                return
+            }
+
+            let weightValue = weightSample.quantity.doubleValue(for: HKUnit.gramUnit(with: .kilo))
+            let activity = ActivityData(id: 5, title: "Weight", subtitle: "Weight Value", image: "scale.3d", amount: String(format: "%.2f", weightValue) + " kg")
+            self.activities["weight"] = activity
+            print(weightValue)
+        }
+        
+        healthStore.execute(query)
+    }
+
+
+
+
 
 }
 

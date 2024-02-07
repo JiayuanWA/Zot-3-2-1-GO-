@@ -32,7 +32,11 @@ struct HomeView: View {
             manager.fetchWalkingRunningDistance()
             manager.fetchSleepData()
             manager.fetchYesterdaySleepData()
+            manager.fetchHeight()
+            manager.fetchWeight()
         }
+        
+
     }
 }
 
