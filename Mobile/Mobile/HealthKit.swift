@@ -7,6 +7,15 @@ extension Date{
     static var startOfDay: Date {
         Calendar.current.startOfDay(for: Date())
     }
+    
+    static var startOfWeek: Date {
+        let calendar = Calendar.current
+        var components = calendar.dateComponents ([.yearForWeekOfYear, .weekOfYear], from: Date())
+        components.weekday = 2
+        return calendar.date(from: components)!
+    }
+        
+        
 }
 class HealthKit: ObservableObject {
     
@@ -14,12 +23,12 @@ class HealthKit: ObservableObject {
     
     @Published var activities: [String : ActivityData] = [:]
     
+    
     init() {
         let types: Set<HKObjectType> = [
             HKObjectType.characteristicType(forIdentifier: .biologicalSex)!,
             HKObjectType.quantityType(forIdentifier: .height)!,
             HKObjectType.quantityType(forIdentifier: .bodyMass)!,
-
             HKObjectType.characteristicType(forIdentifier: .dateOfBirth)!,
             HKObjectType.characteristicType(forIdentifier: .bloodType)!,
             HKObjectType.characteristicType(forIdentifier: .fitzpatrickSkinType)!,
@@ -57,7 +66,7 @@ class HealthKit: ObservableObject {
             return
         }
             let stepCount = quantity.doubleValue(for: .count())
-            let activity = ActivityData(id: 0, title: "Steps", subtitle: "Goal: 10,000", image: "figure.walk", amount: "\(stepCount)")
+            let activity = ActivityData(id: 0, title: "Steps", subtitle: "Daily Step Count", image: "figure.walk", amount: "\(stepCount)")
            
             self.activities["today Steps"] = activity
             print(stepCount)
@@ -183,6 +192,32 @@ class HealthKit: ObservableObject {
         
         healthStore.execute(query)
     }
+    
+    func fetchWeeklyRunning() {
+        let workout = HKSampleType.workoutType()
+        let timePredicate = HKQuery.predicateForSamples(withStart: .startOfWeek, end: Date())
+        let workoutPredicate = HKQuery.predicateForWorkouts(with: .running)
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, workoutPredicate])
+ 
+        let query = HKSampleQuery(sampleType: workout, predicate: predicate, limit: 25, sortDescriptors: nil) { _, sample, error in
+            guard let workouts = sample as? [HKWorkout], error == nil else {
+                print("error fetching week running data")
+                return
+            }
+            var count: Int = 0
+            for workout in workouts {
+                let duration = Int(workout.duration)/60
+                count += duration
+            }
+            let activity = ActivityData(id: 6, title: "Running", subtitle: "This week", image: "figure.walk",
+                                    amount: "\(count) minutes")
+            
+            self.activities["RunTime"] = activity
+            
+        }
+        healthStore.execute (query)
+            
+        }
 
 
 
