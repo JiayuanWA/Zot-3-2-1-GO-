@@ -8,6 +8,7 @@ struct MobileApp: App {
     @StateObject var manager = HealthKit()
     @StateObject var authManager = AuthManager()
     
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
