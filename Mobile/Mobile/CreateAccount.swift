@@ -5,7 +5,7 @@ struct CreateAccount: View {
     @State private var confirmPassword: String = ""
     @State private var isAccountCreated = false
     @State private var isNavigationBarHidden = true
-
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
         NavigationView {
             VStack(spacing: 16) {
@@ -39,6 +39,7 @@ struct CreateAccount: View {
 
                 Button(action: {
                     isAccountCreated = true
+                    
                 }) {
                     Text("Create Account")
                         .foregroundColor(.white)
@@ -53,8 +54,7 @@ struct CreateAccount: View {
                 Spacer()
             }
             .padding()
-            .navigationBarTitle("", displayMode: .inline) // Set navigation bar title explicitly
-            .navigationBarHidden(isNavigationBarHidden)
+            .navigationBarHidden(true)
         }
     }
 }
