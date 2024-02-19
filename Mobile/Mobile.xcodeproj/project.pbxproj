@@ -10,6 +10,7 @@
 		4236C0672B73F0DD001DC6DC /* LogginCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4236C0662B73F0DD001DC6DC /* LogginCheck.swift */; };
 		423B4AB02B83C5C6006EC87E /* RecordHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423B4AAF2B83C5C6006EC87E /* RecordHomeView.swift */; };
 		423B4AB22B83C79C006EC87E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423B4AB12B83C79C006EC87E /* ProfileView.swift */; };
+		423B4AB42B83E168006EC87E /* ExcerciseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423B4AB32B83E168006EC87E /* ExcerciseListView.swift */; };
 		42672BD72B7158580023CBE1 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42672BD62B7158580023CBE1 /* HomeView.swift */; };
 		42672BD92B7159100023CBE1 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42672BD82B7159100023CBE1 /* TabView.swift */; };
 		42672BDB2B715E540023CBE1 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42672BDA2B715E540023CBE1 /* Activity.swift */; };
@@ -24,6 +25,7 @@
 		429B72B12B6F257400EAC0C4 /* MobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B72B02B6F257400EAC0C4 /* MobileTests.swift */; };
 		429B72BB2B6F257400EAC0C4 /* MobileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B72BA2B6F257400EAC0C4 /* MobileUITests.swift */; };
 		429B72BD2B6F257400EAC0C4 /* MobileUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B72BC2B6F257400EAC0C4 /* MobileUITestsLaunchTests.swift */; };
+		42A417A12B83E3D700418944 /* exercises.json in Resources */ = {isa = PBXBuildFile; fileRef = 42A417A02B83E3D700418944 /* exercises.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,7 @@
 		4236C0662B73F0DD001DC6DC /* LogginCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogginCheck.swift; sourceTree = "<group>"; };
 		423B4AAF2B83C5C6006EC87E /* RecordHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordHomeView.swift; sourceTree = "<group>"; };
 		423B4AB12B83C79C006EC87E /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		423B4AB32B83E168006EC87E /* ExcerciseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExcerciseListView.swift; sourceTree = "<group>"; };
 		42672BD62B7158580023CBE1 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		42672BD82B7159100023CBE1 /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
 		42672BDA2B715E540023CBE1 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
@@ -66,6 +69,7 @@
 		429B72B62B6F257400EAC0C4 /* MobileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MobileUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		429B72BA2B6F257400EAC0C4 /* MobileUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileUITests.swift; sourceTree = "<group>"; };
 		429B72BC2B6F257400EAC0C4 /* MobileUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		42A417A02B83E3D700418944 /* exercises.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = exercises.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +120,7 @@
 		429B729A2B6F257400EAC0C4 /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				42A417A02B83E3D700418944 /* exercises.json */,
 				429B729B2B6F257400EAC0C4 /* MobileApp.swift */,
 				4236C0662B73F0DD001DC6DC /* LogginCheck.swift */,
 				427CE1682B828004004CD9D9 /* CreateAccount.swift */,
@@ -132,6 +137,7 @@
 				42672BDC2B7160800023CBE1 /* HealthKit.swift */,
 				423B4AAF2B83C5C6006EC87E /* RecordHomeView.swift */,
 				423B4AB12B83C79C006EC87E /* ProfileView.swift */,
+				423B4AB32B83E168006EC87E /* ExcerciseListView.swift */,
 			);
 			path = Mobile;
 			sourceTree = "<group>";
@@ -267,6 +273,7 @@
 			files = (
 				429B72A52B6F257400EAC0C4 /* Preview Assets.xcassets in Resources */,
 				429B72A22B6F257400EAC0C4 /* Assets.xcassets in Resources */,
+				42A417A12B83E3D700418944 /* exercises.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +300,7 @@
 			files = (
 				42672BDB2B715E540023CBE1 /* Activity.swift in Sources */,
 				429B729E2B6F257400EAC0C4 /* ContentView.swift in Sources */,
+				423B4AB42B83E168006EC87E /* ExcerciseListView.swift in Sources */,
 				4236C0672B73F0DD001DC6DC /* LogginCheck.swift in Sources */,
 				423B4AB02B83C5C6006EC87E /* RecordHomeView.swift in Sources */,
 				423B4AB22B83C79C006EC87E /* ProfileView.swift in Sources */,

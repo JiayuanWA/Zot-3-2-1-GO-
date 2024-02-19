@@ -11,11 +11,15 @@ struct MainTabView: View {
                 }
 
             // Tab 2 (Placeholder for other views, replace with your own)
-            Text("Second Tab")
+            NavigationView {
+                    ExerciseListView()
+                        .navigationBarTitle("Exercise List", displayMode: .inline)
+                }
                 .tabItem {
                     Image(systemName: "star.fill")
-                    Text("Tab 2")
+                    Text("Exercises")
                 }
+
 
             // Tab 3 (Placeholder for other views, replace with your own)
             RecordHomeView()
