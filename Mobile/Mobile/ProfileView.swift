@@ -1,18 +1,28 @@
-//
-//  ProfileView.swift
-//  Mobile
-//
-//  Created by Wang on 2/19/24.
-//
-
 import SwiftUI
-
 struct ProfileView: View {
+    @State private var firstName: String = ""
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("Hi, \(firstName)")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding()
+
+            // Your profile content goes here
+            Text("Profile Content Goes Here")
+        }
+        .onAppear {
+            // Retrieve first name from user preferences
+            if let savedPreferences = UserDefaults.standard.dictionary(forKey: "userPreferences") as? [String: Any] {
+                self.firstName = savedPreferences["firstName"] as? String ?? ""
+            }
+        }
     }
 }
 
-#Preview {
-    ProfileView()
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfileView()
+    }
 }

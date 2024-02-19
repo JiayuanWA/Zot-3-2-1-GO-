@@ -7,8 +7,7 @@ import SwiftData
 struct MobileApp: App {
     @StateObject var manager = HealthKit()
     @StateObject var authManager = AuthManager()
-    
-    
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -23,14 +22,15 @@ struct MobileApp: App {
     }()
 
     var body: some Scene {
-            WindowGroup {
+        WindowGroup {
+            if authManager.isLoggedIn {
+                HomeView()
+                    .environmentObject(manager)
+            } else {
                 ContentView()
                     .environmentObject(authManager)
-                if authManager.isLoggedIn {
-                    HomeView()
-                        .environmentObject(manager)
-                }
             }
-            .modelContainer(sharedModelContainer)
         }
+        .modelContainer(sharedModelContainer)
+    }
 }

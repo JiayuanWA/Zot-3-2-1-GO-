@@ -2,7 +2,8 @@ import SwiftUI
 
 struct ProfileAndPreferences: View {
     var username: String
-
+    @State private var firstname: String = ""
+    @State private var lastname: String = ""
     @State private var age: String = ""
     @State private var height: String = ""
     @State private var weight: String = ""
@@ -38,6 +39,9 @@ struct ProfileAndPreferences: View {
             VStack {
                 Form {
                               Section(header: Text("Personal Information")) {
+                                  CustomTextField(placeholder: "First Name", text: $firstname, keyboardType: .default)
+                                  CustomTextField(placeholder: "Last Name", text: $lastname, keyboardType: .default)
+                                  CustomTextField(placeholder: "Gender", text: $height, keyboardType: .decimalPad)
                                   CustomTextField(placeholder: "Age", text: $age, keyboardType: .numberPad)
                                   CustomTextField(placeholder: "Height (cm)", text: $height, keyboardType: .decimalPad)
                                   CustomTextField(placeholder: "Weight (kg)", text: $weight, keyboardType: .decimalPad)
@@ -107,6 +111,8 @@ struct ProfileAndPreferences: View {
                 NavigationLink(destination: ContentView(), isActive: $isSaved) {
                                     Button(action: {
                                         let preferences: [String: Any] = [
+                                            "firstName": firstname, // Assuming you have a variable named firstName
+                                            "lastName": lastname,   // Assuming you have a variable named lastName
                                             "age": age,
                                             "height": height,
                                             "weight": weight,
@@ -115,6 +121,7 @@ struct ProfileAndPreferences: View {
                                             "selectedGoals": Array(selectedGoals),
                                             "selectedDays": Array(selectedDays)
                                         ]
+
 
                                         UserDefaults.standard.set(preferences, forKey: "userPreferences")
                                         isSaved = true

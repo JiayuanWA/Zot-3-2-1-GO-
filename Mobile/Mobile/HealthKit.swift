@@ -57,23 +57,22 @@ class HealthKit: ObservableObject {
         }
     }
     
-    func fetchSteps(){
+    func fetchSteps(completion: @escaping (Double) -> Void) {
         let steps = HKQuantityType(.stepCount)
         let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date())
-        let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate){_, result, error in
+        let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate) { _, result, error in
             guard let quantity = result?.sumQuantity(), error == nil else {
-            print("error fetching todays step")
-            return
-        }
+                print("Error fetching today's step count")
+                completion(0.0) // Return 0 in case of an error
+                return
+            }
             let stepCount = quantity.doubleValue(for: .count())
-            let activity = ActivityData(id: 0, title: "Steps", subtitle: "Daily Step Count", image: "figure.walk", amount: "\(stepCount)")
-           
-            self.activities["today Steps"] = activity
-            print(stepCount)
+            completion(stepCount)
         }
-        
+
         healthStore.execute(query)
     }
+
     
     func fetchWalkingRunningDistance() {
         let distanceType = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning)!
