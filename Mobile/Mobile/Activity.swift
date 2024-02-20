@@ -3,7 +3,7 @@
 import SwiftUI
 
 
-struct ActivityData {
+struct ActivityData: Identifiable, Equatable {
     let id: Int
     let title: String
     let subtitle: String

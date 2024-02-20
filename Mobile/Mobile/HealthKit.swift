@@ -11,7 +11,7 @@ extension Date{
     static var startOfWeek: Date {
         let calendar = Calendar.current
         var components = calendar.dateComponents ([.yearForWeekOfYear, .weekOfYear], from: Date())
-        components.weekday = 2
+        components.weekday = 1
         return calendar.date(from: components)!
     }
         
@@ -57,23 +57,67 @@ class HealthKit: ObservableObject {
         }
     }
     
-    func fetchSteps(completion: @escaping (Double) -> Void) {
-        let steps = HKQuantityType(.stepCount)
-        let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date())
+//    func fetchSteps(completion: @escaping (Double) -> Void) {
+//        let steps = HKQuantityType(.stepCount)
+//        let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date())
+//        let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate) { _, result, error in
+//            guard let quantity = result?.sumQuantity(), error == nil else {
+//                print("Error fetching today's step count")
+//                completion(0.0) // Return 0 in case of an error
+//                return
+//            }
+//            let stepCount = quantity.doubleValue(for: .count())
+//            completion(stepCount)
+//        }
+//
+//        healthStore.execute(query)
+//    }
+
+//    func fetchSteps(){
+//            let steps = HKQuantityType(.stepCount)
+//            let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date())
+//            let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate){_, result, error in
+//                guard let quantity = result?.sumQuantity(), error == nil else {
+//                print("error fetching todays step")
+//                return
+//            }
+//                let stepCount = quantity.doubleValue(for: .count())
+//                let activity = ActivityData(id: 0, title: "Steps", subtitle: "Daily Step Count", image: "figure.walk", amount: "\(stepCount)")
+//               
+//                self.activities["today Steps"] = activity
+//                print(stepCount)
+//            }
+//            
+//            healthStore.execute(query)
+//        }
+    
+    func fetchSteps(startDate: Date, endDate: Date) {
+        let steps = HKQuantityType.quantityType(forIdentifier: .stepCount)!
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate)
+
         let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate) { _, result, error in
-            guard let quantity = result?.sumQuantity(), error == nil else {
-                print("Error fetching today's step count")
-                completion(0.0) // Return 0 in case of an error
+            if let error = error {
+                print("Error fetching step count: \(error)")
+                let activity = ActivityData(id: 0, title: "Steps", subtitle: "Daily Step Count", image: "figure.walk", amount: "0")
+                self.activities["today Steps"] = activity
                 return
             }
+
+            guard let quantity = result?.sumQuantity() else {
+                print("Error fetching step count. Result is nil.")
+                return
+            }
+
             let stepCount = quantity.doubleValue(for: .count())
-            completion(stepCount)
+            let activity = ActivityData(id: 0, title: "Steps", subtitle: "Daily Step Count", image: "figure.walk", amount: "\(stepCount)")
+
+            self.activities["today Steps"] = activity
+            print(stepCount)
         }
 
         healthStore.execute(query)
     }
 
-    
     func fetchWalkingRunningDistance() {
         let distanceType = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning)!
         let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date())
