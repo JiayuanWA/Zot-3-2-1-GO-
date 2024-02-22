@@ -32,10 +32,14 @@ class FlaskTestCase(unittest.TestCase):
             'password': 'newpass',
             'first_name': 'New',
             'last_name': 'User',
+            'gender': 'male',
+            'date_of_birth': '2002-12-21',
             "activity_level": "active",
             "goals": ["lose weight", "improve cardio"],
             "fitness_level": "intermediate",
-            "workout_days": ["Monday", "Wednesday", "Friday"]
+            "workout_days": ["Monday", "Wednesday", "Friday"],
+            "height_cm": 120,
+            "weight_kg": 100,
             # Add other required fields...
         }
         response = self.client.post('/register', json=user_data)
@@ -45,7 +49,13 @@ class FlaskTestCase(unittest.TestCase):
     def test_update_user_profile(self):
         """Test the profile update endpoint."""
         update_data = {
-            'username': 'existinguser',
+            "username": 'newuser',
+            "height_cm": 130,
+            "weight_kg": 150,
+            "activity_level": "active",
+            "goals": ["lose weight", "improve cardio"],
+            "fitness_level": "intermediate",
+            "workout_days": ["Monday", "Wednesday", "Friday"],
             # Add fields to be updated...
         }
         response = self.client.post('/profile/update', json=update_data)

@@ -59,7 +59,7 @@ def create_app(test_config=None):
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         
         # Insert user into database
-        cur.execute("INSERT INTO users(username, password, email, first_name, last_name, gender, date_of_birth, height_cm, weight_kg, activity_level, goals, fitness_level) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (username, password, email, first_name, last_name, gender, date_of_birth, height_cm, weight_kg, activity_level, goals, fitness_level,))
+        cur.execute("INSERT INTO users(username, password, first_name, last_name, gender, date_of_birth, height_cm, weight_kg, activity_level, goals, fitness_level) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (username, password, first_name, last_name, gender, date_of_birth, height_cm, weight_kg, activity_level, goals, fitness_level,))
         user_id = cur.lastrowid
         
         # Insert workout days
@@ -94,7 +94,6 @@ def create_app(test_config=None):
         # Extract data from request
         data = request.json
         username = data['username']
-        age = data.get('age')  # Assuming age is calculated or provided explicitly
         height_cm = data.get('height_cm')
         weight_kg = data.get('weight_kg')
         activity_level = data.get('activity_level')
@@ -106,10 +105,10 @@ def create_app(test_config=None):
 
         # Update basic metrics in users table
         cur.execute("""
-            UPDATE users SET age = %s, height_cm = %s, weight_kg = %s, 
+            UPDATE users SET height_cm = %s, weight_kg = %s, 
             activity_level = %s, goals = %s, fitness_level = %s
             WHERE username = %s
-            """, (age, height_cm, weight_kg, activity_level, goals, fitness_level, username))
+            """, (height_cm, weight_kg, activity_level, goals, fitness_level, username))
 
         # Update workout days
         # First, get the user_id for the given username
