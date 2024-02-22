@@ -6,14 +6,32 @@ CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    gender ENUM('male', 'female', 'other') NOT NULL,
     date_of_birth DATE,
-    gender ENUM('male', 'female', 'other'),
+    height_cm DECIMAL(5,2),
+    weight_kg DECIMAL(5,2),
+    activity_level ENUM('sedentary', 'moderate', 'active', 'very active') NOT NULL,
+    goals SET('build muscle', 'lose weight', 'improve cardio', 'better lifestyle', 'improve sleep quality', 'improve posture', 'increase flexibility', 'achieve mental clarity') NOT NULL,
+    fitness_level ENUM('beginner', 'intermediate', 'advanced') NOT NULL,
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE workout_days (
+    workout_day_id INT AUTO_INCREMENT PRIMARY KEY,
+    day_of_week ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday') NOT NULL UNIQUE
+);
+
+CREATE TABLE user_workout_days (
+    user_id INT,
+    workout_day_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (workout_day_id) REFERENCES workout_days(workout_day_id),
+    PRIMARY KEY (user_id, workout_day_id)
+);
+
+-- Retain the existing tables for body metrics, common conditions, user conditions, daily logs, calorie intake details, and exercise records
 CREATE TABLE body_metrics (
     metric_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -37,10 +55,10 @@ CREATE TABLE user_conditions (
     condition_id INT NULL,
     condition_name VARCHAR(255) NULL,
     severity ENUM('mild', 'moderate', 'severe'),
-    start_date DATE,
+    start_usersuser_workout_daysusersdate DATE,
     end_date DATE,
     notes TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (userusers_id) REFERENCES users(user_id),
     FOREIGN KEY (condition_id) REFERENCES common_conditions(condition_id)
 );
 
