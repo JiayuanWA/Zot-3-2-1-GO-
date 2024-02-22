@@ -3,14 +3,12 @@ import SwiftUI
 struct MainTabView: View {
     var body: some View {
         TabView {
-            // Tab 1
             RecordHomeView()
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Home")
                 }
 
-            // Tab 2 (Placeholder for other views, replace with your own)
             NavigationView {
                     ExerciseListView()
                         .navigationBarTitle("Exercise List", displayMode: .inline)
@@ -21,21 +19,19 @@ struct MainTabView: View {
                 }
 
 
-            // Tab 3 (Placeholder for other views, replace with your own)
             RecommendationsView()
                             .tabItem {
                                 Image(systemName: "heart.fill")
                                 Text("Recommendations")
                             }
 
-            // Tab 4 (Profile)
             ProfileView()
                 .tabItem {
                     Image(systemName: "person.fill")
                     Text("Profile")
                 }
         }
-        .accentColor(.blue) // Set the color for the selected tab
+        .accentColor(.blue) 
     }
 }
 

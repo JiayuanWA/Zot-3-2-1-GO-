@@ -7,6 +7,8 @@ struct ProfileAndPreferences: View {
     @State private var age: String = ""
     @State private var height: String = ""
     @State private var weight: String = ""
+    @State private var gender: String = ""
+
     @State private var selectedLifestyle = 0
     @State private var selectedFitnessLevel = 0
     @State private var selectedDays: Set<String> = []
@@ -41,11 +43,21 @@ struct ProfileAndPreferences: View {
                               Section(header: Text("Personal Information")) {
                                   CustomTextField(placeholder: "First Name", text: $firstname, keyboardType: .default)
                                   CustomTextField(placeholder: "Last Name", text: $lastname, keyboardType: .default)
-                                  CustomTextField(placeholder: "Gender", text: $height, keyboardType: .decimalPad)
+
+
+
                                   CustomTextField(placeholder: "Age", text: $age, keyboardType: .numberPad)
                                   CustomTextField(placeholder: "Height (cm)", text: $height, keyboardType: .decimalPad)
                                   CustomTextField(placeholder: "Weight (kg)", text: $weight, keyboardType: .decimalPad)
-            
+                                  Picker("Gender", selection: $gender) {
+                                      Text("Select Gender").tag("") // Default empty value
+                                      ForEach(["Male", "Female", "Other", "Prefer not to say"], id: \.self) { option in
+                                          Text(option)
+                                      }
+                                  }
+                                  .padding(.vertical, 8)
+                                  .padding(.horizontal, 16)
+                                  .font(.subheadline)
                                   
                               }
                               

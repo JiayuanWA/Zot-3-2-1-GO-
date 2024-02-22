@@ -32,7 +32,6 @@ struct RecordHomeView: View {
                 .padding(.top, 20)
                 .padding(.bottom, 10)
 
-            // Progress bar for steps walked
             if let stepData = manager.activities["today Steps"] {
                 let stepCount = Double(stepData.amount) ?? 0
                 let goal = 5000.0
@@ -52,7 +51,7 @@ struct RecordHomeView: View {
 
             if let distanceData = manager.activities["today Distance"] {
                    let distanceCount = Double(distanceData.amount) ?? 3
-                   let distanceGoal = 5.0 // Set your goal for distance here
+                   let distanceGoal = 5.0 
 
                        ProgressItem(title: "Distance Walked", value: distanceCount, goal: distanceGoal)
                            .padding(.top, 20)
@@ -61,7 +60,7 @@ struct RecordHomeView: View {
                }
             if let sleepData = manager.activities["today Sleep"] {
                        let Count = Double(sleepData.amount) ?? 0
-                let Goal = 8.0 // Set your goal here for calories
+                let Goal = 8.0
 
                        ProgressItem(title: "Sleep Duration", value: Count, goal: Goal)
                            .padding(.top, 20)
@@ -139,7 +138,6 @@ struct WeekProgressView: View {
                     minutesExercisedPercentage: 0.3
                 )
                 .onTapGesture {
-                    // Update the selected date when a circle is tapped
                     selectedDate = startOfWeekDates[day]
                     print("Selected Date Updated: \(selectedDate ?? Date())")
                 }

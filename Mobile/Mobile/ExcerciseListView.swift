@@ -4,7 +4,6 @@ struct Exercise: Codable, Identifiable {
     var id: String
     var name: String
     
-    // Add other properties as needed
 }
 
 struct ExerciseListView: View {
