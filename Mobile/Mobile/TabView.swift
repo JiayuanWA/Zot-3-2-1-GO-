@@ -22,11 +22,11 @@ struct MainTabView: View {
 
 
             // Tab 3 (Placeholder for other views, replace with your own)
-            RecordHomeView()
-                .tabItem {
-                    Image(systemName: "heart.fill")
-                    Text("Tab 3")
-                }
+            RecommendationsView()
+                            .tabItem {
+                                Image(systemName: "heart.fill")
+                                Text("Recommendations")
+                            }
 
             // Tab 4 (Profile)
             ProfileView()

@@ -16,7 +16,9 @@ extension Date {
 struct RecordHomeView: View {
     @EnvironmentObject var manager: HealthKit
     @State private var firstName: String = ""
-    @State private var stepsCount: Double = 0
+    @State private var selectedDate: Date?
+    
+    
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -25,7 +27,7 @@ struct RecordHomeView: View {
                 .fontWeight(.bold)
                 .padding()
 
-            WeekProgressView(startOfWeekDates: Date.startOfWeekDates())
+            WeekProgressView(selectedDate: $selectedDate, startOfWeekDates: Date.startOfWeekDates())
                 .padding(.horizontal)
                 .padding(.top, 20)
                 .padding(.bottom, 10)
@@ -33,28 +35,55 @@ struct RecordHomeView: View {
             // Progress bar for steps walked
             if let stepData = manager.activities["today Steps"] {
                 let stepCount = Double(stepData.amount) ?? 0
-                let goal = 10000.0 // Set your goal here
+                let goal = 5000.0
+
+                if let selectedDate = selectedDate {
+                    Text("\(selectedDate, style: .date)")
+                        .font(.headline)
+                        .padding(.top, 10)
+                        .padding(.horizontal)
+                }
 
                 ProgressItem(title: "Steps Walked", value: stepCount, goal: goal)
                     .padding(.top, 20)
                     .padding(.horizontal)
             }
+
+
+            if let distanceData = manager.activities["today Distance"] {
+                   let distanceCount = Double(distanceData.amount) ?? 3
+                   let distanceGoal = 5.0 // Set your goal for distance here
+
+                       ProgressItem(title: "Distance Walked", value: distanceCount, goal: distanceGoal)
+                           .padding(.top, 20)
+                           .padding(.horizontal)
+                   
+               }
+            if let sleepData = manager.activities["today Sleep"] {
+                       let Count = Double(sleepData.amount) ?? 0
+                let Goal = 8.0 // Set your goal here for calories
+
+                       ProgressItem(title: "Sleep Duration", value: Count, goal: Goal)
+                           .padding(.top, 20)
+                           .padding(.horizontal)
+                   }
+            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .onAppear {
             if let savedPreferences = UserDefaults.standard.dictionary(forKey: "userPreferences") as? [String: Any] {
                 self.firstName = savedPreferences["firstName"] as? String ?? ""
             }
+            let startOfDay = Calendar.current.startOfDay(for: Date())
+                   let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: Date())!
 
-//            // Fetch initial data
-//            manager.fetchWalkingRunningDistance()
-//            manager.fetchSleepData()
-//            manager.fetchYesterdaySleepData()
-//            manager.fetchWeeklyRunning()
+            manager.fetchSleepData(startDate: startOfDay, endDate: endOfDay)
+
+
         }
         .onReceive(manager.$activities) { _ in
             print("Activities changed. Updating UI.")
-            // Update any other UI elements here if needed
+
         }
     }
 }
@@ -84,9 +113,9 @@ struct ProgressItem: View {
 
                 Spacer()
 
-                Text("\(Int(value))/\(Int(goal))")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                Text(String(format: "%.2f", value) + "/" + String(format: "%.2f", goal))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
             }
         }
         .padding(.vertical, 8)
@@ -95,7 +124,7 @@ struct ProgressItem: View {
 }
 
 struct WeekProgressView: View {
-    @State private var selectedDate: Date?
+    @Binding var selectedDate: Date?
     @EnvironmentObject var manager: HealthKit
     let startOfWeekDates: [Date]
 
@@ -104,6 +133,7 @@ struct WeekProgressView: View {
             ForEach(0..<7) { day in
                 DayProgressView(
                     startDate: startOfWeekDates[day],
+                    selectedDate: $selectedDate,
                     caloriesBurnedPercentage: 0.5,
                     stepsWalkedPercentage: 0.8,
                     minutesExercisedPercentage: 0.3
@@ -113,24 +143,25 @@ struct WeekProgressView: View {
                     selectedDate = startOfWeekDates[day]
                     print("Selected Date Updated: \(selectedDate ?? Date())")
                 }
+
             }
         }
         .onChange(of: selectedDate) { newDate in
             // Print the selected date for debugging
             print("Selected Date: \(newDate ?? Date())")
 
-            // Fetch data for the selected date
+
             if let date = newDate {
                 let calendar = Calendar.current
                 let startDate = calendar.startOfDay(for: date)
                 print("Start Date: \(startDate)")
-                // Unwrap the optional endDate
+
                 if let endDate = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: startDate) {
                             print("Start Date: \(startDate), End Date: \(endDate)")
                             manager.fetchSteps(startDate: startDate, endDate: endDate)
-                    //activity dictionary will then has changed
-                    //show to new step count in the box
-                    
+                            manager.fetchWalkingRunningDistance(startDate: startDate, endDate: endDate)
+                    manager.fetchSleepData(startDate: startDate, endDate: endDate)
+                    print("Activities Dictionarydddddddddddd: \(manager.activities)")
                                
                            
                         }
@@ -143,6 +174,7 @@ struct WeekProgressView: View {
 
 struct DayProgressView: View {
     let startDate: Date
+    let selectedDate: Binding<Date?>
     let caloriesBurnedPercentage: Double
     let stepsWalkedPercentage: Double
     let minutesExercisedPercentage: Double

@@ -17,6 +17,7 @@
 		42672BDD2B7160800023CBE1 /* HealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42672BDC2B7160800023CBE1 /* HealthKit.swift */; };
 		427CE1692B828004004CD9D9 /* CreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427CE1682B828004004CD9D9 /* CreateAccount.swift */; };
 		427CE16B2B828628004CD9D9 /* Profile Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427CE16A2B828628004CD9D9 /* Profile Preferences.swift */; };
+		42843B372B86C443005E11A4 /* RecommendationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42843B362B86C443005E11A4 /* RecommendationsView.swift */; };
 		429B729C2B6F257400EAC0C4 /* MobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729B2B6F257400EAC0C4 /* MobileApp.swift */; };
 		429B729E2B6F257400EAC0C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729D2B6F257400EAC0C4 /* ContentView.swift */; };
 		429B72A02B6F257400EAC0C4 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729F2B6F257400EAC0C4 /* Item.swift */; };
@@ -56,6 +57,7 @@
 		42672BDC2B7160800023CBE1 /* HealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKit.swift; sourceTree = "<group>"; };
 		427CE1682B828004004CD9D9 /* CreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccount.swift; sourceTree = "<group>"; };
 		427CE16A2B828628004CD9D9 /* Profile Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Profile Preferences.swift"; sourceTree = "<group>"; };
+		42843B362B86C443005E11A4 /* RecommendationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsView.swift; sourceTree = "<group>"; };
 		429B72982B6F257400EAC0C4 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		429B729B2B6F257400EAC0C4 /* MobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileApp.swift; sourceTree = "<group>"; };
 		429B729D2B6F257400EAC0C4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				423B4AAF2B83C5C6006EC87E /* RecordHomeView.swift */,
 				423B4AB12B83C79C006EC87E /* ProfileView.swift */,
 				423B4AB32B83E168006EC87E /* ExcerciseListView.swift */,
+				42843B362B86C443005E11A4 /* RecommendationsView.swift */,
 			);
 			path = Mobile;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				423B4AB22B83C79C006EC87E /* ProfileView.swift in Sources */,
 				429B72A02B6F257400EAC0C4 /* Item.swift in Sources */,
 				42672BD72B7158580023CBE1 /* HomeView.swift in Sources */,
+				42843B372B86C443005E11A4 /* RecommendationsView.swift in Sources */,
 				427CE16B2B828628004CD9D9 /* Profile Preferences.swift in Sources */,
 				42672BDD2B7160800023CBE1 /* HealthKit.swift in Sources */,
 				42672BD92B7159100023CBE1 /* TabView.swift in Sources */,

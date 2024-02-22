@@ -57,39 +57,6 @@ class HealthKit: ObservableObject {
         }
     }
     
-//    func fetchSteps(completion: @escaping (Double) -> Void) {
-//        let steps = HKQuantityType(.stepCount)
-//        let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date())
-//        let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate) { _, result, error in
-//            guard let quantity = result?.sumQuantity(), error == nil else {
-//                print("Error fetching today's step count")
-//                completion(0.0) // Return 0 in case of an error
-//                return
-//            }
-//            let stepCount = quantity.doubleValue(for: .count())
-//            completion(stepCount)
-//        }
-//
-//        healthStore.execute(query)
-//    }
-
-//    func fetchSteps(){
-//            let steps = HKQuantityType(.stepCount)
-//            let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date())
-//            let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate){_, result, error in
-//                guard let quantity = result?.sumQuantity(), error == nil else {
-//                print("error fetching todays step")
-//                return
-//            }
-//                let stepCount = quantity.doubleValue(for: .count())
-//                let activity = ActivityData(id: 0, title: "Steps", subtitle: "Daily Step Count", image: "figure.walk", amount: "\(stepCount)")
-//               
-//                self.activities["today Steps"] = activity
-//                print(stepCount)
-//            }
-//            
-//            healthStore.execute(query)
-//        }
     
     func fetchSteps(startDate: Date, endDate: Date) {
         let steps = HKQuantityType.quantityType(forIdentifier: .stepCount)!
@@ -117,10 +84,38 @@ class HealthKit: ObservableObject {
 
         healthStore.execute(query)
     }
+    
+    func fetchCalories(startDate: Date, endDate: Date) {
+        let caloriesType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate)
 
-    func fetchWalkingRunningDistance() {
+        let query = HKStatisticsQuery(quantityType: caloriesType, quantitySamplePredicate: predicate) { _, result, error in
+            if let error = error {
+                print("Error fetching calorie data: \(error)")
+                let activity = ActivityData(id: 0, title: "Calories", subtitle: "Daily Calorie Burn", image: "flame", amount: "0")
+                self.activities["today Calories"] = activity
+                return
+            }
+
+            guard let quantity = result?.sumQuantity() else {
+                print("Error fetching calorie data. Result is nil.")
+                return
+            }
+
+            let calorieCount = quantity.doubleValue(for: HKUnit.kilocalorie())
+            let activity = ActivityData(id: 99, title: "Calories", subtitle: "Daily Calorie Burn", image: "flame", amount: "\(calorieCount)")
+
+            self.activities["today Calories"] = activity
+            print(calorieCount)
+        }
+
+        healthStore.execute(query)
+    }
+
+
+    func fetchWalkingRunningDistance(startDate: Date, endDate: Date) {
         let distanceType = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning)!
-        let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date())
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate)
         
         let query = HKStatisticsQuery(quantityType: distanceType, quantitySamplePredicate: predicate) { _, result, error in
             guard let quantity = result?.sumQuantity(), error == nil else {
@@ -131,20 +126,20 @@ class HealthKit: ObservableObject {
             // Convert distance from meters to miles
             let distanceInMeters = quantity.doubleValue(for: .meter())
             let distanceInMiles = distanceInMeters / 1609.34  // 1 mile = 1609.34 meters
-    
 
-            let activity = ActivityData(id: 1, title: "Distance", subtitle: "Today's distance", image:"figure.walk.motion", amount: String(format: "%.2f", distanceInMiles) + " miles")
+            let activity = ActivityData(id: 1, title: "Distance", subtitle: "Today's distance", image:"figure.walk.motion", amount: "\(distanceInMiles)" )
             self.activities["today Distance"] = activity
+            print("No Error fetching walking+running distance")
             print(distanceInMiles)
         }
         
         healthStore.execute(query)
     }
 
-    //if exist
-    func fetchSleepData() {
+
+    func fetchSleepData(startDate: Date, endDate: Date) {
         let sleepType = HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!
-        let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date(), options: .strictStartDate)
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
         
         let query = HKSampleQuery(sampleType: sleepType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: nil) { _, results, error in
             guard let sleepSamples = results as? [HKCategorySample], error == nil else {
@@ -154,10 +149,9 @@ class HealthKit: ObservableObject {
             
             let totalTimeInBed = sleepSamples.reduce(0.0) { $0 + $1.endDate.timeIntervalSince($1.startDate) }
             
-            // Check if there is actual sleep data before updating the ActivityData
             if totalTimeInBed > 0 {
                 let hours = totalTimeInBed / 3600
-                let activity = ActivityData(id: 2, title: "Sleep", subtitle: "Total time in bed", image: "bed.double.circle", amount: String(format: "%.2f", hours) + " hours")
+                let activity = ActivityData(id: 2, title: "Sleep", subtitle: "Total time in bed", image: "bed.double.circle", amount: "\(hours)")
                 self.activities["today Sleep"] = activity
                 print(hours)
             }
@@ -165,6 +159,7 @@ class HealthKit: ObservableObject {
         
         healthStore.execute(query)
     }
+
 
     
     func fetchYesterdaySleepData() {
