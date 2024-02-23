@@ -225,22 +225,108 @@ def create_app(test_config=None):
         user = cur.fetchone()
         if not user:
             return jsonify({"message": "User not found", "status": "fail"}), 404
-    
         log_id = get_or_create_log_id(user['user_id'], date_logged)
+        # Extract height and weight from metrics
+        height = metrics.get('height_cm')
+        weight = metrics.get('weight_kg')
 
-        # Assuming body metrics are part of the daily_logs or a related table
-        # Here's a simplified example for updating a metrics log; adjust according to your schema
-        for metric, value in metrics.items():
-            cur.execute(f"""
-                UPDATE body_metrics SET {metric} = %s 
-                WHERE log_id = %s
-                """, (value, log_id))
+        # Insert or update height and weight in body_metrics table
+        if height and weight:
+            cur.execute("""
+                INSERT INTO body_metrics (log_id, height_cm, weight_kg)
+                VALUES (%s, %s, %s)
+                ON DUPLICATE KEY UPDATE
+                height_cm = VALUES(height_cm),
+                weight_kg = VALUES(weight_kg)
+                """, (log_id, height, weight))
 
+            # Update user's latest height and weight in the users table
+            cur.execute("UPDATE users SET height_cm = %s, weight_kg = %s WHERE user_id = %s", (height, weight, user['user_id']))
 
         mysql.connection.commit()
+        cur.close()
 
         return jsonify({"message": "Body metrics logged successfully"}), 201
 
+    def get_calorie_intake_by_date(user_id):
+        query = """
+        SELECT dl.date_logged, SUM(cid.calories) as total_calories
+        FROM daily_logs dl
+        JOIN calorie_intake_details cid ON dl.log_id = cid.log_id
+        WHERE dl.user_id = %s
+        GROUP BY dl.date_logged
+        ORDER BY dl.date_logged;
+        """
+        cur = mysql.connection.cursor()
+        cur.execute(query, (user_id,))
+        results = cur.fetchall()
+        cur.close()
+        return results
+
+
+    def get_exercise_records_by_date(user_id):
+        query = """
+        SELECT dl.date_logged, er.exercise_type, er.duration_minutes, er.intensity, er.calories_burned
+        FROM daily_logs dl
+        JOIN exercise_records er ON dl.log_id = er.log_id
+        WHERE dl.user_id = %s
+        ORDER BY dl.date_logged, er.time_started;
+        """
+        cur = mysql.connection.cursor()
+        cur.execute(query, (user_id,))
+        results = cur.fetchall()
+        cur.close()
+        return results
+
+    def get_body_metric_changes_by_date(user_id):
+        query = """
+        SELECT dl.date_logged, bm.height_cm, bm.weight_kg
+        FROM daily_logs dl
+        JOIN body_metrics bm ON dl.log_id = bm.log_id
+        WHERE dl.user_id = %s
+        ORDER BY dl.date_logged;
+        """
+        cur = mysql.connection.cursor()
+        cur.execute(query, (user_id,))
+        results = cur.fetchall()
+        cur.close()
+        return results
+    def get_user_id_by_username(username):
+        query = "SELECT user_id FROM users WHERE username = %s"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (username,))
+        user = cur.fetchone()
+        cur.close()
+        return user['user_id'] if user else None
+
+
+    @app.route('/get_calorie_intake/<username>', methods=['GET'])
+    def get_calorie_intake_for_username(username):
+        # Resolve user_id from username
+        user_id = get_user_id_by_username(username)
+        if not user_id:
+            return jsonify({"message": "User not found"}), 404
+        calorie_intake = get_calorie_intake_by_date(user_id)
+        return jsonify(calorie_intake)
+
+    @app.route('/get_exercise_records/<username>', methods=['GET'])
+    def get_exercise_records_for_username(username):
+        # Resolve user_id from username
+        user_id = get_user_id_by_username(username)
+        if not user_id:
+            return jsonify({"message": "User not found"}), 404
+        exercise_records = get_exercise_records_by_date(user_id)
+        return jsonify(exercise_records)
+
+
+    @app.route('/get_body_metrics/<username>', methods=['GET'])
+    def get_body_metrics_for_username(username):
+        # Resolve user_id from username
+        user_id = get_user_id_by_username(username)
+        if not user_id:
+            return jsonify({"message": "User not found"}), 404
+        body_metrics = get_body_metric_changes_by_date(user_id)
+        return jsonify(body_metrics)
 
 
     return app
