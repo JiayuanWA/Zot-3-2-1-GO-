@@ -35,7 +35,7 @@ CREATE TABLE user_conditions (
     condition_id INT NULL,
     condition_name VARCHAR(255) NULL,
     severity ENUM('mild', 'moderate', 'severe'),
-    start_usersuser_workout_daysusersdate DATE,
+    start_date DATE,
     end_date DATE,
     notes TEXT,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
