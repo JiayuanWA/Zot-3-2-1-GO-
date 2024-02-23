@@ -1,7 +1,6 @@
 import SwiftUI
 
 extension Date {
-  
     
     static func startOfWeekDates() -> [Date] {
         let startOfWeek = Date.startOfWeek
@@ -29,7 +28,8 @@ struct RecordHomeView: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .padding()
-
+      
+            
             WeekProgressView(selectedDate: $selectedDate, startOfWeekDates: Date.startOfWeekDates())
                 .padding(.horizontal)
                 .padding(.top, 20)
@@ -37,7 +37,7 @@ struct RecordHomeView: View {
 
             if let stepData = manager.activities["today Steps"] {
                 let stepCount = Double(stepData.amount) ?? 0
-                let goal = 5000.0
+                let goal = 2000.0
 
                 if let selectedDate = selectedDate {
                     Text("\(selectedDate, style: .date)")
@@ -48,24 +48,27 @@ struct RecordHomeView: View {
 
                 ProgressItem(title: "Steps Walked", value: stepCount, goal: goal)
                     .padding(.top, 20)
+                    .foregroundColor(.blue)
                     .padding(.horizontal)
             }
 
 
             if let distanceData = manager.activities["today Distance"] {
-                   let distanceCount = Double(distanceData.amount) ?? 3
-                   let distanceGoal = 5.0 
+                let distanceCount = Double(distanceData.amount) ?? 3
+                let distanceGoal = 2.0
 
-                       ProgressItem(title: "Distance Walked", value: distanceCount, goal: distanceGoal)
-                           .padding(.top, 20)
-                           .padding(.horizontal)
-                   
-               }
+                ProgressItem(title: "Distance Walked", value: distanceCount, goal: distanceGoal)
+                    .foregroundColor(.green)
+                    .padding(.top, 20)
+                    .padding(.horizontal)
+            }
+
             if let sleepData = manager.activities["today Sleep"] {
-                       let Count = Double(sleepData.amount) ?? 0
+                let Count = Double(sleepData.amount) ?? 0
                 let Goal = 8.0
 
-                       ProgressItem(title: "Sleep Duration", value: Count, goal: Goal)
+                ProgressItem(title: "Sleep Duration", value: Count, goal: Goal)
+                    .foregroundColor(.orange)
                            .padding(.top, 20)
                            .padding(.horizontal)
                    }
@@ -147,9 +150,9 @@ struct WeekProgressView: View {
                 DayProgressView(
                     startDate: startOfWeekDates[day],
                     selectedDate: $selectedDate,
-                    caloriesBurnedPercentage: 0.5,
-                    stepsWalkedPercentage: 0.8,
-                    minutesExercisedPercentage: 0.3
+                    caloriesBurnedPercentage: 0.8,
+                    stepsWalkedPercentage: 0.5,
+                    minutesExercisedPercentage: 0.4
                 )
                 .onTapGesture {
                     selectedDate = startOfWeekDates[day]
@@ -159,7 +162,7 @@ struct WeekProgressView: View {
             }
         }
         .onChange(of: selectedDate) { newDate in
-            // Print the selected date for debugging
+        
             print("Selected Date: \(newDate ?? Date())")
 
 
@@ -182,14 +185,20 @@ struct WeekProgressView: View {
 
     }
 }
-
-
 struct DayProgressView: View {
     let startDate: Date
     let selectedDate: Binding<Date?>
     let caloriesBurnedPercentage: Double
     let stepsWalkedPercentage: Double
     let minutesExercisedPercentage: Double
+
+    var isSelected: Bool {
+        if let selectedDate = selectedDate.wrappedValue {
+            return Calendar.current.isDate(startDate, inSameDayAs: selectedDate)
+        } else {
+            return false
+        }
+    }
 
     var body: some View {
         VStack {
@@ -198,24 +207,27 @@ struct DayProgressView: View {
                 .foregroundColor(.secondary)
 
             ZStack {
-                            Circle()
-                                .trim(from: 0.0, to: CGFloat(caloriesBurnedPercentage))
-                                .stroke(Color.red, style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                                .frame(width: 30, height: 30)
-                                .rotationEffect(.degrees(-90))
+                Circle()
+                    .trim(from: 0.0, to: CGFloat(caloriesBurnedPercentage))
+                    .stroke(isSelected ? Color.orange : Color.gray, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                    .frame(width: 30, height: 30)
+                    .rotationEffect(.degrees(-90))
 
-                            Circle()
-                                .trim(from: 0.0, to: CGFloat(stepsWalkedPercentage))
-                                .stroke(Color.green, style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                                .frame(width: 40, height: 40)
-                                .rotationEffect(.degrees(-90))
+                Circle()
+                    .trim(from: 0.0, to: CGFloat(stepsWalkedPercentage))
+                    .stroke(isSelected ? Color.green : Color.gray, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                    .frame(width: 40, height: 40)
+                    .rotationEffect(.degrees(-90))
 
-                            Circle()
-                                .trim(from: 0.0, to: CGFloat(minutesExercisedPercentage))
-                                .stroke(Color.blue, style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                                .frame(width: 50, height: 50)
-                                .rotationEffect(.degrees(-90))
-                        }
+                Circle()
+                    .trim(from: 0.0, to: CGFloat(minutesExercisedPercentage))
+                    .stroke(isSelected ? Color.blue : Color.gray, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                    .frame(width: 50, height: 50)
+                    .rotationEffect(.degrees(-90))
+            }
+            .onTapGesture {
+                selectedDate.wrappedValue = isSelected ? nil : startDate
+            }
 
             Text(dateString(startDate))
                 .font(.caption)
