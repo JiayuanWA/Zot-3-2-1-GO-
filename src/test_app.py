@@ -37,7 +37,6 @@ class FlaskTestCase(unittest.TestCase):
             "activity_level": "active",
             "goals": ["lose weight", "improve cardio"],
             "fitness_level": "intermediate",
-            "workout_days": ["Monday", "Wednesday", "Friday"],
             "height_cm": 120,
             "weight_kg": 100,
             # Add other required fields...
@@ -55,12 +54,30 @@ class FlaskTestCase(unittest.TestCase):
             "activity_level": "active",
             "goals": ["lose weight", "improve cardio"],
             "fitness_level": "intermediate",
-            "workout_days": ["Monday", "Wednesday", "Friday"],
             # Add fields to be updated...
         }
         response = self.client.post('/profile/update', json=update_data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Profile updated successfully', response.json['message'])
 
+    def test_initialize_daily_log(self):
+        """Test the initialize daily log endpoint."""
+        # Assuming 'testuser' is already registered in your test database
+        request_data = {
+            'username': 'newuser',
+            'date': '2024-02-22'  # Use a specific date for testing
+        }
+        response = self.client.post('/initialize_daily_log', json=request_data)
+        self.assertEqual(response.status_code, 200)
+        
+        self.assertIn('Daily log', response.json['message'])
+
+        # Optionally, verify that the log entry exists in the database
+        with self.app.app_context():
+            cur = mysql.connection.cursor()
+            cur.execute("SELECT * FROM daily_logs WHERE user_id = (SELECT user_id FROM users WHERE username = %s) AND date_logged = %s", ('testuser', '2024-02-22'))
+            log_entry = cur.fetchone()
+            self.assertIsNotNone(log_entry)
+            cur.close()
 if __name__ == '__main__':
     unittest.main()

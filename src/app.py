@@ -11,7 +11,8 @@ def create_app(test_config=None):
         # Load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
         # Load database connection info from a secure location.
-        db = yaml.load(open('db.yaml'), Loader=yaml.FullLoader)
+        with open('db.yaml', 'r') as file:
+            db = yaml.load(file, Loader=yaml.FullLoader)
     else:
         # Load the test config if passed in
         app.config.update(test_config)
@@ -52,20 +53,14 @@ def create_app(test_config=None):
         height_cm = user_details['height_cm']
         weight_kg = user_details['weight_kg']
         activity_level = user_details['activity_level']
-        goals = ','.join(user_details['goals'])  # Assuming goals is a list
+        goals = ','.join(user_details['goals'])  
         fitness_level = user_details['fitness_level']
-        workout_days = user_details['workout_days']  # Assuming workout_days is a list of strings like ["Monday", "Wednesday"]
 
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         
         # Insert user into database
         cur.execute("INSERT INTO users(username, password, first_name, last_name, gender, date_of_birth, height_cm, weight_kg, activity_level, goals, fitness_level) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (username, password, first_name, last_name, gender, date_of_birth, height_cm, weight_kg, activity_level, goals, fitness_level,))
         user_id = cur.lastrowid
-        
-        # Insert workout days
-        for day in workout_days:
-            cur.execute("INSERT INTO user_workout_days(user_id, workout_day_id) SELECT %s, workout_day_id FROM workout_days WHERE day_of_week = %s", (user_id, day,))
-        
         mysql.connection.commit()
         cur.close()
         
@@ -79,10 +74,6 @@ def create_app(test_config=None):
         user_info = cur.fetchone()
         
         if user_info:
-            # Retrieve user's workout days using the user_id from the fetched user_info
-            cur.execute("SELECT wd.day_of_week FROM workout_days wd JOIN user_workout_days uwd ON wd.workout_day_id = uwd.workout_day_id WHERE uwd.user_id = %s", (user_info['user_id'],))
-            workout_days = [row['day_of_week'] for row in cur.fetchall()]
-            user_info['workout_days'] = workout_days
             cur.close()
             return jsonify({"status": "success", "user_info": user_info}), 200
         else:
@@ -99,7 +90,6 @@ def create_app(test_config=None):
         activity_level = data.get('activity_level')
         goals = ','.join(data['goals']) if 'goals' in data else None  # Assuming goals is provided as a list
         fitness_level = data.get('fitness_level')
-        workout_days = data.get('workout_days')  # Assuming workout_days is provided as a list of strings
 
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
@@ -109,29 +99,151 @@ def create_app(test_config=None):
             activity_level = %s, goals = %s, fitness_level = %s
             WHERE username = %s
             """, (height_cm, weight_kg, activity_level, goals, fitness_level, username))
-
-        # Update workout days
-        # First, get the user_id for the given username
         cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
-        user_info = cur.fetchone()
-        if user_info:
-            user_id = user_info['user_id']
-            # Clear existing workout days for the user
-            cur.execute("DELETE FROM user_workout_days WHERE user_id = %s", (user_id,))
-
-            # Insert new workout days
-            for day in workout_days:
-                cur.execute("""
-                    INSERT INTO user_workout_days(user_id, workout_day_id) 
-                    SELECT %s, workout_day_id FROM workout_days WHERE day_of_week = %s
-                    """, (user_id, day))
+    
 
         mysql.connection.commit()
         cur.close()
 
         return jsonify({"status": "success", "message": "Profile updated successfully"}), 200
     # Add more routes here for getting and setting user profile information
+    @app.route('/initialize_daily_log', methods=['POST'])
+    def initialize_daily_log():
+        data = request.json
+        username = data['username']
+        date = data.get('date', None)  # Use the current date if not provided
+
+        # If no date is provided, use the current date
+        if not date:
+            from datetime import datetime
+            date = datetime.now().strftime('%Y-%m-%d')
+
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+        # Verify user exists and get user_id
+        cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
+        user = cur.fetchone()
+        if not user:
+            cur.close()
+            return jsonify({"message": "User not found", "status": "fail"}), 404
+        user_id = user['user_id']
+
+        # Check if a daily log for this date already exists
+        cur.execute("SELECT log_id FROM daily_logs WHERE user_id = %s AND date_logged = %s", (user_id, date))
+        log = cur.fetchone()
+
+        if not log:
+            # Insert a new daily log if it doesn't exist
+            cur.execute("INSERT INTO daily_logs (user_id, date_logged) VALUES (%s, %s)", (user_id, date))
+            mysql.connection.commit()
+            message = "Daily log initialized successfully"
+        else:
+            message = "Daily log already exists for this date"
+
+        cur.close()
+        return jsonify({"message": message, "status": "success"}), 200
+
+    # Assuming this function finds or creates a log entry and returns its log_id
+    def get_or_create_log_id(user_id, date_logged):
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT log_id FROM daily_logs WHERE user_id = %s AND date_logged = %s", (user_id, date_logged))
+        log = cur.fetchone()
+        if log:
+            return log['log_id']
+        else:
+            # Insert a new daily log if it doesn't exist
+            cur.execute("INSERT INTO daily_logs (user_id, date_logged) VALUES (%s, %s)", (user_id, date_logged))
+            mysql.connection.commit()
+            return cur.lastrowid  # Return the newly created log_id
+
+    @app.route('/log/calorie_intake', methods=['POST'])
+    def log_calorie_intake():
+        data = request.json
+        username = data['username']
+        date_logged = data['date_logged']
+        meals = data['meals']
+
+        cur = mysql.connection.cursor()
+
+        # Fetch user_id using username
+        cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
+        user = cur.fetchone()
+        if not user:
+            return jsonify({"message": "User not found", "status": "fail"}), 404
+
+        log_id = get_or_create_log_id(user['user_id'], date_logged)
+        if not log_id:
+            return jsonify({"message": "Daily log not found", "status": "fail"}), 404
+
+        # Insert calorie intake logs using log_id
+        for meal in meals:
+            cur.execute("INSERT INTO calorie_intake_details (log_id, calories, meal_type) VALUES (%s, %s, %s)",
+                        (log_id, meal['calories'], meal['meal_type']))
+
+        mysql.connection.commit()
+        return jsonify({"message": "Calorie intake logged successfully"}), 201
+
+    @app.route('/log/exercise', methods=['POST'])
+    def log_exercise():
+        data = request.json
+        username = data['username']
+        date_logged = data['date_logged']
+        exercises = data['exercises']
+
+        cur = mysql.connection.cursor()
+
+        # Fetch user_id using username
+        cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
+        user = cur.fetchone()
+        if not user:
+            return jsonify({"message": "User not found", "status": "fail"}), 404
+    
+        log_id = get_or_create_log_id(user['user_id'], date_logged)
+
+        # Insert exercise logs using log_id
+        for exercise in exercises:
+            cur.execute("""
+                INSERT INTO exercise_logs (log_id, exercise_type, duration, calories_burned) 
+                VALUES (%s, %s, %s, %s)
+                """, (log_id, exercise['type'], exercise['duration'], exercise['calories_burned']))
+
+        mysql.connection.commit()
+        return jsonify({"message": "Exercise logged successfully"}), 201
+
+
+    @app.route('/log/body_metrics', methods=['POST'])
+    def log_body_metrics():
+        data = request.json
+        username = data['username']
+        date_logged = data['date_logged']
+        metrics = data['metrics']
+
+        cur = mysql.connection.cursor()
+
+        # Fetch user_id using username
+        cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
+        user = cur.fetchone()
+        if not user:
+            return jsonify({"message": "User not found", "status": "fail"}), 404
+    
+        log_id = get_or_create_log_id(user['user_id'], date_logged)
+
+        # Assuming body metrics are part of the daily_logs or a related table
+        # Here's a simplified example for updating a metrics log; adjust according to your schema
+        for metric, value in metrics.items():
+            cur.execute(f"""
+                UPDATE body_metrics SET {metric} = %s 
+                WHERE log_id = %s
+                """, (value, log_id))
+
+        mysql.connection.commit()
+        return jsonify({"message": "Body metrics logged successfully"}), 201
     return app
+
+
+
+    
+    
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
