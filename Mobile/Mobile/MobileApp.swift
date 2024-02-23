@@ -7,6 +7,7 @@ import SwiftData
 struct MobileApp: App {
     @StateObject var manager = HealthKit()
     @StateObject var authManager = AuthManager()
+    @State public var showAlert = false
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -26,6 +27,16 @@ struct MobileApp: App {
             if authManager.isLoggedIn {
                 HomeView()
                     .environmentObject(manager)
+                    .onAppear {
+                        showAlert = true
+                    }
+                    .alert(isPresented: $showAlert) {
+                        Alert(
+                            title: Text("Success"),
+                            message: Text("Loggin Success!"),
+                            dismissButton: .default(Text("OK"))
+                        )
+                    }
             } else {
                 ContentView()
                     .environmentObject(authManager)

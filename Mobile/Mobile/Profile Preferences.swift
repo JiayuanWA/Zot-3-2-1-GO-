@@ -5,6 +5,7 @@ struct ProfileAndPreferences: View {
     @State private var firstname: String = ""
     @State private var lastname: String = ""
     @State private var age: String = ""
+    
     @State private var height: String = ""
     @State private var weight: String = ""
     @State private var gender: String = ""
@@ -123,8 +124,8 @@ struct ProfileAndPreferences: View {
                 NavigationLink(destination: ContentView(), isActive: $isSaved) {
                                     Button(action: {
                                         let preferences: [String: Any] = [
-                                            "firstName": firstname, // Assuming you have a variable named firstName
-                                            "lastName": lastname,   // Assuming you have a variable named lastName
+                                            "firstName": firstname,
+                                            "lastName": lastname,
                                             "age": age,
                                             "height": height,
                                             "weight": weight,
@@ -170,10 +171,10 @@ struct CustomTextField: View {
 
             TextField("", text: $text)
                 .keyboardType(keyboardType)
-                .padding(.vertical, 8)  // Adjust vertical padding
-                .padding(.horizontal, 16) // Adjust horizontal padding
-                .font(.subheadline)  // Adjust font size
-                .multilineTextAlignment(.trailing) // Align text to the right
+                .padding(.vertical, 8)
+                .padding(.horizontal, 16)
+                .font(.subheadline)
+                .multilineTextAlignment(.trailing)
         }
     }
 }

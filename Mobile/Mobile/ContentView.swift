@@ -7,24 +7,16 @@ struct ContentView: View {
 
     @State private var username: String = ""
     @State private var password: String = ""
-    @State private var showAlert = false
+    @State public var showAlert = false
 
     var body: some View {
         NavigationView {
             if authManager.isLoggedIn {
                 EmptyView() 
-                    .onAppear {
-                        showAlert = true
-                    }
-                    .alert(isPresented: $showAlert) {
-                        Alert(
-                            title: Text("Success"),
-                            message: Text("Loggin Success!"),
-                            dismissButton: .default(Text("OK"))
-                        )
-                    }
+                    
             } else {
                 loginView
+                
             }
         }
     }

@@ -15,7 +15,7 @@ struct MainTabView: View {
                 }
                 .tabItem {
                     Image(systemName: "star.fill")
-                    Text("Exercises")
+                    Text("Workout Catalogue")
                 }
 
 
