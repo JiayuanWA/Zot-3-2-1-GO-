@@ -145,7 +145,7 @@ def create_app(test_config=None):
 
     # Assuming this function finds or creates a log entry and returns its log_id
     def get_or_create_log_id(user_id, date_logged):
-        cur = mysql.connection.cursor()
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cur.execute("SELECT log_id FROM daily_logs WHERE user_id = %s AND date_logged = %s", (user_id, date_logged))
         log = cur.fetchone()
         if log:
@@ -163,7 +163,7 @@ def create_app(test_config=None):
         date_logged = data['date_logged']
         meals = data['meals']
 
-        cur = mysql.connection.cursor()
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
         # Fetch user_id using username
         cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
@@ -190,7 +190,7 @@ def create_app(test_config=None):
         date_logged = data['date_logged']
         exercises = data['exercises']
 
-        cur = mysql.connection.cursor()
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
         # Fetch user_id using username
         cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
@@ -203,7 +203,7 @@ def create_app(test_config=None):
         # Insert exercise logs using log_id
         for exercise in exercises:
             cur.execute("""
-                INSERT INTO exercise_logs (log_id, exercise_type, duration, calories_burned) 
+                INSERT INTO exercise_records (log_id, exercise_type, duration_minutes, calories_burned) 
                 VALUES (%s, %s, %s, %s)
                 """, (log_id, exercise['type'], exercise['duration'], exercise['calories_burned']))
 
@@ -218,7 +218,7 @@ def create_app(test_config=None):
         date_logged = data['date_logged']
         metrics = data['metrics']
 
-        cur = mysql.connection.cursor()
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
         # Fetch user_id using username
         cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
@@ -236,8 +236,13 @@ def create_app(test_config=None):
                 WHERE log_id = %s
                 """, (value, log_id))
 
+
         mysql.connection.commit()
+
         return jsonify({"message": "Body metrics logged successfully"}), 201
+
+
+
     return app
 
 
