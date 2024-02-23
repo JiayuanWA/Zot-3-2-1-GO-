@@ -6,6 +6,8 @@ struct CreateAccount: View {
     @State private var isAccountCreated = false
     @State private var isNavigationBarHidden = true
     @Environment(\.presentationMode) var presentationMode
+    
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 16) {
@@ -38,10 +40,14 @@ struct CreateAccount: View {
                 .hidden()
 
                 Button(action: {
-                    isAccountCreated = true
+                    if password == confirmPassword {
+                        isAccountCreated = true
+                    } else {
+                        print("Passwords don't match")
+                                                                }
                     
                 }) {
-                    Text("Create Account")
+                    Text("Continue")
                         .foregroundColor(.white)
                         .font(.headline)
                         .padding()

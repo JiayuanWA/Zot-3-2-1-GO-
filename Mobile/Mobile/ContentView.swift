@@ -43,6 +43,7 @@ struct ContentView: View {
 
             Button(action: {
                 authManager.loginUser(username: username, password: password)
+                
             }) {
                 Text("Login")
                     .foregroundColor(.white)

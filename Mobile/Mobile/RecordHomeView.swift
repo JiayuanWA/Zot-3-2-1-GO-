@@ -13,15 +13,18 @@ extension Date {
     }
 }
 
+
+
+
 struct RecordHomeView: View {
     @EnvironmentObject var manager: HealthKit
     @State private var firstName: String = ""
     @State private var selectedDate: Date?
-    
+    @State private var isSurveyActive: Bool = false
     
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .center) {
             Text("Welcome, \(firstName)")
                 .font(.title)
                 .fontWeight(.bold)
@@ -66,6 +69,17 @@ struct RecordHomeView: View {
                            .padding(.top, 20)
                            .padding(.horizontal)
                    }
+            
+                Button("How are you feeling today?") {
+                           isSurveyActive.toggle()
+                       }
+                       .padding()
+                       .sheet(isPresented: $isSurveyActive) {
+                           DailyDecisionSurveyView(selectedDate: $selectedDate)
+                       }
+                       .padding(.top, 20)
+                       .padding(.horizontal)
+            
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

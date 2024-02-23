@@ -12,6 +12,6 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
-            .environmentObject(HealthKit()) // Provide a dummy HealthKit object for preview
+            .environmentObject(HealthKit())
     }
 }
