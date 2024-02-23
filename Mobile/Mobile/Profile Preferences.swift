@@ -34,7 +34,6 @@ struct ProfileAndPreferences: View {
         "Beginner",
         "Intermediate",
         "Advanced"
-        // Add more fitness levels as needed
     ]
 
     var body: some View {

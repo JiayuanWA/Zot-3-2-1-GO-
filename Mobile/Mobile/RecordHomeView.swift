@@ -13,7 +13,22 @@ extension Date {
 }
 
 
-
+struct StyledButton: View {
+    var title: String
+    var action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .leading, endPoint: .trailing))
+                .cornerRadius(15)
+                .shadow(radius: 5)
+        }
+    }
+}
 
 struct RecordHomeView: View {
     @EnvironmentObject var manager: HealthKit
@@ -27,6 +42,7 @@ struct RecordHomeView: View {
             Text("Welcome, \(firstName)")
                 .font(.title)
                 .fontWeight(.bold)
+            
                 .padding()
       
             
@@ -73,7 +89,7 @@ struct RecordHomeView: View {
                            .padding(.horizontal)
                    }
             
-                Button("How are you feeling today?") {
+            StyledButton(title: "How are you feeling today?") {
                            isSurveyActive.toggle()
                        }
                        .padding()
@@ -82,6 +98,30 @@ struct RecordHomeView: View {
                        }
                        .padding(.top, 20)
                        .padding(.horizontal)
+            
+            StyledButton(title: "Log Workout") {
+                           
+                       }
+                       .padding()
+                       .padding(.horizontal)
+
+
+         
+            
+
+            StyledButton(title: "Log Food Consumption") {
+                         
+                       }
+                       .padding()
+                       .padding(.horizontal)
+
+       
+            StyledButton(title: "Log Body Metrics") {
+                           
+                       }
+                       .padding()
+                       .padding(.horizontal)
+
             
             
         }
