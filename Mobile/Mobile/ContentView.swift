@@ -12,20 +12,28 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             if authManager.isLoggedIn {
-                EmptyView() 
-                    
+                EmptyView()
             } else {
                 loginView
-                
+                    .background(
+                        Image("Wallpaper")
+                            .resizable()
+                            .scaledToFill()
+                            .edgesIgnoringSafeArea(.all)
+                    )
             }
         }
+        .onAppear {
+            UIFont.loadFontIfNeeded("UhBee Se_hyun", type: "ttf")
+        }
     }
+
     private var loginView: some View {
         VStack(spacing: 16) {
-            Text("Log in to Your Account")
-                .font(.title)
-                .fontWeight(.bold)
-            
+            Text("Zot 3 2 1 Go!")
+                .font(.custom("UhBee Se_hyun", size: 24))
+                .foregroundColor(.gray)
+
             TextField("Username", text: $username)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
@@ -35,22 +43,26 @@ struct ContentView: View {
                 .padding()
 
             NavigationLink(destination: CreateAccount()) {
-                Text("Create Account")
-                    .foregroundColor(.blue)
-                    .font(.subheadline)
-                    .underline()
+                HStack {
+                    Text("Create your Workout Buddy")
+                        .foregroundColor(.gray)
+                        .font(.headline)
+                        .underline()
+
+                    Image(systemName: "person.crop.circle.fill")
+                        .foregroundColor(.gray)
+                }
             }
 
             Button(action: {
                 authManager.loginUser(username: username, password: password)
-                
             }) {
                 Text("Login")
                     .foregroundColor(.white)
-                    .font(.headline)
+                    .font(.custom("UhBee Se_hyun", size: 14))
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.blue)
+                    .background(Color.gray)
                     .cornerRadius(8)
             }
             .padding()
@@ -59,5 +71,24 @@ struct ContentView: View {
         }
         .padding()
     }
+}
 
+
+
+extension UIFont {
+    static func loadFontIfNeeded(_ fontName: String, type: String) {
+        if UIFont.fontNames(forFamilyName: fontName).isEmpty {
+            guard let fontPath = Bundle.main.path(forResource: fontName, ofType: type),
+                  let fontData = NSData(contentsOfFile: fontPath),
+                  let dataProvider = CGDataProvider(data: fontData),
+                  let fontRef = CGFont(dataProvider)
+            else {
+                return
+            }
+            var error: Unmanaged<CFError>?
+            if CTFontManagerRegisterGraphicsFont(fontRef, &error) {
+                print("Font loaded successfully")
+            }
+        }
+    }
 }
