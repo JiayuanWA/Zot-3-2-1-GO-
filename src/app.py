@@ -1,8 +1,10 @@
+from datetime import date
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
 import yaml
+import csv
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -329,6 +331,101 @@ def create_app(test_config=None):
         return jsonify(body_metrics)
 
 
+    @app.route('/get_exercise_info/<username>', methods=['GET'])
+    def get_exercise_info(username):
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur.execute('SELECT weight_kg FROM users WHERE username = %s', (username,))
+        user = cur.fetchone()
+        if user:
+            weight_kg = user['weight_kg']
+            exercise_data = []
+            with open('exercise_dataset.csv', mode ='r') as file:
+                csvFile = csv.DictReader(file)
+                for lines in csvFile:
+                    activity = lines['Activity, Exercise or Sport (1 hour)']
+                    calories = float(lines['Calories per kg']) * float(weight_kg)
+                    exercise_data.append({'activity': activity, 'calories': calories})
+            return jsonify(exercise_data)
+        else:
+            return jsonify({'message': 'User not found'}), 404
+
+    def calculate_basic_calories_burned(height, weight, age, gender, activity_level):
+        activity_factors = {
+            'sedentary': 1.2,
+            'light': 1.375,
+            'moderate': 1.55,
+            'active': 1.725,
+            'very active': 1.9
+        }
+        if gender == 'male':
+            bmr = 88.362 + (13.397 * float(weight)) + (4.799 * float(height)) - (5.677 * float(age))* float(activity_factors.get(activity_level, 1))
+        else:
+            bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)* activity_factors.get(activity_level, 1)
+        return bmr
+
+    def calculate_age(born):
+        today = date.today()
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+    @app.route('/get_body_metrics', methods=['POST'])
+    def get_user_fitness_info():
+        data = request.json
+        username = data['username']
+        date = data['date']
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    
+        # Fetch the user details
+        cur.execute("SELECT date_of_birth, gender, goals, fitness_level, activity_level, height_cm, weight_kg  FROM users WHERE username = %s", (username,))
+        user_info = cur.fetchone()
+        
+        gender = user_info['gender']
+        activity_level = user_info['activity_level']
+        height_cm = user_info['height_cm']
+        weight_kg = user_info['weight_kg']
+        date_of_birth = user_info['date_of_birth']
+    
+        # calculate age
+        age = calculate_age(date_of_birth)
+
+        # Fetch daily logs for the date
+        cur.execute("""
+            SELECT calories_burned
+            FROM daily_logs
+            JOIN exercise_records ON daily_logs.log_id = exercise_records.log_id
+            WHERE user_id = (SELECT user_id FROM users WHERE username = %s) AND date_logged = %s
+            """, (username, date))
+        daily_exercise_logs = cur.fetchall()
+        # calculate exercise burned calorie 
+        exercise_calorie = sum(log['calories_burned'] for log in daily_exercise_logs)
+        cur.execute("""
+            SELECT calories
+            FROM daily_logs
+            JOIN calorie_intake_details ON daily_logs.log_id = calorie_intake_details.log_id
+            WHERE user_id = (SELECT user_id FROM users WHERE username = %s) AND date_logged = %s
+            """, (username, date))
+        daily_intake_logs = cur.fetchall()
+        # calculate intake calorie
+        intake_calorie = sum(log['calories'] for log in daily_intake_logs)
+
+        daily_BMR = calculate_basic_calories_burned(height_cm, weight_kg, age, gender, activity_level)
+
+        # get all name for activity
+        exercises = []
+        # Read the CSV file to match the user's weight with the calories burned per kg for the exercises performed
+        with open('exercise_dataset.csv', mode='r') as csvfile:
+            csv_reader = csv.DictReader(csvfile)
+            for row in csv_reader:
+                exercises.append(row['Activity, Exercise or Sport (1 hour)'])
+
+    
+        # Construct the string to ask an AI for a fitness plan
+        ai_query = f"Goal: {user_info['goals']}, Fitness Level: {user_info['fitness_level']}, " \
+                   f"Today's Intake Calories: {intake_calorie}, " \
+                   f"Today's Exercise Calories: {exercise_calorie}, BMR: {daily_BMR}"\
+                   f"I want you to choose from the following exercise, and gives out recommended duration for rest of my day: "\
+                   f"exercise list: {exercises}"
+               
+        return jsonify(ai_query), 201
     return app
 
 

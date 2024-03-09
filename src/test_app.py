@@ -106,5 +106,34 @@ class FlaskTestCase(unittest.TestCase):
         response = self.client.post('/log/body_metrics', json=data)
         self.assertEqual(response.status_code, 201)
         self.assertIn('Body metrics logged successfully', response.json['message'])
+
+
+    def test_get_exercise_info(self):
+        # Mocking the database cursor's behavior
+        # Assuming the username 'john_doe' exists in your database with a weight that corresponds to the 155 lb column
+        response = self.client.get('/get_exercise_info/newuser')
+        print(response.json)
+        self.assertEqual(response.status_code, 200)
+        # Here you can add more assertions to check if the response data is as expected
+        # This is a basic example, you'd likely want to check the structure and content of the response data
+
+    def test_get_exercise_info(self):
+        # Mocking the database cursor's behavior
+        # Assuming the username 'john_doe' exists in your database with a weight that corresponds to the 155 lb column
+        response = self.client.get('/get_exercise_info/newuser')
+        self.assertEqual(response.status_code, 200)
+        # Here you can add more assertions to check if the response data is as expected
+        # This is a basic example, you'd likely want to check the structure and content of the response data
+
+
+    def test_user_info(self):
+        # Example data for the test
+        data = {
+            "username": "testuser",
+            "date": "2024-02-22",
+        }
+        response = self.client.post('/get_body_metrics', json=data)
+        self.assertEqual(response.status_code, 201)
+        print(response.json)
 if __name__ == '__main__':
     unittest.main()
