@@ -134,6 +134,6 @@ class FlaskTestCase(unittest.TestCase):
         }
         response = self.client.post('/get_body_metrics', json=data)
         self.assertEqual(response.status_code, 201)
-        print(response.json)
+        print(response)
 if __name__ == '__main__':
     unittest.main()
