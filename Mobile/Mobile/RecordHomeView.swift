@@ -13,28 +13,15 @@ extension Date {
 }
 
 
-struct StyledButton: View {
-    var title: String
-    var action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            Text(title)
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .leading, endPoint: .trailing))
-                .cornerRadius(15)
-                .shadow(radius: 5)
-        }
-    }
-}
+
 
 struct RecordHomeView: View {
     @EnvironmentObject var manager: HealthKit
     @State private var firstName: String = ""
     @State private var selectedDate: Date?
+    @State private var showAlert = false
     @State private var isSurveyActive: Bool = false
+    @State private var hasUserTakenSurveyToday = false
     
 
     var body: some View {
@@ -45,7 +32,18 @@ struct RecordHomeView: View {
             
                 .padding()
       
-            
+            Button(action: {
+                isSurveyActive.toggle()
+            }) {
+                Text("How are you feeling today?")
+            }
+            .padding()
+            .sheet(isPresented: $isSurveyActive) {
+                DailyDecisionSurveyView(selectedDate: $selectedDate)
+            }
+            .padding(.top, 20)
+            .padding(.horizontal)
+
             WeekProgressView(selectedDate: $selectedDate, startOfWeekDates: Date.startOfWeekDates())
                 .padding(.horizontal)
                 .padding(.top, 20)
@@ -88,45 +86,95 @@ struct RecordHomeView: View {
                            .padding(.top, 20)
                            .padding(.horizontal)
                    }
+           
+
+
+            Button(action: {
+                isSurveyActive.toggle()
+            }) {
+                HStack {
+                    Text("Log Workout")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    Image(systemName: "figure.run")
+                        .font(.system(size: 20))
+                        .foregroundColor(.white)
+                        .padding(.trailing, 10)
+                }
+
+            }
+            .frame(maxWidth: 300, maxHeight:20)
+            .padding()
+            .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.black]), startPoint: .leading, endPoint: .trailing))
+            .cornerRadius(15)
+            .shadow(radius: 5)
+            .sheet(isPresented: $isSurveyActive) {
+                DailyDecisionSurveyView(selectedDate: $selectedDate)
+            }
             
-            StyledButton(title: "How are you feeling today?") {
-                           isSurveyActive.toggle()
-                       }
-                       .padding()
-                       .sheet(isPresented: $isSurveyActive) {
-                           DailyDecisionSurveyView(selectedDate: $selectedDate)
-                       }
-                       .padding(.top, 20)
-                       .padding(.horizontal)
+            Button(action: {
+                isSurveyActive.toggle()
+            }) {
+                HStack {
+                    Text("Log Food Consumption")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    Image(systemName: "fork.knife")
+                        .font(.system(size: 20))
+                        .foregroundColor(.white)
+                        .padding(.trailing, 10)
+                }
+
+            }
+            .frame(maxWidth: 300, maxHeight:20)
+            .padding()
+            .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.black]), startPoint: .leading, endPoint: .trailing))
+            .cornerRadius(15)
+            .shadow(radius: 5)
+            .sheet(isPresented: $isSurveyActive) {
+                DailyDecisionSurveyView(selectedDate: $selectedDate)
+            }
             
-            StyledButton(title: "Log Workout") {
-                           
-                       }
-                       .padding()
-                       .padding(.horizontal)
+            Button(action: {
+                isSurveyActive.toggle()
+            }) {
+                HStack {
+                    Text("Log Workout")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    Image(systemName: "figure.run")
+                        .font(.system(size: 20))
+                        .foregroundColor(.white)
+                        .padding(.trailing, 10)
+                }
 
+            }
+            .frame(maxWidth: 300, maxHeight:20)
+            .padding()
+            .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.black]), startPoint: .leading, endPoint: .trailing))
+            .cornerRadius(15)
+            .shadow(radius: 5)
+            .sheet(isPresented: $isSurveyActive) {
+                DailyDecisionSurveyView(selectedDate: $selectedDate)
+            }
 
-         
-            
-
-            StyledButton(title: "Log Food Consumption") {
-                         
-                       }
-                       .padding()
-                       .padding(.horizontal)
-
-       
-            StyledButton(title: "Log Body Metrics") {
-                           
-                       }
-                       .padding()
-                       .padding(.horizontal)
+//            
+//            StyledButton(title: "Log Food Consumption", iconName: "fork.knife") {
+//            }
+//            .padding()
+//            .padding(.horizontal)
+//
+//            StyledButton(title: "Log Body Metrics", iconName: "waveform.path.ecg") {
+//            }
+//            .padding()
+//            .padding(.horizontal)
 
             
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .onAppear {
+            showAlert = true
             if let savedPreferences = UserDefaults.standard.dictionary(forKey: "userPreferences") as? [String: Any] {
                 self.firstName = savedPreferences["firstName"] as? String ?? ""
             }
@@ -137,6 +185,7 @@ struct RecordHomeView: View {
 
 
         }
+        
         .onReceive(manager.$activities) { _ in
             print("Activities changed. Updating UI.")
 
@@ -216,7 +265,7 @@ struct WeekProgressView: View {
                             manager.fetchSteps(startDate: startDate, endDate: endDate)
                             manager.fetchWalkingRunningDistance(startDate: startDate, endDate: endDate)
                     manager.fetchSleepData(startDate: startDate, endDate: endDate)
-                    print("Activities Dictionarydddddddddddd: \(manager.activities)")
+                    print("Activities Dictionary: \(manager.activities)")
                                
                            
                         }

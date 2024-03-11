@@ -12,7 +12,7 @@ struct CreateAccount: View {
         NavigationView {
             VStack(spacing: 16) {
                 Text("Create Account")
-                    .font(.title)
+                    .font(.custom("UhBee Se_hyun", size: 24))
                     .fontWeight(.bold)
 
                 TextField("Username", text: $username)
@@ -27,7 +27,7 @@ struct CreateAccount: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
 
-                NavigationLink(
+                NavigationLink( 
                     destination: ProfileAndPreferences(username: username)
                         .navigationBarHidden(isNavigationBarHidden)
                         .onAppear {
@@ -49,7 +49,7 @@ struct CreateAccount: View {
                 }) {
                     Text("Continue")
                         .foregroundColor(.white)
-                        .font(.headline)
+                        .font(.custom("UhBee Se_hyun", size: 18))
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(Color.blue)
@@ -59,6 +59,12 @@ struct CreateAccount: View {
 
                 Spacer()
             }
+            .background(
+                Image("Wallpaper")
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
+            )
             .padding()
             .navigationBarHidden(true)
         }

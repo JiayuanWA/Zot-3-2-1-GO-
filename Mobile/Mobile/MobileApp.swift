@@ -27,19 +27,31 @@ struct MobileApp: App {
             if authManager.isLoggedIn {
                 HomeView()
                     .environmentObject(manager)
+                    .background(
+                        Image("Wallpaper")
+                            .resizable()
+                            .scaledToFill()
+                            .edgesIgnoringSafeArea(.all)
+                    )
                     .onAppear {
                         showAlert = true
                     }
                     .alert(isPresented: $showAlert) {
                         Alert(
                             title: Text("Success"),
-                            message: Text("Loggin Success!"),
+                            message: Text("Loggin Success! Have you filled out your daily survey?"),
                             dismissButton: .default(Text("OK"))
                         )
                     }
             } else {
                 ContentView()
                     .environmentObject(authManager)
+                    .background(
+                        Image("Wallpaper")
+                            .resizable()
+                            .scaledToFill()
+                            .edgesIgnoringSafeArea(.all)
+                    )
             }
         }
         .modelContainer(sharedModelContainer)

@@ -8,6 +8,15 @@ struct MainTabView: View {
                     Image(systemName: "house.fill")
                     Text("Home")
                 }
+                .background(
+                    Image("Wallpaper")
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all)
+                )
+                
+
+            
 
             NavigationView {
                     ExerciseListView()
@@ -17,6 +26,12 @@ struct MainTabView: View {
                     Image(systemName: "star.fill")
                     Text("Workout Catalogue")
                 }
+                .background(
+                    Image("Wallpaper")
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all)
+                )
 
 
             RecommendationsView()
@@ -24,12 +39,25 @@ struct MainTabView: View {
                                 Image(systemName: "heart.fill")
                                 Text("Recommendations")
                             }
+                            .background(
+                                Image("Wallpaper")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .edgesIgnoringSafeArea(.all)
+                            )
 
             ProfileView()
                 .tabItem {
                     Image(systemName: "person.fill")
                     Text("Profile")
                 }
+                .background(
+                    Image("Wallpaper")
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all)
+                )
+            
         }
         .accentColor(.blue) 
     }
