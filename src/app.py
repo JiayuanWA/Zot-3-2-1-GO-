@@ -5,6 +5,9 @@ import MySQLdb.cursors
 import re
 import yaml
 import csv
+import openai 
+  
+
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -417,15 +420,25 @@ def create_app(test_config=None):
             for row in csv_reader:
                 exercises.append(row['Activity, Exercise or Sport (1 hour)'])
 
-    
+        openai.api_key = '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'
         # Construct the string to ask an AI for a fitness plan
         ai_query = f"Goal: {user_info['goals']}, Fitness Level: {user_info['fitness_level']}, " \
                    f"Today's Intake Calories: {intake_calorie}, " \
                    f"Today's Exercise Calories: {exercise_calorie}, BMR: {daily_BMR}"\
-                   f"I want you to choose from the following exercise, and gives out recommended duration for rest of my day: "\
+                   f"I want you to choose from the following exercise, and gives out recommended duration for rest of my day in json format in list called exercise_list with name and duration: "\
                    f"exercise list: {exercises}"
-               
-        return jsonify(ai_query), 201
+
+
+        messages = [ {"role": "system", "content": "You are a intelligent assistant."} ]
+        messages.append( 
+            {"role": "user", "content": ai_query}, 
+        ) 
+        chat = openai.ChatCompletion.create( 
+            model="gpt-3.5-turbo-0125", messages=messages 
+        )
+        reply = chat.choices[0].message.content
+        print(reply)
+        return jsonify(reply), 201
     return app
 
 
