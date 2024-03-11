@@ -23,11 +23,15 @@ struct RecordHomeView: View {
     @State private var isSurveyActive: Bool = false
     @State private var hasUserTakenSurveyToday = false
     
+    @State private var isLoggingWorkoutActive = false
+    @State private var isLoggingFoodActive = false
+    @State private var isLoggingBodyMetricsActive = false
+    
 
     var body: some View {
         VStack(alignment: .center) {
             Text("Welcome, \(firstName)")
-                .font(.title)
+                .font(.custom("UhBee Se_hyun", size: 24))
                 .fontWeight(.bold)
             
                 .padding()
@@ -52,10 +56,11 @@ struct RecordHomeView: View {
             if let stepData = manager.activities["today Steps"] {
                 let stepCount = Double(stepData.amount) ?? 0
                 let goal = 2000.0
+                
 
                 if let selectedDate = selectedDate {
                     Text("\(selectedDate, style: .date)")
-                        .font(.headline)
+                        .font(.custom("UhBee Se_hyun", size: 12))
                         .padding(.top, 10)
                         .padding(.horizontal)
                 }
@@ -90,37 +95,36 @@ struct RecordHomeView: View {
 
 
             Button(action: {
-                isSurveyActive.toggle()
-            }) {
-                HStack {
-                    Text("Log Workout")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                    Image(systemName: "figure.run")
-                        .font(.system(size: 20))
-                        .foregroundColor(.white)
-                        .padding(.trailing, 10)
-                }
-
-            }
-            .frame(maxWidth: 300, maxHeight:20)
-            .padding()
-            .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.black]), startPoint: .leading, endPoint: .trailing))
-            .cornerRadius(15)
-            .shadow(radius: 5)
-            .sheet(isPresented: $isSurveyActive) {
-                DailyDecisionSurveyView(selectedDate: $selectedDate)
-            }
+                        isLoggingWorkoutActive.toggle()
+                    }) {
+                        HStack {
+                            Text("Workout")
+                                .font(.custom("UhBee Se_hyun", size: 18))
+                                .foregroundColor(.white)
+                            Image(systemName: "figure.run")
+                                .font(.custom("UhBee Se_hyun", size: 18))
+                                .foregroundColor(.white)
+                                .padding(.trailing, 10)
+                        }
+                    }
+                    .frame(maxWidth: 300, maxHeight: 20)
+                    .padding()
+                    .background(.gray)
+                    .cornerRadius(15)
+                    .shadow(radius: 5)
+                    .sheet(isPresented: $isLoggingWorkoutActive) {
+                        Logging(selectedDate: $selectedDate)
+                    }
             
             Button(action: {
-                isSurveyActive.toggle()
+                isLoggingFoodActive.toggle()
             }) {
                 HStack {
-                    Text("Log Food Consumption")
-                        .font(.headline)
+                    Text("Food Consumption")
+                        .font(.custom("UhBee Se_hyun", size: 18))
                         .foregroundColor(.white)
                     Image(systemName: "fork.knife")
-                        .font(.system(size: 20))
+                        .font(.custom("UhBee Se_hyun", size: 18))
                         .foregroundColor(.white)
                         .padding(.trailing, 10)
                 }
@@ -131,19 +135,19 @@ struct RecordHomeView: View {
             .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.black]), startPoint: .leading, endPoint: .trailing))
             .cornerRadius(15)
             .shadow(radius: 5)
-            .sheet(isPresented: $isSurveyActive) {
-                DailyDecisionSurveyView(selectedDate: $selectedDate)
+            .sheet(isPresented: $isLoggingFoodActive) {
+                FoodLogging(selectedDate: $selectedDate)
             }
             
             Button(action: {
-                isSurveyActive.toggle()
+                isLoggingBodyMetricsActive.toggle()
             }) {
                 HStack {
-                    Text("Log Workout")
-                        .font(.headline)
+                    Text("Body Metrics")
+                        .font(.custom("UhBee Se_hyun", size: 18))
                         .foregroundColor(.white)
-                    Image(systemName: "figure.run")
-                        .font(.system(size: 20))
+                    Image(systemName: "waveform.path.ecg")
+                        .font(.custom("UhBee Se_hyun", size: 18))
                         .foregroundColor(.white)
                         .padding(.trailing, 10)
                 }
@@ -154,20 +158,9 @@ struct RecordHomeView: View {
             .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.black]), startPoint: .leading, endPoint: .trailing))
             .cornerRadius(15)
             .shadow(radius: 5)
-            .sheet(isPresented: $isSurveyActive) {
-                DailyDecisionSurveyView(selectedDate: $selectedDate)
+            .sheet(isPresented: $isLoggingBodyMetricsActive) {
+                BodyMetricLogging(selectedDate: $selectedDate)
             }
-
-//            
-//            StyledButton(title: "Log Food Consumption", iconName: "fork.knife") {
-//            }
-//            .padding()
-//            .padding(.horizontal)
-//
-//            StyledButton(title: "Log Body Metrics", iconName: "waveform.path.ecg") {
-//            }
-//            .padding()
-//            .padding(.horizontal)
 
             
             
@@ -203,7 +196,7 @@ struct ProgressItem: View {
         VStack {
             HStack {
                 Text(title)
-                    .font(.headline)
+                    .font(.custom("UhBee Se_hyun", size: 12))
                     .padding(.bottom, 4)
 
                 Spacer()
@@ -219,7 +212,7 @@ struct ProgressItem: View {
                 Spacer()
 
                 Text(String(format: "%.2f", value) + "/" + String(format: "%.2f", goal))
-                                    .font(.caption)
+                    .font(.custom("UhBee Se_hyun", size: 12))
                                     .foregroundColor(.secondary)
             }
         }
@@ -292,7 +285,7 @@ struct DayProgressView: View {
     var body: some View {
         VStack {
             Text(dayOfWeekString(startDate))
-                .font(.caption)
+                .font(.custom("UhBee Se_hyun", size: 12))
                 .foregroundColor(.secondary)
 
             ZStack {
@@ -319,7 +312,7 @@ struct DayProgressView: View {
             }
 
             Text(dateString(startDate))
-                .font(.caption)
+                .font(.custom("UhBee Se_hyun", size: 12))
                 .foregroundColor(.secondary)
         }
     }

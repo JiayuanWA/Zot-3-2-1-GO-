@@ -14,6 +14,7 @@ struct MainTabView: View {
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all)
                 )
+                .font(.custom("UhBee Se_hyun", size: 14))
                 
 
             
