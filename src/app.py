@@ -29,6 +29,10 @@ def create_app(test_config=None):
     app.config['MYSQL_DB'] = db['mysql_db']
 
     mysql = MySQL(app)
+
+    @app.route('/')
+    def hello():
+        return "<ht style='color:blue'>Hello World!</h1>"
     
     @app.route('/login', methods=['POST'])
     def login():
