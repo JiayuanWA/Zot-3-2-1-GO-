@@ -149,7 +149,36 @@ class FlaskTestCase(unittest.TestCase):
             "username": "testuser",
             "date": "2024-02-22",
         }
-        response = self.client.post('/get_body_metrics', json=data)
+        response = self.client.post('/get_recommendation', json=data)
         self.assertEqual(response.status_code, 201)
+
+        
+    def test_calculate_calories(self):
+        # Replace 'running', 30, and the expected_calories_burned with appropriate values based on your CSV
+        data = {
+            "username": "testuser",
+            "exercise_name": "Running, 5 mph (12 minute mile)",
+            "duration_minutes": 30
+        }
+        
+        # Perform a POST request to the calculate_calories endpoint
+        response = self.client.post('/calculate_calories', json=data)
+        
+        # Assert that the response status code is 200 (success)
+        self.assertEqual(response.status_code, 200)
+        
+        # Check the response for the expected calories burned
+        # This value should be based on the 'running' exercise for 30 minutes from your CSV
+        # and the weight of 'testuser' in your test database.
+        # You will need to manually calculate this expected value based on your CSV and user weight.
+        expected_calories_burned = 123.5865 # Calculate based on your CSV and 'testuser' weight
+        
+        # Assert that the calculated calories are as expected
+        self.assertAlmostEqual(response.json['calories_burned'], expected_calories_burned, places=2)
+
+        # Check for success message
+        self.assertEqual(response.json['status'], 'success')
+        self.assertIn('Calories calculated successfully', response.json['message'])
+        
 if __name__ == '__main__':
     unittest.main()

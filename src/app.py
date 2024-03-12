@@ -6,7 +6,7 @@ import re
 import yaml
 import csv
 import openai 
-  
+import json  
 
 
 def create_app(test_config=None):
@@ -422,7 +422,7 @@ def create_app(test_config=None):
             cur.close()
 
             
-    @app.route('/get_body_metrics', methods=['POST'])
+    @app.route('/get_recommendation', methods=['POST'])
     def get_user_fitness_info():
         data = request.json
         username = data['username']
@@ -486,7 +486,7 @@ def create_app(test_config=None):
                    f"Today's Intake Calories: {intake_calorie}, " \
                    f"Today's Exercise Calories: {exercise_calorie}, BMR: {daily_BMR}, "\
                    f"Conditions: {conditions_str}, "\
-                   f"I want you to choose from the following exercise and choose 10 exercises, and gives out recommended duration for rest of my day in json format in list called exercise_list with name and duration: "\
+                   f"I want you to choose from the following exercise and choose 10 exercises, and gives out recommended duration for rest of my day in json format in list called exercise_list with name and duration only: "\
                    f"exercise list: {exercises}"
 
 
@@ -498,9 +498,19 @@ def create_app(test_config=None):
             model="gpt-4-turbo-preview", messages=messages 
         )
         reply = chat.choices[0].message.content
-        print(ai_query)
-        print(reply)
-        return jsonify(reply), 201
+        try:
+            # Find the JSON substring within the reply
+            json_str_start = reply.find('{')
+            json_str_end = reply.rfind('}') + 1
+            json_str = reply[json_str_start:json_str_end]
+
+            # Parse the JSON string into a Python dictionary
+            json_data = json.loads(json_str)
+            print(json_data)
+            return jsonify(json_data), 201
+        except (ValueError, json.JSONDecodeError) as e:
+            # Handle cases where JSON parsing fails
+            return jsonify({"error": "Failed to parse AI reply into JSON", "detail": str(e)}), 400
 
     @app.route('/get_conditions/<username>', methods=['GET'])
     def get_conditions(username):
@@ -527,7 +537,85 @@ def create_app(test_config=None):
         finally:
             cur.close()
 
-    
+    def get_calorie_burn_rate(exercise_name, weight_kg):
+        with open('exercise_dataset.csv', mode='r') as csvfile:
+            csv_reader = csv.DictReader(csvfile)
+            for row in csv_reader:
+                print(row['Activity, Exercise or Sport (1 hour)'])
+                if row['Activity, Exercise or Sport (1 hour)'] == exercise_name:
+                    # Assuming the CSV contains a column for Calories per kg
+                    # and the exercise matches exactly (consider implementing a more flexible search)
+                    calories_per_kg = float(row['Calories per kg'])
+                    return calories_per_kg * float(weight_kg)
+        return None
+
+
+    @app.route('/calculate_calories', methods=['POST'])
+    def calculate_calories():
+        data = request.json
+        username = data['username']
+        exercise_name = data['exercise_name']
+        duration_minutes = data['duration_minutes']
+        
+        # Fetch user's weight
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur.execute("SELECT weight_kg FROM users WHERE username = %s", (username,))
+        user = cur.fetchone()
+        cur.close()
+
+        if not user:
+            return jsonify({"message": "User not found", "status": "fail"}), 404
+        
+        weight_kg = user['weight_kg']
+        calorie_burn_rate = get_calorie_burn_rate(exercise_name, weight_kg)
+        
+        if calorie_burn_rate is None:
+            return jsonify({"message": "Exercise not found", "status": "fail"}), 404
+
+        calories_burned = calorie_burn_rate * (duration_minutes / 60)
+        
+        return jsonify({
+            "message": "Calories calculated successfully",
+            "status": "success",
+            "calories_burned": calories_burned
+        }), 200
+
+    @app.route('/list_exercises/<username>', methods=['GET'])
+    def list_exercises(username):
+        # Fetch user's weight from the database
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur.execute("SELECT weight_kg FROM users WHERE username = %s", (username,))
+        user = cur.fetchone()
+        cur.close()
+
+        if not user:
+            return jsonify({"message": "User not found", "status": "fail"}), 404
+
+        weight_kg = user['weight_kg']
+
+        # Initialize a list to hold exercise data
+        exercise_data = []
+
+        # Parse the CSV to calculate calories burned for each exercise
+        try:
+            with open('exercise_dataset.csv', mode='r') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    exercise_name = row['Activity, Exercise or Sport (1 hour)']
+                    # Assuming 'Calories per kg per hour' is the correct column name, adjust as necessary
+                    calories_burned_per_hour = float(row['Calories per kg']) * weight_kg
+                    exercise_data.append({
+                        "exercise_name": exercise_name,
+                        "calories_burned_per_hour": calories_burned_per_hour
+                    })
+
+            return jsonify({
+                "message": "Exercise list fetched successfully",
+                "status": "success",
+                "exercises": exercise_data
+            }), 200
+        except Exception as e:
+            return jsonify({"message": str(e), "status": "fail"}), 500
     return app
 
 
