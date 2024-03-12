@@ -32,7 +32,7 @@ def create_app(test_config=None):
 
     @app.route('/')
     def hello():
-        return "<ht style='color:blue'>Hello World!</h1>"
+        return "<h1 style='color:blue'>Hello World!</h1>"
     
     @app.route('/login', methods=['POST'])
     def login():
