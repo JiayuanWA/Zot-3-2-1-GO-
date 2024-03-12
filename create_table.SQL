@@ -32,7 +32,6 @@ CREATE TABLE daily_logs (
     log_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     date_logged DATE,
-    total_calories INT,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
