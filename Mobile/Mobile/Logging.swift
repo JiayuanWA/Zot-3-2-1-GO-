@@ -162,8 +162,9 @@ struct FoodLogging: View {
 
 struct BodyMetricLogging: View {
     @Binding var selectedDate: Date?
-    @State private var weight: Double = 0.0
-    @State private var height: Double = 0.0
+    @State private var dateString: String = ""
+    @State private var weight: Int = 0
+    @State private var height: Int = 0
     @State private var bodyFatPercentage: Double = 0.0
     @Environment(\.presentationMode) var presentationMode
     
@@ -191,6 +192,59 @@ struct BodyMetricLogging: View {
                     print("Weight: \(weight) kg")
                     print("Height: \(height) cm")
                     print("Body Fat Percentage: \(bodyFatPercentage)%")
+                    
+                    if let selectedDate = selectedDate {
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "yyyy-MM-dd"
+                        dateString = dateFormatter.string(from: selectedDate)
+                        print("Selected date string: \(dateString)")}
+                    // Create the request body
+        
+                    let requestb: [String: Any] = [
+                                            "username": "Yes",
+                                            "date_logged": "2022-03-02",
+                                            "metrics": [
+                                                [
+                                                    "weight_kg": 77,
+                                                    "height_cm": 177
+                                                ]
+                                            ]
+                                        ]
+                    
+                    // Send POST request
+                    guard let url = URL(string: "http://52.14.25.178:5000/log/body_metrics") else {
+                        print("Invalid URL")
+                        return
+                    }
+                  
+                    var request = URLRequest(url: url)
+                    request.httpMethod = "POST"
+                    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                    guard let httpBody = try? JSONSerialization.data(withJSONObject: requestb, options: []) else {
+                        print("Failed to serialize HTTP body")
+                        return
+                    }
+                    request.httpBody = httpBody
+                    
+                    URLSession.shared.dataTask(with: request) { data, response, error in
+                        guard let data = data, error == nil else {
+                            print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                            return
+                        }
+                        if let httpResponse = response as? HTTPURLResponse {
+                                                print("Response status code: \(httpResponse.statusCode)")
+                                                
+                                                if httpResponse.statusCode == 201 {
+                                                    // Log intake successful, show alert
+                                                    DispatchQueue.main.async {
+                                                                                       let alertController = UIAlertController(title: "Success", message: "Logged body metrics for \(dateString)", preferredStyle: .alert)
+                                                                                       alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                                                                                       UIApplication.shared.windows.first?.rootViewController?.present(alertController, animated: true, completion: nil)
+                                                                                   }
+                                                }
+                                            }
+                    }.resume()
+                    
                     dismissSheet()
                 }
                 .padding()
