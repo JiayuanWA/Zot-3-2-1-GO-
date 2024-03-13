@@ -22,6 +22,8 @@
 		427CE16B2B828628004CD9D9 /* Profile Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427CE16A2B828628004CD9D9 /* Profile Preferences.swift */; };
 		42843B372B86C443005E11A4 /* RecommendationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42843B362B86C443005E11A4 /* RecommendationsView.swift */; };
 		4287CDD32BA136B700F145D8 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4287CDD22BA136B700F145D8 /* NetworkManager.swift */; };
+		4287CDD52BA22BC400F145D8 /* exercise_dataset.csv in Resources */ = {isa = PBXBuildFile; fileRef = 4287CDD42BA22BC400F145D8 /* exercise_dataset.csv */; };
+		4287CDD72BA2420600F145D8 /* exercise_dataset (1).csv in Resources */ = {isa = PBXBuildFile; fileRef = 4287CDD62BA2420600F145D8 /* exercise_dataset (1).csv */; };
 		429B729C2B6F257400EAC0C4 /* MobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729B2B6F257400EAC0C4 /* MobileApp.swift */; };
 		429B729E2B6F257400EAC0C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729D2B6F257400EAC0C4 /* ContentView.swift */; };
 		429B72A02B6F257400EAC0C4 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729F2B6F257400EAC0C4 /* Item.swift */; };
@@ -68,6 +70,8 @@
 		427CE16A2B828628004CD9D9 /* Profile Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Profile Preferences.swift"; sourceTree = "<group>"; };
 		42843B362B86C443005E11A4 /* RecommendationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsView.swift; sourceTree = "<group>"; };
 		4287CDD22BA136B700F145D8 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		4287CDD42BA22BC400F145D8 /* exercise_dataset.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = exercise_dataset.csv; sourceTree = "<group>"; };
+		4287CDD62BA2420600F145D8 /* exercise_dataset (1).csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "exercise_dataset (1).csv"; sourceTree = "<group>"; };
 		429B72982B6F257400EAC0C4 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		429B729B2B6F257400EAC0C4 /* MobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileApp.swift; sourceTree = "<group>"; };
 		429B729D2B6F257400EAC0C4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -134,7 +138,9 @@
 		429B729A2B6F257400EAC0C4 /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				4287CDD62BA2420600F145D8 /* exercise_dataset (1).csv */,
 				42A417A02B83E3D700418944 /* exercises.json */,
+				4287CDD42BA22BC400F145D8 /* exercise_dataset.csv */,
 				429B729B2B6F257400EAC0C4 /* MobileApp.swift */,
 				4236C0662B73F0DD001DC6DC /* LogginCheck.swift */,
 				427CE1682B828004004CD9D9 /* CreateAccount.swift */,
@@ -295,6 +301,8 @@
 				429B72A52B6F257400EAC0C4 /* Preview Assets.xcassets in Resources */,
 				42E9043C2B9BD51300FFDDE0 /* UhBee Se_hyun.ttf in Resources */,
 				42E904402B9C0A1700FFDDE0 /* Wallpaper.jpeg in Resources */,
+				4287CDD52BA22BC400F145D8 /* exercise_dataset.csv in Resources */,
+				4287CDD72BA2420600F145D8 /* exercise_dataset (1).csv in Resources */,
 				429B72A22B6F257400EAC0C4 /* Assets.xcassets in Resources */,
 				42A417A12B83E3D700418944 /* exercises.json in Resources */,
 			);

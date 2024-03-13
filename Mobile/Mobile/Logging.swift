@@ -134,11 +134,17 @@ struct FoodLogging: View {
                                         return
                                     }
                                     if let httpResponse = response as? HTTPURLResponse {
-                                        print("Response status code: \(httpResponse.statusCode)")
-                                        if let responseData = String(data: data, encoding: .utf8) {
-                                            print("Response data: \(responseData)")
-                                        }
-                                    }
+                                                            print("Response status code: \(httpResponse.statusCode)")
+                                                            
+                                                            if httpResponse.statusCode == 201 {
+                                                                // Log intake successful, show alert
+                                                                DispatchQueue.main.async {
+                                                                                                   let alertController = UIAlertController(title: "Success", message: "Logged calorie intake for \(dateString)", preferredStyle: .alert)
+                                                                                                   alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                                                                                                   UIApplication.shared.windows.first?.rootViewController?.present(alertController, animated: true, completion: nil)
+                                                                                               }
+                                                            }
+                                                        }
                                 }.resume()
                                 
                                 dismissSheet()

@@ -10,6 +10,10 @@ struct ProfileAndPreferences: View {
     
     @State private var height: String = ""
     @State private var weight: String = ""
+    
+    @State private var newheight: Int = 0
+    @State private var newweight: Int = 0
+    
     @State private var gender: String = ""
     
     @State private var isFirstNameValid = false
@@ -107,49 +111,54 @@ struct ProfileAndPreferences: View {
                 }
                 
                 NavigationLink(destination: Optional(username: username).navigationBarHidden(true), isActive: $isSaved) {
-                    Button(action: {
-                        if isFormValid() {
-                            // Submit form
-                            // Reset form states
-                            isFirstNameValid = false
-                            isLastNameValid = false
-                            isAgeValid = false
-                            isHeightValid = false
-                            isWeightValid = false
-                            isGenderValid = false
+                                    Button(action: {
+                                        if isFormValid() {
+                                            if let convertedHeight = Int(height), let convertedWeight = Int(weight) {
+                                                // Proceed with submission
+                                                // Reset form states
+                                                isFirstNameValid = false
+                                                isLastNameValid = false
+                                                isAgeValid = false
+                                                isHeightValid = false
+                                                isWeightValid = false
+                                                isGenderValid = false
+                                                
+                                                errorMessage = ""
+                                                showErrorAlert = false
+                                                
+                                                // Proceed with submission
+                                                networkManager.registerUser(username: username, password: password, firstName: firstname, lastName: lastname, gender: gender, dateOfBirth: age, height: convertedHeight, weight: convertedWeight, activityLevel: "moderate", goals: ["improve cardio"], fitnessLevel:"intermediate")
+                                                let preferences: [String: Any] = [
+                                                    "firstName": firstname,
+                                                    "lastName": lastname,
+                                                    "age": age,
+                                                    "height": convertedHeight,
+                                                    "weight": convertedWeight
+                                                ]
+                                                UserDefaults.standard.set(preferences, forKey: "userPreferences")
+                                                isSaved = true
+                                            } else {
+                                                errorMessage = "Invalid height or weight format."
+                                                showErrorAlert = true
+                                            }
+                                        } else {
+                                            errorMessage = "Please fill out all required fields."
+                                            showErrorAlert = true
+                                        }
+                                    }) {
+                                        Text("Submit")
+                                    }
+                                    .padding()
+                                }
+                                .alert(isPresented: $showErrorAlert) {
+                                    Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+                                }
+                            }
+                            .navigationBarHidden(true)
                             
-                            errorMessage = ""
-                            showErrorAlert = false
-                            
-                            // Proceed with submission
-                            networkManager.registerUser(username: username, password: password, firstName: firstname, lastName: lastname, gender: gender, dateOfBirth: age, height: 0, weight: 0, activityLevel: "moderate", goals: ["improve cardio"], fitnessLevel:"intermediate")
-                            let preferences: [String: Any] = [
-                                "firstName": firstname,
-                                "lastName": lastname,
-                                "age": age,
-                                "height": height,
-                                "weight": weight
-                            ]
-                            UserDefaults.standard.set(preferences, forKey: "userPreferences")
-                            isSaved = true
-                        } else {
-                            errorMessage = "Please fill out all required fields."
-                            showErrorAlert = true
                         }
-                    }) {
-                        Text("Submit")
                     }
-                    .padding()
-                }
-                .alert(isPresented: $showErrorAlert) {
-                    Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
-                }
-            }
-            .navigationBarHidden(true)
-            
-        }
-    }
-    
+                    
     private func isFormValid() -> Bool {
         return isFirstNameValid && isLastNameValid && isAgeValid && isHeightValid && isWeightValid && isGenderValid
     }
