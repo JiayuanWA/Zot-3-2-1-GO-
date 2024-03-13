@@ -5,175 +5,152 @@ struct ProfileAndPreferences: View {
     @State private var firstname: String = ""
     @State private var lastname: String = ""
     @State private var age: String = ""
+    let networkManager = NetworkManager()
+    var password: String
     
     @State private var height: String = ""
     @State private var weight: String = ""
     @State private var gender: String = ""
-
-    @State private var selectedLifestyle = 0
-    @State private var selectedFitnessLevel = 0
-    @State private var selectedDays: Set<String> = []
-    let daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-
-    let lifestyles = ["Sedentary", "Moderate", "Active", "Very Active"]
+    
+    @State private var isFirstNameValid = false
+    @State private var isLastNameValid = false
+    @State private var isAgeValid = false
+    @State private var isHeightValid = false
+    @State private var isWeightValid = false
+    @State private var isGenderValid = false
+    
     @State private var isSaved = false
-
-    @State private var selectedGoals: Set<String> = []
-    let workoutGoals = [
-        "Build Muscle",
-        "Lose Weight",
-        "Improve Cardio",
-        "Better Lifestyle",
-        "Improve Sleep Quality",
-        "Improve Posture",
-        "Increase Flexibility",
-        "Achieve Mental Clarity"
-    ]
-
-    let fitnessLevels = [
-        "Beginner",
-        "Intermediate",
-        "Advanced"
-    ]
-
+    
+    @State private var errorMessage: String = ""
+    @State private var showErrorAlert = false
+    
     var body: some View {
         NavigationView {
             VStack {
+                Text("Basic Profile")
+                    .font(.custom("UhBee Se_hyun", size: 24))
+                    .fontWeight(.bold)
+
                 Form {
-                              Section(header: Text("Personal Information")) {
-                                  CustomTextField(placeholder: "First Name", text: $firstname, keyboardType: .default)
-                                  CustomTextField(placeholder: "Last Name", text: $lastname, keyboardType: .default)
-
-
-
-                                  CustomTextField(placeholder: "Age", text: $age, keyboardType: .numberPad)
-                                  CustomTextField(placeholder: "Height (cm)", text: $height, keyboardType: .decimalPad)
-                                  CustomTextField(placeholder: "Weight (kg)", text: $weight, keyboardType: .decimalPad)
-                                  Picker("Gender", selection: $gender) {
-                                      Text("Select Gender").tag("") // Default empty value
-                                      ForEach(["Male", "Female", "Other", "Prefer not to say"], id: \.self) { option in
-                                          Text(option)
-                                      }
-                                  }
-                                  .padding(.vertical, 8)
-                                  .padding(.horizontal, 16)
-                                  .font(.subheadline)
-                                  
-                              }
-                              
-//                              Section(header: Text("Activity Level")) {
-//                                  // Add fields for fitness level, experience, etc.
-//                                  Picker("Lifestyle", selection: $selectedLifestyle) {
-//                                      ForEach(0..<lifestyles.count) {
-//                                          Text(self.lifestyles[$0])
-//                                      }
-//                                  }
-//                                  .pickerStyle(SegmentedPickerStyle())
-//
-//                              }
-                              
-//                              Section(header: Text("Goals")) {
-//                                  List {
-//                                      ForEach(workoutGoals, id: \.self) { goal in
-//                                          Toggle(goal, isOn: Binding(
-//                                            get: {
-//                                                selectedGoals.contains(goal)
-//                                            },
-//                                            set: { newValue in
-//                                                if let index = selectedGoals.firstIndex(of: goal) {
-//                                                    selectedGoals.remove(at: index)
-//                                                } else {
-//                                                    selectedGoals.insert(goal)
-//                                                }
-//                                            }
-//                                          ))
-//                                      }
-//                                  }
-//                              }
-//
-                              
-//                              Section(header: Text("Fitness Level")) {
-//                                  Picker("Select Fitness Level", selection: $selectedFitnessLevel) {
-//                                      ForEach(0..<fitnessLevels.count) {
-//                                          Text(self.fitnessLevels[$0])
-//                                      }
-//                                  }
-//
-//
-//                                  .pickerStyle(SegmentedPickerStyle())
-//                              }
-//                              Section(header: Text("Select Workout Days")) {
-//                                  List {
-//                                      ForEach(daysOfWeek, id: \.self) { day in
-//                                          Toggle(day, isOn: Binding(
-//                                            get: { selectedDays.contains(day) },
-//                                            set: { newValue in
-//                                                if selectedDays.contains(day) {
-//                                                    selectedDays.remove(day)
-//                                                } else {
-//                                                    selectedDays.insert(day)
-//                                                }
-//                                            }
-//                                          ))
-//                                      }
-//                                  }
-//                              }
-                          }
-            
-                NavigationLink(destination: Optional(username: username).navigationBarHidden(true), isActive: $isSaved) {
-                                    Button(action: {
-                                        let preferences: [String: Any] = [
-                                            "firstName": firstname,
-                                            "lastName": lastname,
-                                            "age": age,
-                                            "height": height,
-                                            "weight": weight,
-//                                            "lifestyle": lifestyles[selectedLifestyle],
-//                                            "fitnessLevel": fitnessLevels[selectedFitnessLevel],
-//                                            "selectedGoals": Array(selectedGoals),
-//                                            "selectedDays": Array(selectedDays)
-                                        ]
-
-
-                                        UserDefaults.standard.set(preferences, forKey: "userPreferences")
-                                        isSaved = true
-                                    }) {
-                                        Text("Personal Touches (Optional) ")
-                                            .foregroundColor(.white)
-                                            .font(.headline)
-                                            .padding()
-                                            .frame(maxWidth: .infinity)
-                                            .background(Color.gray)
-                                            .cornerRadius(8)
-                                    }
-                                    .padding()
-                                }
+                    Section(header: Text("Personal Information")) {
+                        CustomTextField(placeholder: "First Name", text: $firstname, keyboardType: .default)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .onChange(of: firstname) { newValue in
+                                isFirstNameValid = !newValue.isEmpty
                             }
-                            .navigationBarHidden(true)
+                        
+                        CustomTextField(placeholder: "Last Name", text: $lastname, keyboardType: .default)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .onChange(of: lastname) { newValue in
+                                isLastNameValid = !newValue.isEmpty
+                            }
+                        
+                        CustomTextField(placeholder: "Date of Birth (YYYY-MM-DD)", text: $age, keyboardType: .default)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .onChange(of: age) { newValue in
+                                isAgeValid = !newValue.isEmpty
+                            }
+                        
+                        CustomTextField(placeholder: "Height (cm)", text: $height, keyboardType: .decimalPad)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .onChange(of: height) { newValue in
+                                isHeightValid = !newValue.isEmpty
+                            }
+                        
+                        CustomTextField(placeholder: "Weight (kg)", text: $weight, keyboardType: .decimalPad)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .onChange(of: weight) { newValue in
+                                isWeightValid = !newValue.isEmpty
+                            }
+                        
+                        Picker("Gender", selection: $gender) {
+                            Text("Select Gender").tag("")
+                            ForEach(["Male", "Female", "Other", "Prefer not to say"], id: \.self) { option in
+                                Text(option)
+                            }
+                        }
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray, lineWidth: 1)
+                        )
+                        .onChange(of: gender) { newValue in
+                            isGenderValid = !newValue.isEmpty
                         }
                     }
                 }
-
-
-//struct CustomTextField: View {
-//    var placeholder: String
-//    @Binding var text: String
-//    var keyboardType: UIKeyboardType
-//
-//    var body: some View {
-//        HStack {
-//            Text(placeholder)
-//                .foregroundColor(.secondary)
-//                .font(.body)
-//
-//            Spacer()
-//
-//            TextField("", text: $text)
-//                .keyboardType(keyboardType)
-//                .padding(.vertical, 8)
-//                .padding(.horizontal, 16)
-//                .font(.subheadline)
-//                .multilineTextAlignment(.trailing)
-//        }
-//    }
-//}
+                
+                NavigationLink(destination: Optional(username: username).navigationBarHidden(true), isActive: $isSaved) {
+                    Button(action: {
+                        if isFormValid() {
+                            // Submit form
+                            // Reset form states
+                            isFirstNameValid = false
+                            isLastNameValid = false
+                            isAgeValid = false
+                            isHeightValid = false
+                            isWeightValid = false
+                            isGenderValid = false
+                            
+                            errorMessage = ""
+                            showErrorAlert = false
+                            
+                            // Proceed with submission
+                            networkManager.registerUser(username: username, password: password, firstName: firstname, lastName: lastname, gender: gender, dateOfBirth: age, height: 0, weight: 0, activityLevel: "moderate", goals: ["improve cardio"], fitnessLevel:"intermediate")
+                            let preferences: [String: Any] = [
+                                "firstName": firstname,
+                                "lastName": lastname,
+                                "age": age,
+                                "height": height,
+                                "weight": weight
+                            ]
+                            UserDefaults.standard.set(preferences, forKey: "userPreferences")
+                            isSaved = true
+                        } else {
+                            errorMessage = "Please fill out all required fields."
+                            showErrorAlert = true
+                        }
+                    }) {
+                        Text("Submit")
+                    }
+                    .padding()
+                }
+                .alert(isPresented: $showErrorAlert) {
+                    Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+                }
+            }
+            .navigationBarHidden(true)
+            
+        }
+    }
+    
+    private func isFormValid() -> Bool {
+        return isFirstNameValid && isLastNameValid && isAgeValid && isHeightValid && isWeightValid && isGenderValid
+    }
+}

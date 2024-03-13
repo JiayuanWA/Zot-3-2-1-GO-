@@ -42,7 +42,7 @@ struct ContentView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
 
-            NavigationLink(destination: CreateAccount()) {
+            NavigationLink(destination: CreateAccount().navigationBarHidden(true)) {
                 HStack {
                     Text("Create your Workout Buddy")
                         .foregroundColor(.gray)

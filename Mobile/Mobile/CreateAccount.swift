@@ -28,7 +28,7 @@ struct CreateAccount: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 16) {
+            VStack() {
                 Text("Create Account")
                     .font(.custom("UhBee Se_hyun", size: 24))
                     .fontWeight(.bold)
@@ -44,10 +44,12 @@ struct CreateAccount: View {
                 SecureField("Confirm Password", text: $confirmPassword)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
+                
+ 
 
                 NavigationLink( 
-                    destination: ProfileAndPreferences(username: username)
-                        .navigationBarHidden(isNavigationBarHidden)
+                    destination: ProfileAndPreferences(username: username, password: password)
+                        .navigationBarHidden(true)
                         .onAppear {
                             isNavigationBarHidden = true
                         },
@@ -77,8 +79,8 @@ struct CreateAccount: View {
                         
                     
                         
-                        networkManager.registerUser(username: username, password: password, firstName: "N", lastName: "Y", gender: "male", dateOfBirth: "2002-12-21", height: 10, weight: 20, activityLevel: "active", goals: ["lose weight", "improve cardio"], fitnessLevel:"intermediate")
-                       
+//                        networkManager.registerUser(username: username, password: password, firstName: "NA", lastName: "NA", gender: "male", dateOfBirth: "2002-12-21", height: 0, weight: 0, activityLevel: "moderate", goals: ["lose weight", "improve cardio"], fitnessLevel:"intermediate")
+//                       
                         
                     } else {
                         print("Passwords don't match")
@@ -97,14 +99,15 @@ struct CreateAccount: View {
 
                 Spacer()
             }
+            
+            .padding()
+            .navigationBarHidden(true)
             .background(
                 Image("Wallpaper")
                     .resizable()
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
             )
-            .padding()
-            .navigationBarHidden(true)
             
             
             
