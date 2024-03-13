@@ -21,6 +21,7 @@
 		427CE1692B828004004CD9D9 /* CreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427CE1682B828004004CD9D9 /* CreateAccount.swift */; };
 		427CE16B2B828628004CD9D9 /* Profile Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427CE16A2B828628004CD9D9 /* Profile Preferences.swift */; };
 		42843B372B86C443005E11A4 /* RecommendationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42843B362B86C443005E11A4 /* RecommendationsView.swift */; };
+		4287CDD32BA136B700F145D8 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4287CDD22BA136B700F145D8 /* NetworkManager.swift */; };
 		429B729C2B6F257400EAC0C4 /* MobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729B2B6F257400EAC0C4 /* MobileApp.swift */; };
 		429B729E2B6F257400EAC0C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729D2B6F257400EAC0C4 /* ContentView.swift */; };
 		429B72A02B6F257400EAC0C4 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B729F2B6F257400EAC0C4 /* Item.swift */; };
@@ -66,6 +67,7 @@
 		427CE1682B828004004CD9D9 /* CreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccount.swift; sourceTree = "<group>"; };
 		427CE16A2B828628004CD9D9 /* Profile Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Profile Preferences.swift"; sourceTree = "<group>"; };
 		42843B362B86C443005E11A4 /* RecommendationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsView.swift; sourceTree = "<group>"; };
+		4287CDD22BA136B700F145D8 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		429B72982B6F257400EAC0C4 /* Mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		429B729B2B6F257400EAC0C4 /* MobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileApp.swift; sourceTree = "<group>"; };
 		429B729D2B6F257400EAC0C4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				42843B362B86C443005E11A4 /* RecommendationsView.swift */,
 				4214138C2B890F1E00D1BBA3 /* DailyDecisionSurveyView.swift */,
 				42403F4C2B9F95FA00238AB8 /* Logging.swift */,
+				4287CDD22BA136B700F145D8 /* NetworkManager.swift */,
 			);
 			path = Mobile;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4287CDD32BA136B700F145D8 /* NetworkManager.swift in Sources */,
 				42672BDB2B715E540023CBE1 /* Activity.swift in Sources */,
 				429B729E2B6F257400EAC0C4 /* ContentView.swift in Sources */,
 				423B4AB42B83E168006EC87E /* ExcerciseListView.swift in Sources */,
