@@ -179,6 +179,17 @@ class FlaskTestCase(unittest.TestCase):
         # Check for success message
         self.assertEqual(response.json['status'], 'success')
         self.assertIn('Calories calculated successfully', response.json['message'])
+
+
+    def test_calculate_calories(self):
+        # Perform a POST request to the calculate_calories endpoint
+        response = self.client.get('/list_exercises/testuser')
+        
+        # Assert that the response status code is 200 (success)
+        self.assertEqual(response.status_code, 200)
+        
+        self.assertEqual(response.json['status'], 'success')
+        print(response.json['exercises']) 
         
 if __name__ == '__main__':
     unittest.main()

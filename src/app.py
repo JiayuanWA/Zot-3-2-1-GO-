@@ -607,7 +607,7 @@ def create_app(test_config=None):
                 for row in reader:
                     exercise_name = row['Activity, Exercise or Sport (1 hour)']
                     # Assuming 'Calories per kg per hour' is the correct column name, adjust as necessary
-                    calories_burned_per_hour = float(row['Calories per kg']) * weight_kg
+                    calories_burned_per_hour = float(row['Calories per kg']) * float(weight_kg)
                     exercise_data.append({
                         "exercise_name": exercise_name,
                         "calories_burned_per_hour": calories_burned_per_hour
