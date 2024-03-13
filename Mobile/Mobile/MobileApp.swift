@@ -25,7 +25,7 @@ struct MobileApp: App {
     var body: some Scene {
         WindowGroup {
             if authManager.isLoggedIn {
-                HomeView()
+                MainTabView()
                     .environmentObject(manager)
                     .background(
                         Image("Wallpaper")

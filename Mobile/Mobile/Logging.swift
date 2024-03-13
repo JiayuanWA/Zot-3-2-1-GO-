@@ -10,6 +10,7 @@ import SwiftUI
 struct Logging: View {
         @Binding var selectedDate: Date?
         @State private var exerciseType: String = ""
+      
         @State private var workoutDuration: Int = 30
         @State private var caloriesBurned: Double = 0.0
         @State private var isCardio: Bool = false
@@ -61,6 +62,8 @@ struct Logging: View {
 
 struct FoodLogging: View {
     @Binding var selectedDate: Date?
+    @State private var dateString: String = ""
+    
     @State private var foodItem: String = ""
     @State private var mealType: String = ""
     @State private var caloriesConsumed: Double = 0.0
@@ -87,25 +90,68 @@ struct FoodLogging: View {
                 Slider(value: $caloriesConsumed, in: 0...1000, step: 10)
                 Text("\(Int(caloriesConsumed)) calories")
             }
-            
+           
             Section {
-                Button("Log Food Intake") {
-                    // Handle the submission of food intake log
-                    print("Food intake logged for \(selectedDate ?? Date())")
-                    print("Food Item: \(foodItem)")
-                    print("Meal Type: \(mealType)")
-                    print("Calories Consumed: \(caloriesConsumed) calories")
-                    dismissSheet()
+                            Button("Log Food Intake") {
+                                print("your date data: \(selectedDate)")
+                                
+                                if let selectedDate = selectedDate {
+                                    let dateFormatter = DateFormatter()
+                                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                                    dateString = dateFormatter.string(from: selectedDate)
+                                    print("Selected date string: \(dateString)")}
+                                // Create the request body
+                    
+                                let requestBody: [String: Any] = [
+                                                        "username": "",
+                                                        "date_logged": dateString,
+                                                        "meals": [
+                                                            [
+                                                                //"food_item": foodItem,
+                                                                "meal_type": mealType,
+                                                                "calories":caloriesConsumed
+                                                            ]
+                                                        ]
+                                                    ]
+                                
+                                // Send POST request
+                                guard let url = URL(string: "http://52.14.25.178:5000/log/calorie_intake") else {
+                                    print("Invalid URL")
+                                    return
+                                }
+                                var request = URLRequest(url: url)
+                                request.httpMethod = "POST"
+                                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                                guard let httpBody = try? JSONSerialization.data(withJSONObject: requestBody, options: []) else {
+                                    print("Failed to serialize HTTP body")
+                                    return
+                                }
+                                request.httpBody = httpBody
+                                
+                                URLSession.shared.dataTask(with: request) { data, response, error in
+                                    guard let data = data, error == nil else {
+                                        print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                                        return
+                                    }
+                                    if let httpResponse = response as? HTTPURLResponse {
+                                        print("Response status code: \(httpResponse.statusCode)")
+                                        if let responseData = String(data: data, encoding: .utf8) {
+                                            print("Response data: \(responseData)")
+                                        }
+                                    }
+                                }.resume()
+                                
+                                dismissSheet()
+                            }
+                            .padding()
+                        }
+                    }
                 }
-                .padding()
+                
+                private func dismissSheet() {
+                    presentationMode.wrappedValue.dismiss()
+                }
             }
-        }
-    }
-    
-    private func dismissSheet() {
-        presentationMode.wrappedValue.dismiss()
-    }
-}
 
 
 struct BodyMetricLogging: View {

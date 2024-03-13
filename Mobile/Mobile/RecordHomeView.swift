@@ -18,6 +18,7 @@ extension Date {
 struct RecordHomeView: View {
     @EnvironmentObject var manager: HealthKit
     @State private var firstName: String = ""
+    @State private var username: String = ""
     @State private var selectedDate: Date?
     @State private var showAlert = false
     @State private var isSurveyActive: Bool = false
@@ -168,9 +169,11 @@ struct RecordHomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .onAppear {
             showAlert = true
+            
             if let savedPreferences = UserDefaults.standard.dictionary(forKey: "userPreferences") as? [String: Any] {
                 self.firstName = savedPreferences["firstName"] as? String ?? ""
             }
+            selectedDate = Date() 
             let startOfDay = Calendar.current.startOfDay(for: Date())
                    let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: Date())!
 
@@ -229,6 +232,7 @@ struct WeekProgressView: View {
     var body: some View {
         LazyHGrid(rows: [GridItem()], spacing: 10) {
             ForEach(0..<7) { day in
+  
                 DayProgressView(
                     startDate: startOfWeekDates[day],
                     selectedDate: $selectedDate,
@@ -267,6 +271,7 @@ struct WeekProgressView: View {
 
     }
 }
+
 struct DayProgressView: View {
     let startDate: Date
     let selectedDate: Binding<Date?>

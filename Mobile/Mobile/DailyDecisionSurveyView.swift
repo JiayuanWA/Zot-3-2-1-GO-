@@ -71,18 +71,51 @@ struct DailyDecisionSurveyView: View {
             }
 
             Section {
-                Button("Submit Survey") {
-                    // Handle the submission of the survey
-                    print("Survey submitted for \(selectedDate ?? Date())")
-                    print("Feeling: \(feelingSelection)")
-                    print("Focus: \(focusSelection)")
-                    dismissSheet()
+                            Button("Submit Survey") {
+                                // Combine all variables into a single string for condition_description
+                                let conditionDescription = """
+                                    Feeling: \(feelingSelection)
+                                    Focus: \(focusSelection)
+                                    Workout Duration: \(workoutDuration) min
+                                    Selected Equipment: \(selectedEquipment.joined(separator: ", "))
+                                """
+                                // Create the request body
+                                let requestBody: [String: Any] = [
+                                    "username": "username",
+                                    "condition_description": conditionDescription
+                                ]
+                                
+                                guard let url = URL(string: "http://52.14.25.178:5000/add_user_condition") else {
+                                    print("Invalid URL")
+                                    return
+                                }
+                                var request = URLRequest(url: url)
+                                request.httpMethod = "POST"
+                                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                                guard let httpBody = try? JSONSerialization.data(withJSONObject: requestBody, options: []) else {
+                                    print("Failed to serialize HTTP body")
+                                    return
+                                }
+                                request.httpBody = httpBody
+                                
+                                URLSession.shared.dataTask(with: request) { data, response, error in
+                                    guard let data = data, error == nil else {
+                                        print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                                        return
+                                    }
+                                    if let httpResponse = response as? HTTPURLResponse {
+                                        print("Response status code: \(httpResponse.statusCode)")
+                                        if let responseData = String(data: data, encoding: .utf8) {
+                                            print("Response data: \(responseData)")
+                                        }
+                                    }
+                                }.resume()
+                                
+                                dismissSheet()
+                            }
+                            .padding()
+                            .frame(maxHeight: 90, alignment: .center)
+                        }
+                    }
                 }
-                .padding()
-                .frame(maxHeight: 90, alignment: .center)
             }
-            
-        }
-        
-    }
-}
