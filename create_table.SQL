@@ -21,32 +21,17 @@ CREATE TABLE users (
 -- Retain the existing tables for body metrics, common conditions, user conditions, daily logs, calorie intake details, and exercise records
 
 
-CREATE TABLE common_conditions (
-    condition_id INT AUTO_INCREMENT PRIMARY KEY,
-    condition_name VARCHAR(255) NOT NULL,
-    condition_type ENUM('illness', 'injury', 'other') NOT NULL,
-    description TEXT,
-    impact_on_exercise TEXT
-);
-
 CREATE TABLE user_conditions (
     uc_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
-    condition_id INT NULL,
-    condition_name VARCHAR(255) NULL,
-    severity ENUM('mild', 'moderate', 'severe'),
-    start_date DATE,
-    end_date DATE,
-    notes TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (condition_id) REFERENCES common_conditions(condition_id)
+    condition_description VARCHAR(255) NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE daily_logs (
     log_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     date_logged DATE,
-    total_calories INT,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
@@ -63,9 +48,7 @@ CREATE TABLE exercise_records (
     log_id INT,
     exercise_type VARCHAR(255),
     duration_minutes INT,
-    intensity ENUM('low', 'medium', 'high'),
     calories_burned INT,
-    time_started TIME,
     FOREIGN KEY (log_id) REFERENCES daily_logs(log_id)
 );
 
