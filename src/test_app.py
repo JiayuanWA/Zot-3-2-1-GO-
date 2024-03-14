@@ -46,7 +46,7 @@ class FlaskTestCase(unittest.TestCase):
         self.assertIn('Login successful', response.json['message'])
 
     
-
+    
     def test_update_user_profile(self):
         """Test the profile update endpoint."""
         update_data = {
@@ -58,7 +58,7 @@ class FlaskTestCase(unittest.TestCase):
             "fitness_level": "intermediate",
             # Add fields to be updated...
             }
-        response = self.client.post('/profile/update', json=update_data)
+        response = self.client.post('/update_profile', json=update_data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Profile updated successfully', response.json['message'])
 
@@ -108,6 +108,15 @@ class FlaskTestCase(unittest.TestCase):
         response = self.client.post('/log/body_metrics', json=data)
         self.assertEqual(response.status_code, 201)
         self.assertIn('Body metrics logged successfully', response.json['message'])
+
+    def test_get_profile(self):
+        # Mocking the database cursor's behavior
+        # Assuming the username 'john_doe' exists in your database with a weight that corresponds to the 155 lb column
+        response = self.client.get('/profile/testuser')
+        print(response.json)
+        self.assertEqual(response.status_code, 200)
+        # Here you can add more assertions to check if the response data is as expected
+        # This is a basic example, you'd likely want to check the structure and content of the response data
 
 
     def test_get_exercise_info(self):
