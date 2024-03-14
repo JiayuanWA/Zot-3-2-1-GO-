@@ -572,7 +572,7 @@ def create_app(test_config=None):
                     # Assuming the CSV contains a column for Calories per kg
                     # and the exercise matches exactly (consider implementing a more flexible search)
                     calories_per_kg = float(row['Calories per kg'])
-                    return calories_per_kg * float(weight_kg)
+                    return calories_per_kg * float(weight_kg) * 2.2 * 2.2
         return None
 
 
