@@ -115,7 +115,7 @@ def create_app(test_config=None):
             return jsonify({"status": "error", "message": "Internal Server Error"}), 500
 
 
-    @app.route('/profile/update', methods=['POST'])
+    @app.route('/update_profile', methods=['POST'])
     def update_user_profile():
         # Extract data from request
         data = request.json
@@ -572,7 +572,7 @@ def create_app(test_config=None):
                     # Assuming the CSV contains a column for Calories per kg
                     # and the exercise matches exactly (consider implementing a more flexible search)
                     calories_per_kg = float(row['Calories per kg'])
-                    return calories_per_kg * float(weight_kg)
+                    return calories_per_kg * float(weight_kg) * 60
         return None
 
 
