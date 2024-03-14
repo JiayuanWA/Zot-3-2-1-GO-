@@ -125,6 +125,7 @@ struct ProfileAndPreferences: View {
                                                 
                                                 errorMessage = ""
                                                 showErrorAlert = false
+                                                print("Username saved", username)
                                                 
                                                 // Proceed with submission
                                                 networkManager.registerUser(username: username, password: password, firstName: firstname, lastName: lastname, gender: gender, dateOfBirth: age, height: convertedHeight, weight: convertedWeight, activityLevel: "moderate", goals: ["improve cardio"], fitnessLevel:"intermediate")

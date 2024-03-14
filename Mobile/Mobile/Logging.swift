@@ -100,21 +100,20 @@ struct FoodLogging: View {
                                     dateFormatter.dateFormat = "yyyy-MM-dd"
                                     dateString = dateFormatter.string(from: selectedDate)
                                     print("Selected date string: \(dateString)")}
-                                // Create the request body
+
                     
                                 let requestBody: [String: Any] = [
                                                         "username": "",
                                                         "date_logged": dateString,
                                                         "meals": [
                                                             [
-                                                                //"food_item": foodItem,
                                                                 "meal_type": mealType,
                                                                 "calories":caloriesConsumed
                                                             ]
                                                         ]
                                                     ]
                                 
-                                // Send POST request
+
                                 guard let url = URL(string: "http://52.14.25.178:5000/log/calorie_intake") else {
                                     print("Invalid URL")
                                     return
@@ -198,20 +197,19 @@ struct BodyMetricLogging: View {
                         dateFormatter.dateFormat = "yyyy-MM-dd"
                         dateString = dateFormatter.string(from: selectedDate)
                         print("Selected date string: \(dateString)")}
-                    // Create the request body
-        
+           
                     let requestb: [String: Any] = [
-                                            "username": "Yes",
+                                            "username": "",
                                             "date_logged": "2022-03-02",
                                             "metrics": [
-                                                [
+                                                
                                                     "weight_kg": 77,
                                                     "height_cm": 177
-                                                ]
+                                                
                                             ]
                                         ]
                     
-                    // Send POST request
+         
                     guard let url = URL(string: "http://52.14.25.178:5000/log/body_metrics") else {
                         print("Invalid URL")
                         return

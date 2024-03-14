@@ -1,114 +1,71 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @State private var firstName: String = ""
-    @State private var lastName: String = ""
-    @State private var gender: String = ""
-    @State private var age: String = ""
-    @State private var height: String = ""
-    @State private var weight: String = ""
-    @State private var selectedLifestyle = 0
-    @State private var selectedFitnessLevel = 0
-    @State private var selectedDays: Set<String> = []
-    @State private var selectedGoals: Set<String> = []
-    let fitnessLevels = [
-        "Beginner",
-        "Intermediate",
-        "Advanced"
-    ]
-
+    @State private var profileData: UserProfile?
+    let username: String = "never" // Assuming you have a way to get the username
 
     var body: some View {
-        NavigationView {
-            VStack(alignment: .leading, spacing: 20) {
-                Text("Hi, \(firstName) \(lastName)")
+        VStack(alignment: .leading, spacing: 20) {
+            if let data = profileData {
+                Text("Hi, \(data.firstName) \(data.lastName)")
                     .font(.title)
                     .fontWeight(.bold)
                     .padding()
-
-                VStack(alignment: .leading, spacing: 10) {
-                    ProfileInfoView(label: "Gender", value: gender)
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-
-                    ProfileInfoView(label: "Age", value: age)
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-
-                    ProfileInfoView(label: "Height", value: height)
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-
-                    ProfileInfoView(label: "Weight", value: weight)
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-
-                    ProfileInfoView(label: "Activity Level", value: selectedLifestyle == 0 ? "Sedentary" :
-                                                                     selectedLifestyle == 1 ? "Moderate" :
-                                                                     selectedLifestyle == 2 ? "Active" :
-                                                                     "Very Active")
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-
-                    ProfileInfoView(label: "Goals", value: selectedGoals.joined(separator: ", "))
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-
-                    ProfileInfoView(label: "Fitness Level", value: fitnessLevels[selectedFitnessLevel])
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-
-                    ProfileInfoView(label: "Workout Days", value: selectedDays.isEmpty ? "Not selected" : selectedDays.joined(separator: ", "))
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-                }
-
-                .padding(20)
-
-
-                NavigationLink(
-                    destination: ExerciseListView(),
-                    label: {
-                        Text("View Past Exercises")
-                            .font(.headline)
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                    }
-                )
-                .padding()
+                
+                ProfileInfoView(label: "Gender", value: data.gender)
+                ProfileInfoView(label: "Age", value: "\(data.age)")
+                ProfileInfoView(label: "Height", value: "\(data.height) cm")
+                ProfileInfoView(label: "Weight", value: "\(data.weight) kg")
+                ProfileInfoView(label: "Activity Level", value: data.activityLevel)
+                ProfileInfoView(label: "Goals", value: data.goals.joined(separator: ", "))
+                ProfileInfoView(label: "Fitness Level", value: data.fitnessLevel)
+                ProfileInfoView(label: "Workout Days", value: data.workoutDays.joined(separator: ", "))
+            } else {
+                Text("Loading...")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .padding()
             }
-            .padding()
-            .onAppear {
-                // Retrieve data from user preferences
-                if let savedPreferences = UserDefaults.standard.dictionary(forKey: "userPreferences") as? [String: Any] {
-                    self.firstName = savedPreferences["firstName"] as? String ?? ""
-                    self.lastName = savedPreferences["lastName"] as? String ?? ""
-                    self.gender = savedPreferences["gender"] as? String ?? ""
-                    self.age = savedPreferences["age"] as? String ?? ""
-                    self.height = savedPreferences["height"] as? String ?? ""
-                    self.weight = savedPreferences["weight"] as? String ?? ""
-                    
-                    if let selectedLifestyle = savedPreferences["selectedLifestyle"] as? Int {
-                        self.selectedLifestyle = selectedLifestyle
-                    }
-                    
-                    if let selectedFitnessLevel = savedPreferences["selectedFitnessLevel"] as? Int {
-                        self.selectedFitnessLevel = selectedFitnessLevel
-                    }
-                    
-                    if let selectedGoals = savedPreferences["selectedGoals"] as? [String] {
-                        self.selectedGoals = Set(selectedGoals)
-                    }
-                    
-                    if let selectedDays = savedPreferences["selectedDays"] as? [String] {
-                        self.selectedDays = Set(selectedDays)
-                    }
-                }
-            }
-
+            
+            Spacer()
         }
+        .padding()
+        .onAppear {
+            fetchData(for: username)
+        }
+    }
+    
+    func fetchData(for username: String) {
+        // Make GET request to retrieve user's profile data
+        guard let url = URL(string: "http://52.14.25.178:5000/profile/idlice3") else {
+            print("Invalid URL")
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid HTTP response")
+                return
+            }
+            
+            print("Response code: \(httpResponse.statusCode)")
+            
+            guard let data = data, error == nil else {
+                print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+//            do {
+//                let decoder = JSONDecoder()
+//                let userData = try decoder.decode(UserProfile.self, from: data)
+//                
+//                DispatchQueue.main.async {
+//                    self.profileData = userData
+//                }
+//            } catch {
+//                print("Error decoding JSON: \(error.localizedDescription)")
+//            }
+        }.resume()
     }
 }
 
@@ -129,6 +86,19 @@ struct ProfileInfoView: View {
         }
         .padding()
     }
+}
+
+struct UserProfile: Codable {
+    var firstName: String
+    var lastName: String
+    var gender: String
+    var age: Int
+    var height: Int
+    var weight: Int
+    var activityLevel: String
+    var goals: [String]
+    var fitnessLevel: String
+    var workoutDays: [String]
 }
 
 struct ProfileView_Previews: PreviewProvider {

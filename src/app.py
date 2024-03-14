@@ -80,18 +80,40 @@ def create_app(test_config=None):
         return jsonify({"message": "Registration successful", "status": "success"}), 201
 
 
+    # @app.route('/profile/<username>', methods=['GET'])
+    # def get_user_profile(username):
+    #     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    #     cur.execute("SELECT user_id, username, email, first_name, last_name, gender, date_of_birth, height_cm, weight_kg, activity_level, goals, fitness_level FROM users WHERE username = %s", (username,))
+    #     user_info = cur.fetchone()
+        
+    #     if user_info:
+    #         cur.close()
+    #         return jsonify({"status": "success", "user_info": user_info}), 200
+    #     else:
+    #         cur.close()
+    #         return jsonify({"status": "fail", "message": "User not found"}), 404
+        
     @app.route('/profile/<username>', methods=['GET'])
     def get_user_profile(username):
-        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cur.execute("SELECT user_id, username, email, first_name, last_name, gender, date_of_birth, height_cm, weight_kg, activity_level, goals, fitness_level FROM users WHERE username = %s", (username,))
-        user_info = cur.fetchone()
-        
-        if user_info:
-            cur.close()
-            return jsonify({"status": "success", "user_info": user_info}), 200
-        else:
-            cur.close()
-            return jsonify({"status": "fail", "message": "User not found"}), 404
+        try:
+            cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cur.execute("SELECT user_id, username, first_name, last_name, gender, date_of_birth, height_cm, weight_kg, activity_level, goals, fitness_level FROM users WHERE username = %s", (username,))
+            user_info = cur.fetchone()
+
+            # Log user_info for debugging
+            print("User Info:", user_info)
+
+            if user_info:
+                cur.close()
+                return jsonify({"status": "success", "user_info": user_info}), 200
+            else:
+                cur.close()
+                return jsonify({"status": "fail", "message": "User not found"}), 404
+        except Exception as e:
+            # Log the exception for debugging
+            print("Error:", e)
+            return jsonify({"status": "error", "message": "Internal Server Error"}), 500
+
 
     @app.route('/profile/update', methods=['POST'])
     def update_user_profile():
