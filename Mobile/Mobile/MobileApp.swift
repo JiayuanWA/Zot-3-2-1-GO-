@@ -7,6 +7,7 @@ import SwiftData
 struct MobileApp: App {
     @StateObject var manager = HealthKit()
     @StateObject var authManager = AuthManager()
+    let userSettings = UserSettings()
     @State public var showAlert = false
 
     var sharedModelContainer: ModelContainer = {
@@ -27,6 +28,7 @@ struct MobileApp: App {
             if authManager.isLoggedIn {
                 MainTabView()
                     .environmentObject(manager)
+                    .environmentObject(userSettings)
                     .background(
                         Image("Wallpaper")
                             .resizable()
@@ -46,6 +48,7 @@ struct MobileApp: App {
             } else {
                 ContentView()
                     .environmentObject(authManager)
+                    .environmentObject(userSettings)
                     .background(
                         Image("Wallpaper")
                             .resizable()

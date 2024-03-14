@@ -19,7 +19,8 @@ class RecommendationsEngine {
 
 struct RecommendationsView: View {
     let recommendationsEngine = RecommendationsEngine()
-
+    @EnvironmentObject var userSettings: UserSettings
+    
     @State private var recommendations: [RecommendationModel] = []
 
     var body: some View {
@@ -56,8 +57,8 @@ struct RecommendationsView: View {
         }
         
         let requestBody: [String: Any] = [
-            "username": "",
-            "date": "2024-03-13"
+            "username": userSettings.username,
+            "date": "2024-03-14"
         ]
         
         var request = URLRequest(url: url)

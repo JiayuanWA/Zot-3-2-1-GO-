@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @EnvironmentObject var userSettings: UserSettings
     var body: some View {
         TabView {
             RecordHomeView()
@@ -8,6 +9,7 @@ struct MainTabView: View {
                     Image(systemName: "house.fill")
                     Text("Home")
                 }
+                .environmentObject(userSettings)
                 .background(
                     Image("Wallpaper")
                         .resizable()
@@ -40,6 +42,7 @@ struct MainTabView: View {
                                 Image(systemName: "heart.fill")
                                 Text("Recommendations")
                             }
+                            .environmentObject(userSettings)
                             .background(
                                 Image("Wallpaper")
                                     .resizable()
@@ -52,6 +55,7 @@ struct MainTabView: View {
                     Image(systemName: "person.fill")
                     Text("Profile")
                 }
+                .environmentObject(userSettings)
                 .background(
                     Image("Wallpaper")
                         .resizable()

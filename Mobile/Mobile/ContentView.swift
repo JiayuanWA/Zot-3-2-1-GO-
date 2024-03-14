@@ -1,11 +1,17 @@
 import SwiftUI
 
+
+class UserSettings: ObservableObject {
+    @Published var username: String = ""
+}
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject var manager = HealthKit()
     @EnvironmentObject var authManager: AuthManager
 
-    @State private var username: String = ""
+    @EnvironmentObject var userSettings: UserSettings
+    
     @State private var password: String = ""
     @State public var showAlert = false
 
@@ -34,7 +40,7 @@ struct ContentView: View {
                 .font(.custom("UhBee Se_hyun", size: 24))
                 .foregroundColor(.gray)
 
-            TextField("Username", text: $username)
+            TextField("Username", text: $userSettings.username)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
 
@@ -55,7 +61,7 @@ struct ContentView: View {
             }
 
             Button(action: {
-                authManager.loginUser(username: username, password: password)
+                authManager.loginUser(username: userSettings.username, password: password)
             }) {
                 Text("Login")
                     .foregroundColor(.white)

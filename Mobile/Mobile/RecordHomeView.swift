@@ -18,12 +18,12 @@ extension Date {
 struct RecordHomeView: View {
     @EnvironmentObject var manager: HealthKit
     @State private var firstName: String = ""
-    @State private var username: String = ""
+    @State private var username: String = "Alice"
     @State private var selectedDate: Date?
     @State private var showAlert = false
     @State private var isSurveyActive: Bool = false
     @State private var hasUserTakenSurveyToday = false
-    
+    @State private var exerciseDuration: Double = 0
     @State private var isLoggingWorkoutActive = false
     @State private var isLoggingFoodActive = false
     @State private var isLoggingBodyMetricsActive = false
@@ -35,14 +35,14 @@ struct RecordHomeView: View {
                 .font(.custom("UhBee Se_hyun", size: 24))
                 .fontWeight(.bold)
             
-                .padding()
+
       
             Button(action: {
                 isSurveyActive.toggle()
             }) {
                 Text("How are you feeling today?")
             }
-            .padding()
+           
             .sheet(isPresented: $isSurveyActive) {
                 DailyDecisionSurveyView(selectedDate: $selectedDate)
             }
@@ -82,7 +82,13 @@ struct RecordHomeView: View {
                     .padding(.top, 20)
                     .padding(.horizontal)
             }
-
+            
+            
+            ProgressItem(title: "Exercise Duration", value: exerciseDuration, goal: 60)
+                .foregroundColor(.green)
+                .padding(.top, 20)
+                .padding(.horizontal)
+            
             if let sleepData = manager.activities["today Sleep"] {
                 let Count = Double(sleepData.amount) ?? 0
                 let Goal = 8.0
@@ -169,7 +175,9 @@ struct RecordHomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .onAppear {
             showAlert = true
-            
+            fetchExerciseDuration(for: username)
+
+
             if let savedPreferences = UserDefaults.standard.dictionary(forKey: "userPreferences") as? [String: Any] {
                 self.firstName = savedPreferences["firstName"] as? String ?? ""
             }
@@ -186,7 +194,52 @@ struct RecordHomeView: View {
             print("Activities changed. Updating UI.")
 
         }
+        
     }
+    func fetchExerciseDuration(for username: String) {
+        // Construct the URL with username parameter
+        // Construct the URL with username parameter
+        let urlString = "http://52.14.25.178:5000/get_exercise_records/Alice"
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET" // Specify GET method
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid HTTP response")
+                return
+            }
+            
+            print("Response code: \(httpResponse.statusCode)")
+            
+            guard let data = data, error == nil else {
+                print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            print("Retrieved JSON: \(data)")
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]{
+                    print("Retrieved JSON: \(json)")
+                    
+                    // Parse the user info
+                   
+                    
+                   
+                    DispatchQueue.main.async {
+                      //
+                    }
+                }
+            } catch {
+                print("Error decoding JSON: \(error.localizedDescription)")
+            }
+        }.resume()
+    }
+
 }
 
 
