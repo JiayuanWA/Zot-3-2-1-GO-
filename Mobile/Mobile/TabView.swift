@@ -19,7 +19,19 @@ struct MainTabView: View {
                 .font(.custom("UhBee Se_hyun", size: 14))
                 
 
-            
+            HomeView()
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("Home2")
+                }
+                .environmentObject(userSettings)
+                .background(
+                    Image("Wallpaper")
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all)
+                )
+                .font(.custom("UhBee Se_hyun", size: 14))
 
             NavigationView {
                     ExerciseListView()

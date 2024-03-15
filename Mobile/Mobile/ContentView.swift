@@ -36,6 +36,7 @@ struct ContentView: View {
 
     private var loginView: some View {
         VStack(spacing: 16) {
+            Spacer()
             Text("Zot 3 2 1 Go!")
                 .font(.custom("UhBee Se_hyun", size: 24))
                 .foregroundColor(.gray)

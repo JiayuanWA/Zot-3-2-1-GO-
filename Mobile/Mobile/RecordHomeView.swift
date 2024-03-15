@@ -12,14 +12,16 @@ extension Date {
     }
 }
 
-
+class UserPreferences: ObservableObject {
+    @Published var selectedDate: Date?
+}
 
 
 struct RecordHomeView: View {
     @EnvironmentObject var manager: HealthKit
     @State private var firstName: String = ""
     @State private var username: String = "Alice"
-    @State private var selectedDate: Date?
+    @StateObject var userPreferences = UserPreferences()
     @State private var showAlert = false
     @State private var isSurveyActive: Bool = false
     @State private var hasUserTakenSurveyToday = false
@@ -31,25 +33,23 @@ struct RecordHomeView: View {
 
     var body: some View {
         VStack(alignment: .center) {
+     
+            
             Text("Welcome, \(firstName)")
                 .font(.custom("UhBee Se_hyun", size: 24))
                 .fontWeight(.bold)
             
 
-      
-            Button(action: {
-                isSurveyActive.toggle()
-            }) {
-                Text("How are you feeling today?")
+            
+            if let selectedDate = userPreferences.selectedDate {
+                Text("Selected Date: \(selectedDate, style: .date)")
+                    .font(.custom("UhBee Se_hyun", size: 14))
+                    .padding(.top,1 )
+              
             }
-           
-            .sheet(isPresented: $isSurveyActive) {
-                DailyDecisionSurveyView(selectedDate: $selectedDate)
-            }
-            .padding(.top, 20)
-            .padding(.horizontal)
 
-            WeekProgressView(selectedDate: $selectedDate, startOfWeekDates: Date.startOfWeekDates())
+
+            WeekProgressView(selectedDate: $userPreferences.selectedDate, startOfWeekDates: Date.startOfWeekDates())
                 .padding(.horizontal)
                 .padding(.top, 20)
                 .padding(.bottom, 10)
@@ -59,12 +59,7 @@ struct RecordHomeView: View {
                 let goal = 2000.0
                 
 
-                if let selectedDate = selectedDate {
-                    Text("\(selectedDate, style: .date)")
-                        .font(.custom("UhBee Se_hyun", size: 12))
-                        .padding(.top, 10)
-                        .padding(.horizontal)
-                }
+                
 
                 ProgressItem(title: "Steps Walked", value: stepCount, goal: goal)
                     .padding(.top, 20)
@@ -79,14 +74,15 @@ struct RecordHomeView: View {
 
                 ProgressItem(title: "Distance Walked", value: distanceCount, goal: distanceGoal)
                     .foregroundColor(.green)
-                    .padding(.top, 20)
+                
+             
                     .padding(.horizontal)
             }
             
             
             ProgressItem(title: "Exercise Duration", value: exerciseDuration, goal: 60)
                 .foregroundColor(.green)
-                .padding(.top, 20)
+ 
                 .padding(.horizontal)
             
             if let sleepData = manager.activities["today Sleep"] {
@@ -95,81 +91,13 @@ struct RecordHomeView: View {
 
                 ProgressItem(title: "Sleep Duration", value: Count, goal: Goal)
                     .foregroundColor(.orange)
-                           .padding(.top, 20)
+                  
                            .padding(.horizontal)
                    }
            
-
-
-            Button(action: {
-                        isLoggingWorkoutActive.toggle()
-                    }) {
-                        HStack {
-                            Text("Workout")
-                                .font(.custom("UhBee Se_hyun", size: 18))
-                                .foregroundColor(.white)
-                            Image(systemName: "figure.run")
-                                .font(.custom("UhBee Se_hyun", size: 18))
-                                .foregroundColor(.white)
-                                .padding(.trailing, 10)
-                        }
-                    }
-                    .frame(maxWidth: 300, maxHeight: 20)
-                    .padding()
-                    .background(.gray)
-                    .cornerRadius(15)
-                    .shadow(radius: 5)
-                    .sheet(isPresented: $isLoggingWorkoutActive) {
-                        Logging(selectedDate: $selectedDate)
-                    }
             
-            Button(action: {
-                isLoggingFoodActive.toggle()
-            }) {
-                HStack {
-                    Text("Food Consumption")
-                        .font(.custom("UhBee Se_hyun", size: 18))
-                        .foregroundColor(.white)
-                    Image(systemName: "fork.knife")
-                        .font(.custom("UhBee Se_hyun", size: 18))
-                        .foregroundColor(.white)
-                        .padding(.trailing, 10)
-                }
 
-            }
-            .frame(maxWidth: 300, maxHeight:20)
-            .padding()
-            .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.black]), startPoint: .leading, endPoint: .trailing))
-            .cornerRadius(15)
-            .shadow(radius: 5)
-            .sheet(isPresented: $isLoggingFoodActive) {
-                FoodLogging(selectedDate: $selectedDate)
-            }
-            
-            Button(action: {
-                isLoggingBodyMetricsActive.toggle()
-            }) {
-                HStack {
-                    Text("Body Metrics")
-                        .font(.custom("UhBee Se_hyun", size: 18))
-                        .foregroundColor(.white)
-                    Image(systemName: "waveform.path.ecg")
-                        .font(.custom("UhBee Se_hyun", size: 18))
-                        .foregroundColor(.white)
-                        .padding(.trailing, 10)
-                }
-
-            }
-            .frame(maxWidth: 300, maxHeight:20)
-            .padding()
-            .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.black]), startPoint: .leading, endPoint: .trailing))
-            .cornerRadius(15)
-            .shadow(radius: 5)
-            .sheet(isPresented: $isLoggingBodyMetricsActive) {
-                BodyMetricLogging(selectedDate: $selectedDate)
-            }
-
-            
+            Spacer()
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -179,9 +107,9 @@ struct RecordHomeView: View {
 
 
             if let savedPreferences = UserDefaults.standard.dictionary(forKey: "userPreferences") as? [String: Any] {
-                self.firstName = savedPreferences["firstName"] as? String ?? ""
-            }
-            selectedDate = Date() 
+                   self.firstName = savedPreferences["firstName"] as? String ?? ""
+               }
+               userPreferences.selectedDate = Date()
             let startOfDay = Calendar.current.startOfDay(for: Date())
                    let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: Date())!
 
@@ -197,9 +125,9 @@ struct RecordHomeView: View {
         
     }
     func fetchExerciseDuration(for username: String) {
-        // Construct the URL with username parameter
-        // Construct the URL with username parameter
-        let urlString = "http://52.14.25.178:5000/get_exercise_records/Alice"
+   
+        
+        let urlString = "http://52.14.25.178:5000/get_exercise_records/Test"
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
             return
@@ -214,12 +142,17 @@ struct RecordHomeView: View {
                 return
             }
             
-            print("Response code: \(httpResponse.statusCode)")
-            
+            print("Response code hereeeeeeeeeee: \(httpResponse.statusCode)")
+          
+
             guard let data = data, error == nil else {
                 print("Error: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
+
+            print("Retrieved data: \(String(data: data, encoding: .utf8) ?? "Unknown")")
+
+  
             print("Retrieved JSON: \(data)")
             
             do {

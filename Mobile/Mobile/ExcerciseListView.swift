@@ -67,7 +67,7 @@ struct ExerciseListView: View {
                         Button(action: {
                             if let duration = Double(duration) {
                                 // Make a POST request to the backend
-                                let data = ["username": "Yes",
+                                let data = ["username": "Test",
                                             "exercise_name": exercise.activity,
                                             "duration_minutes": duration]
                                 print("you did \( exercise.activity)")
@@ -140,12 +140,12 @@ struct ExerciseListView: View {
                             }
                             
                             let data: [String: Any] = [
-                                                                 "username": "Yes",
+                                                                 "username": "Test",
                                                                  "date_logged": "2024-02-22",
                                                                   "exercises": [[
-                                                                         "type": "Running",
-                                                                         "duration":50,
-                                                                         "calories_burned":300
+                                                                         "type":  exercise.activity,
+                                                                         "duration": duration,
+                                                                         "calories_burned":caloriesBurned
                                                                      ]
                                                                  ]
                                                              ]

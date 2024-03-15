@@ -226,7 +226,8 @@ private func calculateBMI(weight: Double, height: Double) -> Double {
     }
 
 struct ProfileInfoView: View {
-    @State public var  username: String = "Alice"
+    @EnvironmentObject var userSettings: UserSettings
+   
     var label: String
     @State var value: String
     @Binding var userProfile: UserProfile
@@ -244,7 +245,7 @@ struct ProfileInfoView: View {
                 get: { self.value },
                 set: { newValue in
                     self.value = newValue
-                    self.updateUserProfileField(for: username)
+                    self.updateUserProfileField(for: userSettings.username)
                     
                 }
             ))
@@ -258,9 +259,9 @@ struct ProfileInfoView: View {
     
     func updateUserProfileField(for username: String) {
         var update_data: [String: Any] = [
-            "username": "Alice",
-            "height_cm": 170,
-            "weight_kg": 150,
+            "username": username,
+            "height_cm": 185,
+            "weight_kg": 78,
             "activity_level": "active",
             "goals": ["improve posture"],
             "fitness_level": "intermediate"

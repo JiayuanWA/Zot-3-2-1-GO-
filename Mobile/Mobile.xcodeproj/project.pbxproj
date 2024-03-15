@@ -34,6 +34,10 @@
 		429B72BD2B6F257400EAC0C4 /* MobileUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B72BC2B6F257400EAC0C4 /* MobileUITestsLaunchTests.swift */; };
 		42A417A12B83E3D700418944 /* exercises.json in Resources */ = {isa = PBXBuildFile; fileRef = 42A417A02B83E3D700418944 /* exercises.json */; };
 		42D745442BA374970048E9FA /* Record view.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D745432BA374970048E9FA /* Record view.swift */; };
+		42D745462BA3E3140048E9FA /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D745452BA3E3140048E9FA /* WeatherModel.swift */; };
+		42D745482BA3E3600048E9FA /* WeatherAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D745472BA3E3600048E9FA /* WeatherAPIClient.swift */; };
+		42D7454A2BA3E6010048E9FA /* WeatherResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D745492BA3E6010048E9FA /* WeatherResponse.swift */; };
+		42D7454C2BA3E7F00048E9FA /* workout view.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D7454B2BA3E7F00048E9FA /* workout view.swift */; };
 		42E9043C2B9BD51300FFDDE0 /* UhBee Se_hyun.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 42E9043B2B9BD51300FFDDE0 /* UhBee Se_hyun.ttf */; };
 		42E904402B9C0A1700FFDDE0 /* Wallpaper.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 42E9043F2B9C0A1700FFDDE0 /* Wallpaper.jpeg */; };
 /* End PBXBuildFile section */
@@ -88,6 +92,10 @@
 		429B72BC2B6F257400EAC0C4 /* MobileUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		42A417A02B83E3D700418944 /* exercises.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = exercises.json; sourceTree = "<group>"; };
 		42D745432BA374970048E9FA /* Record view.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Record view.swift"; sourceTree = "<group>"; };
+		42D745452BA3E3140048E9FA /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
+		42D745472BA3E3600048E9FA /* WeatherAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAPIClient.swift; sourceTree = "<group>"; };
+		42D745492BA3E6010048E9FA /* WeatherResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherResponse.swift; sourceTree = "<group>"; };
+		42D7454B2BA3E7F00048E9FA /* workout view.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "workout view.swift"; sourceTree = "<group>"; };
 		42E9043B2B9BD51300FFDDE0 /* UhBee Se_hyun.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "UhBee Se_hyun.ttf"; path = "../../UhBee Se_hyun.ttf"; sourceTree = "<group>"; };
 		42E9043F2B9C0A1700FFDDE0 /* Wallpaper.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Wallpaper.jpeg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -155,29 +163,33 @@
 				42E9043F2B9C0A1700FFDDE0 /* Wallpaper.jpeg */,
 				429B72A62B6F257400EAC0C4 /* Mobile.entitlements */,
 				429B72A72B6F257400EAC0C4 /* Info.plist */,
-				429B72A32B6F257400EAC0C4 /* Preview Content */,
+				429B72A32B6F257400EAC0C4 /* WeatherAPIClient */,
 				42672BD62B7158580023CBE1 /* HomeView.swift */,
 				42672BD82B7159100023CBE1 /* TabView.swift */,
 				42672BDA2B715E540023CBE1 /* Activity.swift */,
 				42672BDC2B7160800023CBE1 /* HealthKit.swift */,
 				423B4AAF2B83C5C6006EC87E /* RecordHomeView.swift */,
+				42D7454B2BA3E7F00048E9FA /* workout view.swift */,
 				42D745432BA374970048E9FA /* Record view.swift */,
 				423B4AB12B83C79C006EC87E /* ProfileView.swift */,
 				423B4AB32B83E168006EC87E /* ExcerciseListView.swift */,
 				42843B362B86C443005E11A4 /* RecommendationsView.swift */,
 				4214138C2B890F1E00D1BBA3 /* DailyDecisionSurveyView.swift */,
 				42403F4C2B9F95FA00238AB8 /* Logging.swift */,
+				429B72A42B6F257400EAC0C4 /* Preview Assets.xcassets */,
 				4287CDD22BA136B700F145D8 /* NetworkManager.swift */,
 			);
 			path = Mobile;
 			sourceTree = "<group>";
 		};
-		429B72A32B6F257400EAC0C4 /* Preview Content */ = {
+		429B72A32B6F257400EAC0C4 /* WeatherAPIClient */ = {
 			isa = PBXGroup;
 			children = (
-				429B72A42B6F257400EAC0C4 /* Preview Assets.xcassets */,
+				42D745452BA3E3140048E9FA /* WeatherModel.swift */,
+				42D745472BA3E3600048E9FA /* WeatherAPIClient.swift */,
+				42D745492BA3E6010048E9FA /* WeatherResponse.swift */,
 			);
-			path = "Preview Content";
+			path = WeatherAPIClient;
 			sourceTree = "<group>";
 		};
 		429B72AF2B6F257400EAC0C4 /* MobileTests */ = {
@@ -334,10 +346,13 @@
 			files = (
 				4287CDD32BA136B700F145D8 /* NetworkManager.swift in Sources */,
 				42672BDB2B715E540023CBE1 /* Activity.swift in Sources */,
+				42D7454C2BA3E7F00048E9FA /* workout view.swift in Sources */,
 				429B729E2B6F257400EAC0C4 /* ContentView.swift in Sources */,
+				42D7454A2BA3E6010048E9FA /* WeatherResponse.swift in Sources */,
 				423B4AB42B83E168006EC87E /* ExcerciseListView.swift in Sources */,
 				4236C0672B73F0DD001DC6DC /* LogginCheck.swift in Sources */,
 				42D745442BA374970048E9FA /* Record view.swift in Sources */,
+				42D745482BA3E3600048E9FA /* WeatherAPIClient.swift in Sources */,
 				42403F4D2B9F95FA00238AB8 /* Logging.swift in Sources */,
 				423B4AB02B83C5C6006EC87E /* RecordHomeView.swift in Sources */,
 				423B4AB22B83C79C006EC87E /* ProfileView.swift in Sources */,
@@ -346,6 +361,7 @@
 				42843B372B86C443005E11A4 /* RecommendationsView.swift in Sources */,
 				4214138D2B890F1E00D1BBA3 /* DailyDecisionSurveyView.swift in Sources */,
 				427CE16B2B828628004CD9D9 /* Profile Preferences.swift in Sources */,
+				42D745462BA3E3140048E9FA /* WeatherModel.swift in Sources */,
 				42672BDD2B7160800023CBE1 /* HealthKit.swift in Sources */,
 				42672BD92B7159100023CBE1 /* TabView.swift in Sources */,
 				427CE1692B828004004CD9D9 /* CreateAccount.swift in Sources */,
@@ -514,12 +530,13 @@
 				CODE_SIGN_ENTITLEMENTS = Mobile/Mobile.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Mobile/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Mobile/WeatherAPIClient\"";
 				DEVELOPMENT_TEAM = Q78S6WYZXP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Mobile/Info.plist;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Please allow HealthKit access to enjoy full feature capabilities";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow Location access for weather data";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -546,12 +563,13 @@
 				CODE_SIGN_ENTITLEMENTS = Mobile/Mobile.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Mobile/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Mobile/WeatherAPIClient\"";
 				DEVELOPMENT_TEAM = Q78S6WYZXP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Mobile/Info.plist;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Please allow HealthKit access to enjoy full feature capabilities";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow Location access for weather data";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
