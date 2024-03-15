@@ -393,7 +393,7 @@ def create_app(test_config=None):
         if gender == 'male':
             bmr = 88.362 + (13.397 * float(weight)) + (4.799 * float(height)) - (5.677 * float(age))* float(activity_factors.get(activity_level, 1))
         else:
-            bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)* activity_factors.get(activity_level, 1)
+            bmr = 447.593 + (9.247 * float(weight)) + (3.098 * float(height)) - (4.330 * float(age))* float(activity_factors.get(activity_level, 1))
         return bmr
 
     def calculate_age(born):
