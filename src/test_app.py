@@ -113,7 +113,6 @@ class FlaskTestCase(unittest.TestCase):
         # Mocking the database cursor's behavior
         # Assuming the username 'john_doe' exists in your database with a weight that corresponds to the 155 lb column
         response = self.client.get('/profile/testuser')
-        print(response.json)
         self.assertEqual(response.status_code, 200)
         # Here you can add more assertions to check if the response data is as expected
         # This is a basic example, you'd likely want to check the structure and content of the response data
@@ -131,7 +130,6 @@ class FlaskTestCase(unittest.TestCase):
         # Mocking the database cursor's behavior
         # Assuming the username 'john_doe' exists in your database with a weight that corresponds to the 155 lb column
         response = self.client.get('/get_exercise_records/testuser')
-        print(response.json)
         self.assertEqual(response.status_code, 200)
         # Here you can add more assertions to check if the response data is as expected
         # This is a basic example, you'd likely want to check the structure and content of the response data
@@ -159,6 +157,7 @@ class FlaskTestCase(unittest.TestCase):
             "date": "2024-02-22",
         }
         response = self.client.post('/get_recommendation', json=data)
+        print(response.json)
         self.assertEqual(response.status_code, 201)
 
         
@@ -198,7 +197,6 @@ class FlaskTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         
         self.assertEqual(response.json['status'], 'success')
-        print(response.json['exercises']) 
         
 if __name__ == '__main__':
     unittest.main()

@@ -13,13 +13,12 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
     if test_config is None:
-        # Load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
-        # Load database connection info from a secure location.
+        
         with open('db.yaml', 'r') as file:
             db = yaml.load(file, Loader=yaml.FullLoader)
     else:
-        # Load the test config if passed in
+        
         app.config.update(test_config)
         db = test_config
 
@@ -101,7 +100,6 @@ def create_app(test_config=None):
             user_info = cur.fetchone()
 
             # Log user_info for debugging
-            print("User Info:", user_info)
 
             if user_info:
                 cur.close()
@@ -111,7 +109,6 @@ def create_app(test_config=None):
                 return jsonify({"status": "fail", "message": "User not found"}), 404
         except Exception as e:
             # Log the exception for debugging
-            print("Error:", e)
             return jsonify({"status": "error", "message": "Internal Server Error"}), 500
 
 
@@ -123,12 +120,12 @@ def create_app(test_config=None):
         height_cm = data.get('height_cm')
         weight_kg = data.get('weight_kg')
         activity_level = data.get('activity_level')
-        goals = ','.join(data['goals']) if 'goals' in data else None  # Assuming goals is provided as a list
+        goals = ','.join(data['goals']) if 'goals' in data else None
         fitness_level = data.get('fitness_level')
 
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        # Update basic metrics in users table
+
         cur.execute("""
             UPDATE users SET height_cm = %s, weight_kg = %s, 
             activity_level = %s, goals = %s, fitness_level = %s
@@ -141,14 +138,12 @@ def create_app(test_config=None):
         cur.close()
 
         return jsonify({"status": "success", "message": "Profile updated successfully"}), 200
-    # Add more routes here for getting and setting user profile information
+    
     @app.route('/initialize_daily_log', methods=['POST'])
     def initialize_daily_log():
         data = request.json
         username = data['username']
-        date = data.get('date', None)  # Use the current date if not provided
-
-        # If no date is provided, use the current date
+        date = data.get('date', None)
         if not date:
             from datetime import datetime
             date = datetime.now().strftime('%Y-%m-%d')
@@ -178,7 +173,7 @@ def create_app(test_config=None):
         cur.close()
         return jsonify({"message": message, "status": "success"}), 200
 
-    # Assuming this function finds or creates a log entry and returns its log_id
+    
     def get_or_create_log_id(user_id, date_logged):
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cur.execute("SELECT log_id FROM daily_logs WHERE user_id = %s AND date_logged = %s", (user_id, date_logged))
@@ -186,10 +181,10 @@ def create_app(test_config=None):
         if log:
             return log['log_id']
         else:
-            # Insert a new daily log if it doesn't exist
+            
             cur.execute("INSERT INTO daily_logs (user_id, date_logged) VALUES (%s, %s)", (user_id, date_logged))
             mysql.connection.commit()
-            return cur.lastrowid  # Return the newly created log_id
+            return cur.lastrowid
 
     @app.route('/log/calorie_intake', methods=['POST'])
     def log_calorie_intake():
@@ -200,7 +195,7 @@ def create_app(test_config=None):
 
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        # Fetch user_id using username
+        
         cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
         user = cur.fetchone()
         if not user:
@@ -210,7 +205,7 @@ def create_app(test_config=None):
         if not log_id:
             return jsonify({"message": "Daily log not found", "status": "fail"}), 404
 
-        # Insert calorie intake logs using log_id
+        
         for meal in meals:
             cur.execute("INSERT INTO calorie_intake_details (log_id, calories, meal_type) VALUES (%s, %s, %s)",
                         (log_id, meal['calories'], meal['meal_type']))
@@ -227,7 +222,7 @@ def create_app(test_config=None):
 
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        # Fetch user_id using username
+        
         cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
         user = cur.fetchone()
         if not user:
@@ -235,7 +230,7 @@ def create_app(test_config=None):
     
         log_id = get_or_create_log_id(user['user_id'], date_logged)
 
-        # Insert exercise logs using log_id
+        
         for exercise in exercises:
             cur.execute("""
                 INSERT INTO exercise_records (log_id, exercise_type, duration_minutes, calories_burned) 
@@ -255,17 +250,17 @@ def create_app(test_config=None):
 
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        # Fetch user_id using username
+        
         cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
         user = cur.fetchone()
         if not user:
             return jsonify({"message": "User not found", "status": "fail"}), 404
         log_id = get_or_create_log_id(user['user_id'], date_logged)
-        # Extract height and weight from metrics
+        
         height = metrics.get('height_cm')
         weight = metrics.get('weight_kg')
 
-        # Insert or update height and weight in body_metrics table
+        
         if height and weight:
             cur.execute("""
                 INSERT INTO body_metrics (log_id, height_cm, weight_kg)
@@ -275,7 +270,7 @@ def create_app(test_config=None):
                 weight_kg = VALUES(weight_kg)
                 """, (log_id, height, weight))
 
-            # Update user's latest height and weight in the users table
+            
             cur.execute("UPDATE users SET height_cm = %s, weight_kg = %s WHERE user_id = %s", (height, weight, user['user_id']))
 
         mysql.connection.commit()
@@ -337,7 +332,6 @@ def create_app(test_config=None):
 
     @app.route('/get_calorie_intake/<username>', methods=['GET'])
     def get_calorie_intake_for_username(username):
-        # Resolve user_id from username
         user_id = get_user_id_by_username(username)
         if not user_id:
             return jsonify({"message": "User not found"}), 404
@@ -346,7 +340,6 @@ def create_app(test_config=None):
 
     @app.route('/get_exercise_records/<username>', methods=['GET'])
     def get_exercise_records_for_username(username):
-        # Resolve user_id from username
         user_id = get_user_id_by_username(username)
         if not user_id:
             return jsonify({"message": "User not found"}), 404
@@ -356,7 +349,6 @@ def create_app(test_config=None):
 
     @app.route('/get_body_metrics/<username>', methods=['GET'])
     def get_body_metrics_for_username(username):
-        # Resolve user_id from username
         user_id = get_user_id_by_username(username)
         if not user_id:
             return jsonify({"message": "User not found"}), 404
@@ -393,7 +385,7 @@ def create_app(test_config=None):
         if gender == 'male':
             bmr = 88.362 + (13.397 * float(weight)) + (4.799 * float(height)) - (5.677 * float(age))* float(activity_factors.get(activity_level, 1))
         else:
-            bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)* activity_factors.get(activity_level, 1)
+            bmr = 447.593 + (9.247 * float(weight)) + (3.098 * float(height)) - (4.330 * float(age))* float(activity_factors.get(activity_level, 1))
         return bmr
 
     def calculate_age(born):
@@ -422,7 +414,6 @@ def create_app(test_config=None):
         username = data['username']
         condition_description = data['condition_description']
 
-        # Resolve user_id from username
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
         user = cur.fetchone()
@@ -434,7 +425,6 @@ def create_app(test_config=None):
         user_id = user['user_id']
 
         try:
-            # Delete the condition based on user_id and condition_description
             cur.execute("DELETE FROM user_conditions WHERE user_id = %s AND condition_description = %s", (user_id, condition_description,))
             mysql.connection.commit()
 
@@ -455,7 +445,6 @@ def create_app(test_config=None):
         date = data['date']
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     
-        # Fetch the user details
         cur.execute("SELECT date_of_birth, gender, goals, fitness_level, activity_level, height_cm, weight_kg  FROM users WHERE username = %s", (username,))
         user_info = cur.fetchone()
         if not user_info:
@@ -473,10 +462,8 @@ def create_app(test_config=None):
         conditions_list = [condition['condition_description'] for condition in user_conditions]
         conditions_str = ", ".join(conditions_list)
         
-        # calculate age
         age = calculate_age(date_of_birth)
 
-        # Fetch daily logs for the date
         cur.execute("""
             SELECT calories_burned
             FROM daily_logs
@@ -484,7 +471,6 @@ def create_app(test_config=None):
             WHERE user_id = (SELECT user_id FROM users WHERE username = %s) AND date_logged = %s
             """, (username, date))
         daily_exercise_logs = cur.fetchall()
-        # calculate exercise burned calorie 
         exercise_calorie = sum(log['calories_burned'] for log in daily_exercise_logs)
         cur.execute("""
             SELECT calories
@@ -493,26 +479,23 @@ def create_app(test_config=None):
             WHERE user_id = (SELECT user_id FROM users WHERE username = %s) AND date_logged = %s
             """, (username, date))
         daily_intake_logs = cur.fetchall()
-        # calculate intake calorie
         intake_calorie = sum(log['calories'] for log in daily_intake_logs)
 
         daily_BMR = calculate_basic_calories_burned(height_cm, weight_kg, age, gender, activity_level)
 
-        # get all name for activity
         exercises = []
-        # Read the CSV file to match the user's weight with the calories burned per kg for the exercises performed
         with open('exercise_dataset.csv', mode='r') as csvfile:
             csv_reader = csv.DictReader(csvfile)
             for row in csv_reader:
                 exercises.append(row['Activity, Exercise or Sport (1 hour)'])
 
         openai.api_key = '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'
-        # Construct the string to ask an AI for a fitness plan
+
         ai_query = f"Consider below circumstances, Goal: {user_info['goals']}, Fitness Level: {user_info['fitness_level']}, " \
                    f"Today's Intake Calories: {intake_calorie}, " \
                    f"Today's Exercise Calories: {exercise_calorie}, BMR: {daily_BMR}, "\
                    f"Conditions: {conditions_str}, "\
-                   f"I want you to choose from the following exercise and choose 10 exercises, and gives out recommended duration for rest of my day in json format in list called exercise_list with name and duration only: "\
+                   f"I want you to choose from the following exercise and choose top 10 most appropriate (by giving a score based on appropriateness) exercises based on previous description, and gives out recommended duration for rest of my day in json format in list called exercise_list with name, duration, and score only: "\
                    f"exercise list: {exercises}"
 
 
@@ -525,24 +508,21 @@ def create_app(test_config=None):
         )
         reply = chat.choices[0].message.content
         try:
-            # Find the JSON substring within the reply
+            # Find the JSON substring 
             json_str_start = reply.find('{')
             json_str_end = reply.rfind('}') + 1
             json_str = reply[json_str_start:json_str_end]
 
-            # Parse the JSON string into a Python dictionary
+            # Parse the JSON string
             json_data = json.loads(json_str)
-            print(json_data)
             return jsonify(json_data), 201
         except (ValueError, json.JSONDecodeError) as e:
-            # Handle cases where JSON parsing fails
             return jsonify({"error": "Failed to parse AI reply into JSON", "detail": str(e)}), 400
 
     @app.route('/get_conditions/<username>', methods=['GET'])
     def get_conditions(username):
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         
-        # Fetch user_id using username
         cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
         user = cur.fetchone()
         
@@ -553,7 +533,6 @@ def create_app(test_config=None):
         user_id = user['user_id']
 
         try:
-            # Fetch all conditions for the user_id
             cur.execute("SELECT uc_id, condition_description FROM user_conditions WHERE user_id = %s", (user_id,))
             conditions = cur.fetchall()
 
@@ -567,10 +546,7 @@ def create_app(test_config=None):
         with open('exercise_dataset.csv', mode='r') as csvfile:
             csv_reader = csv.DictReader(csvfile)
             for row in csv_reader:
-                print(row['Activity, Exercise or Sport (1 hour)'])
                 if row['Activity, Exercise or Sport (1 hour)'] == exercise_name:
-                    # Assuming the CSV contains a column for Calories per kg
-                    # and the exercise matches exactly (consider implementing a more flexible search)
                     calories_per_kg = float(row['Calories per kg'])
                     return calories_per_kg * float(weight_kg) * 2.2 * 2.2
         return None
@@ -583,7 +559,6 @@ def create_app(test_config=None):
         exercise_name = data['exercise_name']
         duration_minutes = data['duration_minutes']
         
-        # Fetch user's weight
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cur.execute("SELECT weight_kg FROM users WHERE username = %s", (username,))
         user = cur.fetchone()
@@ -608,7 +583,6 @@ def create_app(test_config=None):
 
     @app.route('/list_exercises/<username>', methods=['GET'])
     def list_exercises(username):
-        # Fetch user's weight from the database
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cur.execute("SELECT weight_kg FROM users WHERE username = %s", (username,))
         user = cur.fetchone()
@@ -618,17 +592,13 @@ def create_app(test_config=None):
             return jsonify({"message": "User not found", "status": "fail"}), 404
 
         weight_kg = user['weight_kg']
-
-        # Initialize a list to hold exercise data
         exercise_data = []
 
-        # Parse the CSV to calculate calories burned for each exercise
         try:
             with open('exercise_dataset.csv', mode='r') as csvfile:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     exercise_name = row['Activity, Exercise or Sport (1 hour)']
-                    # Assuming 'Calories per kg per hour' is the correct column name, adjust as necessary
                     calories_burned_per_hour = float(row['Calories per kg']) * float(weight_kg)
                     exercise_data.append({
                         "exercise_name": exercise_name,
