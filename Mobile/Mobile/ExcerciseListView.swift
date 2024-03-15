@@ -141,7 +141,7 @@ struct ExerciseListView: View {
                             
                             let data: [String: Any] = [
                                                                  "username": "Test",
-                                                                 "date_logged": "2024-02-22",
+                                                                 "date_logged": "2024-03-15",
                                                                   "exercises": [[
                                                                          "type":  exercise.activity,
                                                                          "duration": duration,

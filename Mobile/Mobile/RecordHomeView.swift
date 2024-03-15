@@ -29,7 +29,8 @@ struct RecordHomeView: View {
     @State private var isLoggingWorkoutActive = false
     @State private var isLoggingFoodActive = false
     @State private var isLoggingBodyMetricsActive = false
-    
+    @State private var exerciseRecords: [(id: Int, formattedDate: String, exerciseType: String, duration: Double, calories: Double)] = []
+
 
     var body: some View {
         VStack(alignment: .center) {
@@ -82,7 +83,6 @@ struct RecordHomeView: View {
             
             ProgressItem(title: "Exercise Duration", value: exerciseDuration, goal: 60)
                 .foregroundColor(.green)
- 
                 .padding(.horizontal)
             
             if let sleepData = manager.activities["today Sleep"] {
@@ -94,8 +94,14 @@ struct RecordHomeView: View {
                   
                            .padding(.horizontal)
                    }
-           
-            
+
+            if !exerciseRecords.isEmpty {
+                RecordListView(records: exerciseRecords)
+                    .padding(.top, 20)
+            }
+
+
+
 
             Spacer()
             
@@ -120,30 +126,57 @@ struct RecordHomeView: View {
         
         .onReceive(manager.$activities) { _ in
             print("Activities changed. Updating UI.")
+            exerciseDuration = calculateExerciseDuration()
 
         }
         
     }
+    
+
+
+    func calculateExerciseDuration() -> Double {
+        guard let selectedDate = userPreferences.selectedDate else { return 0 }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yy" // Adjust the format according to your needs
+
+        let selectedDateString = dateFormatter.string(from: selectedDate)
+
+        let totalDuration = exerciseRecords.reduce(0.0) { (result, record) in
+            print("Record Formatted Date: \(record.formattedDate)")
+            if record.formattedDate == selectedDateString {
+                return result + record.duration
+            } else {
+                return result
+            }
+        }
+
+
+        print("Selected Date String: \(selectedDateString)")
+        print("i got total \(totalDuration)")
+
+        return totalDuration
+    }
+
     func fetchExerciseDuration(for username: String) {
-   
-        
+        exerciseRecords.removeAll() // Clear the exerciseRecords array
+
         let urlString = "http://52.14.25.178:5000/get_exercise_records/Test"
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
             return
         }
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = "GET" // Specify GET method
-        
+
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid HTTP response")
                 return
             }
-            
-            print("Response code hereeeeeeeeeee: \(httpResponse.statusCode)")
-          
+
+            print("Response code: \(httpResponse.statusCode)")
 
             guard let data = data, error == nil else {
                 print("Error: \(error?.localizedDescription ?? "Unknown error")")
@@ -152,20 +185,34 @@ struct RecordHomeView: View {
 
             print("Retrieved data: \(String(data: data, encoding: .utf8) ?? "Unknown")")
 
-  
             print("Retrieved JSON: \(data)")
-            
+
             do {
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]{
-                    print("Retrieved JSON: \(json)")
-                    
-                    // Parse the user info
-                   
-                    
-                   
-                    DispatchQueue.main.async {
-                      //
+                if let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[Any]] {
+                    var recordID = 0
+
+                    for record in jsonArray {
+                        if record.count >= 4,
+                            let dateString = record[0] as? String,
+                            let duration = record[2] as? Double,
+                            let calories = record[3] as? Double,
+                            let exerciseType = record[1] as? String {
+                                recordID += 1
+
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+                                if let date = dateFormatter.date(from: dateString) {
+                                    dateFormatter.dateFormat = "MM/dd/yy"
+                                    let stringFormattedDate = dateFormatter.string(from: date)
+
+                                    let recordData = (id: recordID, formattedDate: stringFormattedDate, exerciseType: exerciseType, duration: duration, calories: calories)
+                                    exerciseRecords.append(recordData)
+                                } else {
+                                    print("Error parsing date: \(dateString)")
+                                }
+                        }
                     }
+                    print("exerciseRecords: \(exerciseRecords)")
                 }
             } catch {
                 print("Error decoding JSON: \(error.localizedDescription)")
@@ -173,8 +220,40 @@ struct RecordHomeView: View {
         }.resume()
     }
 
+
+}
+struct RecordListView: View {
+    let records: [(id: Int, formattedDate: String, exerciseType: String, duration: Double, calories: Double)]
+
+
+    var body: some View {
+        List(records, id: \.id) { record in
+            RecordView(formattedDate: record.formattedDate,
+                        exerciseType: record.exerciseType,
+                        duration: record.duration,
+                        calories: record.calories)
+        }
+    }
 }
 
+struct RecordView: View {
+    
+
+    let formattedDate: String
+    let exerciseType: String
+    let duration: Double
+    let calories: Double
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Date: \(formattedDate)")
+            Text("Exercise Type: \(exerciseType)")
+            Text("Duration: \(duration)")
+            Text("Calories: \(calories)")
+        }
+        .padding()
+    }
+}
 
 struct ProgressItem: View {
     var title: String
