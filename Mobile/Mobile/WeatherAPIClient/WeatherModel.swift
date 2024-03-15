@@ -68,7 +68,7 @@ enum WeatherCode: String, Codable {
     var description: String {
         switch self {
         case .clear:
-            return "It's very sunny!\n Don't forget your hat!"
+            return "It's very sunny!\n Let's go out and enjoy the weather. Don't forget your hat!"
         case .cloudy, .mostlyCloudy:
             return "Cloudy today!\n Watch out for some rain"
         case .mostlyClear, .partlyCloudy:

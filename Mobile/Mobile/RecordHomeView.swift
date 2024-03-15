@@ -1,4 +1,5 @@
 import SwiftUI
+var exerciseRecords: [(id: Int, formattedDate: String, exerciseType: String, duration: Double, calories: Double)] = []
 
 extension Date {
     
@@ -29,8 +30,8 @@ struct RecordHomeView: View {
     @State private var isLoggingWorkoutActive = false
     @State private var isLoggingFoodActive = false
     @State private var isLoggingBodyMetricsActive = false
-    @State private var exerciseRecords: [(id: Int, formattedDate: String, exerciseType: String, duration: Double, calories: Double)] = []
 
+    @State private var totalCaloriesBurned: Double = 0
 
     var body: some View {
         VStack(alignment: .center) {
@@ -84,7 +85,9 @@ struct RecordHomeView: View {
             ProgressItem(title: "Exercise Duration", value: exerciseDuration, goal: 60)
                 .foregroundColor(.green)
                 .padding(.horizontal)
-            
+            ProgressItem(title: "Calories Burned", value: totalCaloriesBurned, goal: 200)
+                   .foregroundColor(.red)
+                   .padding(.horizontal)
             if let sleepData = manager.activities["today Sleep"] {
                 let Count = Double(sleepData.amount) ?? 0
                 let Goal = 8.0
@@ -94,11 +97,11 @@ struct RecordHomeView: View {
                   
                            .padding(.horizontal)
                    }
-
-            if !exerciseRecords.isEmpty {
-                RecordListView(records: exerciseRecords)
-                    .padding(.top, 20)
-            }
+//
+//            if !exerciseRecords.isEmpty {
+//                RecordListView(records: exerciseRecords)
+//                    .padding(.top, 20)
+//            }
 
 
 
@@ -110,6 +113,7 @@ struct RecordHomeView: View {
         .onAppear {
             showAlert = true
             fetchExerciseDuration(for: username)
+          
 
 
             if let savedPreferences = UserDefaults.standard.dictionary(forKey: "userPreferences") as? [String: Any] {
@@ -120,18 +124,37 @@ struct RecordHomeView: View {
                    let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: Date())!
 
             manager.fetchSleepData(startDate: startOfDay, endDate: endOfDay)
-
+            exerciseDuration = calculateExerciseDuration()
+             totalCaloriesBurned = calculateTotalCaloriesBurned()
 
         }
         
         .onReceive(manager.$activities) { _ in
             print("Activities changed. Updating UI.")
             exerciseDuration = calculateExerciseDuration()
+             totalCaloriesBurned = calculateTotalCaloriesBurned()
 
         }
         
     }
-    
+    func calculateTotalCaloriesBurned() -> Double {
+        guard let selectedDate = userPreferences.selectedDate else { return 0 }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yy" // Adjust the format according to your needs
+
+        let selectedDateString = dateFormatter.string(from: selectedDate)
+
+        let totalCaloriesBurned = exerciseRecords.reduce(0.0) { (result, record) in
+            if record.formattedDate == selectedDateString {
+                return result + record.calories
+            } else {
+                return result
+            }
+        }
+
+        return totalCaloriesBurned
+    }
 
 
     func calculateExerciseDuration() -> Double {

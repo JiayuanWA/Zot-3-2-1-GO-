@@ -3,7 +3,6 @@
 import Foundation
 import CoreLocation
 import SwiftUI
-
 final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var currentWeather: Weather?
     
@@ -37,7 +36,7 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
                 }
             }
         } catch {
-            // handle the error
+            print("Weather error: \(error)")
         }
     }
     
@@ -47,10 +46,15 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.first else {
+            print("No location found.")
+            return
+        }
+        print("Location retrieved - Latitude: \(location.coordinate.latitude), Longitude: \(location.coordinate.longitude)")
         Task { await fetchWeather() }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        // handle the error
+        print("Location manager error: \(error)")
     }
 }

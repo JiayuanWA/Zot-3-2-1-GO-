@@ -20,15 +20,18 @@ class RecommendationsEngine {
 struct RecommendationsView: View {
     let recommendationsEngine = RecommendationsEngine()
     @EnvironmentObject var userSettings: UserSettings
-    
+    @State private var showRecords = false
     @State private var recommendations: [RecommendationModel] = []
+    let brownColor = Color(red: 0.6, green: 0.4, blue: 0.2)
 
     var body: some View {
         VStack {
             Text("Personalized Recommendations")
                 .font(.title)
                 .padding()
-
+            
+           
+            
             List(recommendations, id: \.title) { recommendation in
                 VStack(alignment: .leading) {
                     Text(recommendation.title)
@@ -38,7 +41,25 @@ struct RecommendationsView: View {
                         .foregroundColor(.gray)
                 }
                 .padding()
+                
+                
             }
+            
+            Button(action: {
+                            showRecords.toggle()
+                        }) {
+                            Text("Show Exercise Records")
+                                .padding()
+                                .background(brownColor)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
+                        
+                        if showRecords && !exerciseRecords.isEmpty {
+                            RecordListView(records: exerciseRecords)
+                                .padding(.top, 20)
+                        }
+        
         }
         .onAppear {
             // Call the function to generate recommendations
@@ -86,7 +107,7 @@ struct RecommendationsView: View {
                             for item in exerciseList {
                                 if let duration = item["duration"] as? String,
                                    let name = item["name"] as? String {
-                                    let recommendation = RecommendationModel(title: name, description: "Duration: \(duration)")
+                                    let recommendation = RecommendationModel(title: name, description: "Recommended duration: \(duration)")
                                     recommendations.append(recommendation)
                                 }
                             }

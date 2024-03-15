@@ -19,8 +19,8 @@ struct HomeView: View {
         
         var body: some View {
             
-            VStack(alignment: .center, spacing: 15) {
-       
+            VStack(alignment: .center, spacing: 16) {
+      
                 Text("Log your progress!")
                     .font(.custom("UhBee Se_hyun", size: 24))
                     .fontWeight(.bold)
@@ -28,11 +28,13 @@ struct HomeView: View {
                 .sheet(isPresented: $isSurveyActive) {
                     DailyDecisionSurveyView(selectedDate: $userPreferences.selectedDate)
                 }
+                
                 .padding(.horizontal)
+                
                 if let currentWeather = weatherAPIClient.currentWeather  {
                     HStack(alignment: .center, spacing: 16) {
                         currentWeather.weatherCode.image
-                         
+                            .font(.largeTitle)
                         Text("\(currentWeather.temperature)º")
                             .font(.largeTitle)
                     }
@@ -49,6 +51,8 @@ struct HomeView: View {
                         }
                     })
                 }
+                
+           
                 
                 Button(action: {
                     isSurveyActive.toggle()

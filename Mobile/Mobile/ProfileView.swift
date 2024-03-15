@@ -49,8 +49,17 @@ struct ProfileView: View {
                 ProfileInfoView(label: "Activity Level", value: data.activityLevel ?? "", userProfile: $userProfile, field: "activity_level")
                 ProfileInfoView(label: "Goals", value: data.goals ?? "", userProfile: $userProfile, field: "goals")
                 ProfileInfoView(label: "Fitness Level", value: data.fitnessLevel ?? "", userProfile: $userProfile, field: "fitness_level")
-                
-
+                Text("Recommendations:")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .padding(.top)
+                                
+                Text("Recommended Exercise Time: \(calculateRecommendedExerciseTime(activityLevel: data.activityLevel)) minutes/day")
+                               Text("Recommended Sleep Time: \(calculateRecommendedSleepTime(age: data.age)) hours/day")
+                               Text("Recommended Calorie Intake: \(calculateRecommendedCalorieIntake(data: data)) Kcal/day")
+                               Text("Recommended Calories to Burn: \(calculateRecommendedCaloriesToBurn(data: data)) Kcal/day")
+                               Text("Recommended Distance to Walk: \(calculateRecommendedDistanceToWalk()) steps/day")
+                             
 
             } else {
                 Text("Loading...")
@@ -338,3 +347,29 @@ struct ProfileView_Previews: PreviewProvider {
     }
 }
 
+
+
+func calculateRecommendedExerciseTime(activityLevel: String) -> Int {
+   
+    return 30
+}
+
+func calculateRecommendedSleepTime(age: String) -> Double {
+    
+    return 7.5
+}
+
+func calculateRecommendedCalorieIntake(data: UserProfile) -> Int {
+    
+    return 2000
+}
+
+func calculateRecommendedCaloriesToBurn(data: UserProfile) -> Int {
+    
+    return 300
+}
+
+func calculateRecommendedDistanceToWalk() -> Int {
+    
+    return 10000
+}
