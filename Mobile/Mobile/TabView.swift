@@ -22,7 +22,7 @@ struct MainTabView: View {
             HomeView()
                 .tabItem {
                     Image(systemName: "house.fill")
-                    Text("Home2")
+                    Text("Log")
                 }
                 .environmentObject(userSettings)
                 .background(

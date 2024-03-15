@@ -18,6 +18,7 @@ struct Exercise: Identifiable, Equatable {
 }
 
 struct ExerciseListView: View {
+    @EnvironmentObject var userSettings: UserSettings
     @State private var exercises: [Exercise] = []
     @State private var selectedExercise: Exercise?
     @State private var searchText: String = ""
@@ -67,7 +68,7 @@ struct ExerciseListView: View {
                         Button(action: {
                             if let duration = Double(duration) {
                                 // Make a POST request to the backend
-                                let data = ["username": "Test",
+                                let data = ["username": userSettings.username,
                                             "exercise_name": exercise.activity,
                                             "duration_minutes": duration]
                                 print("you did \( exercise.activity)")
@@ -140,7 +141,7 @@ struct ExerciseListView: View {
                             }
                             
                             let data: [String: Any] = [
-                                                                 "username": "Test",
+                                                                 "username": userSettings.username,
                                                                  "date_logged": "2024-03-15",
                                                                   "exercises": [[
                                                                          "type":  exercise.activity,

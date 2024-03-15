@@ -59,7 +59,12 @@ struct RecommendationsView: View {
                             RecordListView(records: exerciseRecords)
                                 .padding(.top, 20)
                         }
-        
+//            Text("Recommended Exercise Time: \(calculateRecommendedExerciseTime(activityLevel: data.activityLevel)) minutes/day")
+//                           Text("Recommended Sleep Time: \(calculateRecommendedSleepTime(age: calculateAge(from: data.age))) hours/day")
+//                           Text("Recommended Calorie Intake: \(calculateRecommendedCalorieIntake(data: data)) Kcal/day")
+//                           Text("Recommended Calories to Burn: \(calculateRecommendedCaloriesToBurn(data: data)) Kcal/day")
+//            Text("Recommended Distance to Walk: \(Int(1.2*Double(calculateRecommendedDistanceToWalk(data: data))))steps/day")
+//           
         }
         .onAppear {
             // Call the function to generate recommendations
@@ -104,6 +109,8 @@ struct RecommendationsView: View {
                         if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                            let exerciseList = json["exercise_list"] as? [[String: Any]] {
                             var recommendations: [RecommendationModel] = []
+                            
+                            print("look here: \(json)")
                             for item in exerciseList {
                                 if let duration = item["duration"] as? String,
                                    let name = item["name"] as? String {

@@ -1,6 +1,8 @@
 import SwiftUI
 var exerciseRecords: [(id: Int, formattedDate: String, exerciseType: String, duration: Double, calories: Double)] = []
 
+
+
 extension Date {
     
     static func startOfWeekDates() -> [Date] {
@@ -19,9 +21,13 @@ class UserPreferences: ObservableObject {
 
 
 struct RecordHomeView: View {
+    @EnvironmentObject var userSettings: UserSettings
+    @EnvironmentObject var userProfileData: UserProfileData
+    @State private var profileData: UserProfile?
+    
     @EnvironmentObject var manager: HealthKit
     @State private var firstName: String = ""
-    @State private var username: String = "Alice"
+
     @StateObject var userPreferences = UserPreferences()
     @State private var showAlert = false
     @State private var isSurveyActive: Bool = false
@@ -35,106 +41,172 @@ struct RecordHomeView: View {
 
     var body: some View {
         VStack(alignment: .center) {
-     
+            
             
             Text("Welcome, \(firstName)")
                 .font(.custom("UhBee Se_hyun", size: 24))
                 .fontWeight(.bold)
             
-
+            
             
             if let selectedDate = userPreferences.selectedDate {
                 Text("Selected Date: \(selectedDate, style: .date)")
                     .font(.custom("UhBee Se_hyun", size: 14))
                     .padding(.top,1 )
-              
+                
             }
-
-
-            WeekProgressView(selectedDate: $userPreferences.selectedDate, startOfWeekDates: Date.startOfWeekDates())
-                .padding(.horizontal)
-                .padding(.top, 20)
-                .padding(.bottom, 10)
-
-            if let stepData = manager.activities["today Steps"] {
-                let stepCount = Double(stepData.amount) ?? 0
-                let goal = 2000.0
+            
+            
+            if let userProfile = profileData{
+//                               
+//                                Text("Recommended Calorie Intake: \(calculateRecommendedCalorieIntake(data: userProfile)) Kcal/day")
+//                                Text("Recommended Calories to Burn: \(calculateRecommendedCaloriesToBurn(data: userProfile)) Kcal/day")
+//                               
+//                            } else {
+//                                Text("User profile data not available")
+//                            }
                 
-
-                
-
-                ProgressItem(title: "Steps Walked", value: stepCount, goal: goal)
+                WeekProgressView(selectedDate: $userPreferences.selectedDate, startOfWeekDates: Date.startOfWeekDates())
+                    .padding(.horizontal)
                     .padding(.top, 20)
-                    .foregroundColor(.blue)
-                    .padding(.horizontal)
-            }
-
-
-            if let distanceData = manager.activities["today Distance"] {
-                let distanceCount = Double(distanceData.amount) ?? 3
-                let distanceGoal = 2.0
-
-                ProgressItem(title: "Distance Walked", value: distanceCount, goal: distanceGoal)
-                    .foregroundColor(.green)
+                    .padding(.bottom, 10)
                 
-             
+                if let stepData = manager.activities["today Steps"] {
+                    let stepCount = Double(stepData.amount) ?? 0
+                    let goal = 2000.0
+                    
+                    
+                    
+                    
+                    ProgressItem(title: "Recommended Steps: \(Int(1.2 * Double(calculateRecommendedDistanceToWalk(data: userProfile)))) steps/day", value: stepCount, goal: Double(recommendedStepsToWalk))
+                        .padding(.top, 20)
+                        .foregroundColor(.blue)
+                        .padding(.horizontal)
+                }
+                
+                
+                if let distanceData = manager.activities["today Distance"] {
+                    let distanceCount = Double(distanceData.amount) ?? 3
+                    
+                    ProgressItem(title: "Distance Walked", value: distanceCount, goal: Double(recommendedDistanceToWalk))
+                        .foregroundColor(.green)
+                    
+                    
+                        .padding(.horizontal)
+                }
+                
+                
+                ProgressItem(title: "Recommended Exercise Time: \(calculateRecommendedExerciseTime(activityLevel: userProfile.activityLevel)) minutes/day", value: exerciseDuration, goal: Double(recommendedExerciseTime))
+                    .foregroundColor(.purple)
                     .padding(.horizontal)
+                ProgressItem(title: "Recommended Calories to Burn: \(calculateRecommendedCaloriesToBurn(data: userProfile)) Kcal/day", value: totalCaloriesBurned, goal: Double(recommendedCaloriesToBurn))
+                    .foregroundColor(.red)
+                    .padding(.horizontal)
+                if let sleepData = manager.activities["today Sleep"] {
+                    let Count = Double(sleepData.amount) ?? 0
+                    
+                    ProgressItem(title: "Recommended Sleep Time: \(calculateRecommendedSleepTime(age: calculateAge(from: userProfile.age))) hours/day", value: Count, goal:  recommendedSleepTime)
+                        .foregroundColor(.orange)
+                    
+                        .padding(.horizontal)
+                }
+                
             }
             
             
-            ProgressItem(title: "Exercise Duration", value: exerciseDuration, goal: 60)
-                .foregroundColor(.green)
-                .padding(.horizontal)
-            ProgressItem(title: "Calories Burned", value: totalCaloriesBurned, goal: 200)
-                   .foregroundColor(.red)
-                   .padding(.horizontal)
-            if let sleepData = manager.activities["today Sleep"] {
-                let Count = Double(sleepData.amount) ?? 0
-                let Goal = 8.0
-
-                ProgressItem(title: "Sleep Duration", value: Count, goal: Goal)
-                    .foregroundColor(.orange)
-                  
-                           .padding(.horizontal)
-                   }
-//
-//            if !exerciseRecords.isEmpty {
-//                RecordListView(records: exerciseRecords)
-//                    .padding(.top, 20)
-//            }
-
-
-
-
+            
+            
+            
             Spacer()
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .onAppear {
             showAlert = true
-            fetchExerciseDuration(for: username)
-          
-
-
+            fetchData(for: userSettings.username)
+            fetchExerciseDuration(for: userSettings.username)
+            
+            
+            
             if let savedPreferences = UserDefaults.standard.dictionary(forKey: "userPreferences") as? [String: Any] {
-                   self.firstName = savedPreferences["firstName"] as? String ?? ""
-               }
-               userPreferences.selectedDate = Date()
+                self.firstName = savedPreferences["firstName"] as? String ?? ""
+            }
+            userPreferences.selectedDate = Date()
             let startOfDay = Calendar.current.startOfDay(for: Date())
-                   let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: Date())!
-
+            let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: Date())!
+            
             manager.fetchSleepData(startDate: startOfDay, endDate: endOfDay)
             exerciseDuration = calculateExerciseDuration()
-             totalCaloriesBurned = calculateTotalCaloriesBurned()
-
+            totalCaloriesBurned = calculateTotalCaloriesBurned()
+//            if let userProfile = profileData{
+//            calculateRecommendedExerciseTime(activityLevel: userProfile.activityLevel)
+//            calculateRecommendedSleepTime(age: calculateAge(from: userProfile.age))
+//            calculateRecommendedCalorieIntake(data: userProfile)
+//            calculateRecommendedCaloriesToBurn(data: userProfile)
+//           // Int(1.2 * Double(calculateRecommendedDistanceToWalk(data: userProfile))
+//           
+//                }
         }
         
         .onReceive(manager.$activities) { _ in
             print("Activities changed. Updating UI.")
             exerciseDuration = calculateExerciseDuration()
-             totalCaloriesBurned = calculateTotalCaloriesBurned()
-
+            totalCaloriesBurned = calculateTotalCaloriesBurned()
+            
         }
+    }
+        func fetchData(for username: String) {
+            // Construct the URL with username parameter
+            let urlString = "http://52.14.25.178:5000/profile/\(username)"
+            guard let url = URL(string: urlString) else {
+                print("Invalid URL")
+                return
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    print("Invalid HTTP response")
+                    return
+                }
+                
+                print("Response code: \(httpResponse.statusCode)")
+                
+                guard let data = data, error == nil else {
+                    print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                    return
+                }
+                
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                       let userInfo = json["user_info"] as? [String: Any] {
+                        print("Retrieved JSON: \(json)")
+                        
+                        // Parse the user info
+                        let firstName = userInfo["first_name"] as? String ?? ""
+                        let lastName = userInfo["last_name"] as? String ?? ""
+                        let gender = userInfo["gender"] as? String
+                        let age = userInfo["date_of_birth"] as? String
+                        let height = userInfo["height_cm"] as? String
+                        let weight = userInfo["weight_kg"] as? String
+                        let activityLevel = userInfo["activity_level"] as? String
+                        let goals = userInfo["goals"] as? String
+                        let fitnessLevel = userInfo["fitness_level"] as? String
+                        
+                        // Create UserProfile object
+                        let userProfile = UserProfile(firstName: firstName, lastName: lastName, gender: gender ?? "", age: age ?? "", height: height ?? "", weight: weight ?? "", activityLevel: activityLevel ?? "", goals: goals ?? "", fitnessLevel: fitnessLevel ?? "")
+                        
+                        DispatchQueue.main.async {
+                            self.profileData = userProfile
+                        }
+                    }
+                } catch {
+                    print("Error decoding JSON: \(error.localizedDescription)")
+                }
+            }.resume()
+        
         
     }
     func calculateTotalCaloriesBurned() -> Double {
@@ -184,14 +256,14 @@ struct RecordHomeView: View {
     func fetchExerciseDuration(for username: String) {
         exerciseRecords.removeAll() // Clear the exerciseRecords array
 
-        let urlString = "http://52.14.25.178:5000/get_exercise_records/Test"
+        let urlString = "http://52.14.25.178:5000/get_exercise_records/\(username)"
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
             return
         }
 
         var request = URLRequest(url: url)
-        request.httpMethod = "GET" // Specify GET method
+        request.httpMethod = "GET"
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse else {
@@ -311,6 +383,8 @@ struct ProgressItem: View {
         .padding(.horizontal, 16)
     }
 }
+
+
 
 struct WeekProgressView: View {
     @Binding var selectedDate: Date?

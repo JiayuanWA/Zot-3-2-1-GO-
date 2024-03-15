@@ -33,7 +33,6 @@
 		429B72BB2B6F257400EAC0C4 /* MobileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B72BA2B6F257400EAC0C4 /* MobileUITests.swift */; };
 		429B72BD2B6F257400EAC0C4 /* MobileUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429B72BC2B6F257400EAC0C4 /* MobileUITestsLaunchTests.swift */; };
 		42A417A12B83E3D700418944 /* exercises.json in Resources */ = {isa = PBXBuildFile; fileRef = 42A417A02B83E3D700418944 /* exercises.json */; };
-		42D745442BA374970048E9FA /* Record view.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D745432BA374970048E9FA /* Record view.swift */; };
 		42D745462BA3E3140048E9FA /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D745452BA3E3140048E9FA /* WeatherModel.swift */; };
 		42D745482BA3E3600048E9FA /* WeatherAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D745472BA3E3600048E9FA /* WeatherAPIClient.swift */; };
 		42D7454A2BA3E6010048E9FA /* WeatherResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D745492BA3E6010048E9FA /* WeatherResponse.swift */; };
@@ -91,7 +90,6 @@
 		429B72BA2B6F257400EAC0C4 /* MobileUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileUITests.swift; sourceTree = "<group>"; };
 		429B72BC2B6F257400EAC0C4 /* MobileUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		42A417A02B83E3D700418944 /* exercises.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = exercises.json; sourceTree = "<group>"; };
-		42D745432BA374970048E9FA /* Record view.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Record view.swift"; sourceTree = "<group>"; };
 		42D745452BA3E3140048E9FA /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		42D745472BA3E3600048E9FA /* WeatherAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAPIClient.swift; sourceTree = "<group>"; };
 		42D745492BA3E6010048E9FA /* WeatherResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherResponse.swift; sourceTree = "<group>"; };
@@ -170,7 +168,6 @@
 				42672BDC2B7160800023CBE1 /* HealthKit.swift */,
 				423B4AAF2B83C5C6006EC87E /* RecordHomeView.swift */,
 				42D7454B2BA3E7F00048E9FA /* workout view.swift */,
-				42D745432BA374970048E9FA /* Record view.swift */,
 				423B4AB12B83C79C006EC87E /* ProfileView.swift */,
 				423B4AB32B83E168006EC87E /* ExcerciseListView.swift */,
 				42843B362B86C443005E11A4 /* RecommendationsView.swift */,
@@ -351,7 +348,6 @@
 				42D7454A2BA3E6010048E9FA /* WeatherResponse.swift in Sources */,
 				423B4AB42B83E168006EC87E /* ExcerciseListView.swift in Sources */,
 				4236C0672B73F0DD001DC6DC /* LogginCheck.swift in Sources */,
-				42D745442BA374970048E9FA /* Record view.swift in Sources */,
 				42D745482BA3E3600048E9FA /* WeatherAPIClient.swift in Sources */,
 				42403F4D2B9F95FA00238AB8 /* Logging.swift in Sources */,
 				423B4AB02B83C5C6006EC87E /* RecordHomeView.swift in Sources */,

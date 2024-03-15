@@ -10,7 +10,7 @@ import SwiftUI
 struct Logging: View {
         @Binding var selectedDate: Date?
         @State private var exerciseType: String = ""
-      
+        
         @State private var workoutDuration: Int = 30
         @State private var caloriesBurned: Double = 0.0
         @State private var isCardio: Bool = false
@@ -63,7 +63,7 @@ struct Logging: View {
 struct FoodLogging: View {
     @Binding var selectedDate: Date?
     @State private var dateString: String = ""
-    
+    @EnvironmentObject var userSettings: UserSettings
     @State private var foodItem: String = ""
     @State private var mealType: String = ""
     @State private var caloriesConsumed: Double = 0.0
@@ -103,7 +103,7 @@ struct FoodLogging: View {
 
                     
                                 let requestBody: [String: Any] = [
-                                                        "username": "",
+                                    "username": userSettings.username,
                                                         "date_logged": dateString,
                                                         "meals": [
                                                             [
@@ -166,6 +166,7 @@ struct BodyMetricLogging: View {
     @State private var height: Int = 0
     @State private var bodyFatPercentage: Double = 0.0
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var userSettings: UserSettings
     
     var body: some View {
         Form {
@@ -199,7 +200,7 @@ struct BodyMetricLogging: View {
                         print("Selected date string: \(dateString)")}
            
                     let requestb: [String: Any] = [
-                                            "username": "",
+                        "username": userSettings.username,
                                             "date_logged": "2022-03-02",
                                             "metrics": [
                                                 

@@ -14,7 +14,7 @@ struct DailyDecisionSurveyView: View {
     @State private var workoutDuration: Int = 30
     @State private var selectedEquipment: [String] = []
     @Environment(\.presentationMode) var presentationMode
-    
+    @EnvironmentObject var userSettings: UserSettings
     var availableEquipment = ["Weights", "Yoga Mat", "Bike", "Stationary Bike", "Stepmill/Stairmaster", "Stairs"]
     private func dismissSheet() {
             presentationMode.wrappedValue.dismiss()
@@ -81,7 +81,7 @@ struct DailyDecisionSurveyView: View {
                                 """
                                 // Create the request body
                                 let requestBody: [String: Any] = [
-                                    "username": "username",
+                                    "username": userSettings.username,
                                     "condition_description": conditionDescription
                                 ]
                                 

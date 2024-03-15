@@ -8,6 +8,8 @@ struct MobileApp: App {
     @StateObject var manager = HealthKit()
     @StateObject var authManager = AuthManager()
     let userSettings = UserSettings()
+    
+    @StateObject var userProfileData = UserProfileData()
     @State public var showAlert = false
 
     var sharedModelContainer: ModelContainer = {
@@ -29,6 +31,7 @@ struct MobileApp: App {
                 MainTabView()
                     .environmentObject(manager)
                     .environmentObject(userSettings)
+                    .environmentObject(userProfileData)
                     .background(
                         Image("Wallpaper")
                             .resizable()

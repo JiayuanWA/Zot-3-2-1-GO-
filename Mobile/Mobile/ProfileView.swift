@@ -1,10 +1,22 @@
 import SwiftUI
+var recommendedExerciseTime: Int = 0
+var recommendedSleepTime: Double = 0.0
+var recommendedCalorieIntake: Int = 0
+var recommendedCaloriesToBurn: Int = 0
+var recommendedDistanceToWalk: Int = 0
+var recommendedStepsToWalk: Int = 0
 
+
+class UserProfileData: ObservableObject {
+    @Published var userProfile = UserProfile(firstName: "", lastName: "", gender: "", age: "", height: "", weight: "", activityLevel: "", goals: "", fitnessLevel: "")
+}
 struct ProfileView: View {
+    @StateObject private var userProfileData = UserProfileData()
     @State private var profileData: UserProfile?
-    @EnvironmentObject var userSettings: UserSettings
     
-    @State private var userProfile = UserProfile(firstName: "", lastName: "", gender: "", age: "", height: "", weight: "", activityLevel: "", goals: "", fitnessLevel: "")
+    @EnvironmentObject var userSettings: UserSettings
+
+ 
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -29,37 +41,37 @@ struct ProfileView: View {
                           
                         Text("Body Mass Index: \(bmi, specifier: "%.2f")")
                             .font(.title3)
-                 
-
+                        
                             .padding(.bottom, 5)
                         
                         BMIProgressBar(bmi: bmi)
                             .frame(height: 20)
                             .padding(.horizontal)
+                            .padding(.bottom, 40)
+                        Text("Recommended Calorie Intake: \(calculateRecommendedCalorieIntake(data: data)) Kcal/day")
                         
+
                         
                     }
                 }
                 Spacer()
                 
-                ProfileInfoView(label: "Gender", value: data.gender ?? "", userProfile: $userProfile, field: "gender")
-                ProfileInfoView(label: "Age", value: data.age ?? "", userProfile: $userProfile, field: "age")
-                ProfileInfoView(label: "Height", value: data.height ?? "", userProfile: $userProfile, field: "height_cm")
-                ProfileInfoView(label: "Weight", value: data.weight ?? "", userProfile: $userProfile, field: "weight_kg")
-                ProfileInfoView(label: "Activity Level", value: data.activityLevel ?? "", userProfile: $userProfile, field: "activity_level")
-                ProfileInfoView(label: "Goals", value: data.goals ?? "", userProfile: $userProfile, field: "goals")
-                ProfileInfoView(label: "Fitness Level", value: data.fitnessLevel ?? "", userProfile: $userProfile, field: "fitness_level")
-                Text("Recommendations:")
-                                    .font(.title)
-                                    .fontWeight(.bold)
-                                    .padding(.top)
-                                
-                Text("Recommended Exercise Time: \(calculateRecommendedExerciseTime(activityLevel: data.activityLevel)) minutes/day")
-                               Text("Recommended Sleep Time: \(calculateRecommendedSleepTime(age: data.age)) hours/day")
-                               Text("Recommended Calorie Intake: \(calculateRecommendedCalorieIntake(data: data)) Kcal/day")
-                               Text("Recommended Calories to Burn: \(calculateRecommendedCaloriesToBurn(data: data)) Kcal/day")
-                               Text("Recommended Distance to Walk: \(calculateRecommendedDistanceToWalk()) steps/day")
-                             
+                ProfileInfoView(label: "Gender", value: data.gender ?? "", userProfile: $userProfileData.userProfile, field: "gender")
+                ProfileInfoView(label: "Age", value: data.age ?? "", userProfile: $userProfileData.userProfile, field: "age")
+                ProfileInfoView(label: "Height", value: data.height ?? "", userProfile: $userProfileData.userProfile, field: "height_cm")
+                ProfileInfoView(label: "Weight", value: data.weight ?? "", userProfile: $userProfileData.userProfile, field: "weight_kg")
+                ProfileInfoView(label: "Activity Level", value: data.activityLevel ?? "", userProfile: $userProfileData.userProfile, field: "activity_level")
+                ProfileInfoView(label: "Goals", value: data.goals ?? "", userProfile: $userProfileData.userProfile, field: "goals")
+                ProfileInfoView(label: "Fitness Level", value: data.fitnessLevel ?? "", userProfile: $userProfileData.userProfile, field: "fitness_level")
+//                Text("Recommendations:")
+//                                    .font(.title)
+//                                    .fontWeight(.bold)
+//                                    .padding(.top)
+//
+                
+                              
+               
+
 
             } else {
                 Text("Loading...")
@@ -86,7 +98,7 @@ struct ProfileView: View {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "GET" // Specify GET method
+        request.httpMethod = "GET" 
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse else {
@@ -225,12 +237,18 @@ private func calculateBMI(weight: Double, height: Double) -> Double {
     
     // Function to calculate BMR
     private func calculateBMR(data: UserProfile) -> Double {
-        // Assuming gender is male for simplicity (adjust if needed)
-        let genderFactor: Double = data.gender.lowercased() == "male" ? 5 : -161
-        let age = Double(data.age) ?? 0
-        let weight = Double(data.weight) ?? 0
-        let height = Double(data.height) ?? 0
-        let bmr = (10 * weight) + (6.25 * height) - (5 * age) + genderFactor
+
+        let age = Double(calculateAge(from: data.age)) ?? 0
+            let weight = Double(data.weight) ?? 0
+            let height = Double(data.height) ?? 0
+            
+            var bmr: Double = 0
+            
+            if data.gender.lowercased() == "male" {
+                bmr = 66.5 + (13.75 * weight) + (5.003 * height) - (6.75 * age)
+            } else {
+                bmr = 655.1 + (9.563 * weight) + (1.850 * height) - (4.676 * age)
+            }
         return bmr
     }
 
@@ -350,26 +368,158 @@ struct ProfileView_Previews: PreviewProvider {
 
 
 func calculateRecommendedExerciseTime(activityLevel: String) -> Int {
-   
-    return 30
+    var recommendedTime = 60 // Default value
+    
+    switch activityLevel {
+    case "sedentary":
+        recommendedTime = 30 // 30 minutes/day
+    case "moderate":
+        recommendedTime = 60 // 1 hour/day
+    case "active":
+        recommendedTime = 90 // 1.5 hours/day
+    case "very active":
+        recommendedTime = 120 // 2 hours/day
+    default:
+        return 99 // Default recommendation
+    }
+    
+    recommendedExerciseTime = recommendedTime
+    return recommendedTime
 }
 
-func calculateRecommendedSleepTime(age: String) -> Double {
-    
-    return 7.5
+
+func calculateRecommendedSleepTime(age: Int) -> Double {
+    var SleepTime: Double = 7.5
+    if age < 18 {
+        SleepTime = 8.0
+    } else if age >= 65 {
+        SleepTime = 7.0
+    }
+    recommendedSleepTime =  SleepTime
+    return  SleepTime
 }
+
 
 func calculateRecommendedCalorieIntake(data: UserProfile) -> Int {
+    let bmr = calculateBMR(data: data)
+    var activityFactorDescription = ""
+    var activityFactor: Double = 1.0
+    switch data.activityLevel {
+    case "sedentary":
+        activityFactorDescription = "sedentary (1.2)"
+        activityFactor = 1.2
+    case "moderate":
+        activityFactorDescription = "moderate (1.32)"
+        activityFactor = 1.32
+    case "active":
+        activityFactorDescription = "active (1.43)"
+        activityFactor = 1.42
+    case "very active":
+        activityFactorDescription = "very active (1.67)"
+        activityFactor = 1.67
+    default:
+        activityFactorDescription = "default (1.32)"
+        activityFactor = 1.32
+    }
     
-    return 2000
+    var goalFactorDescription = ""
+    var goalFactor: Double = 1.0
+    switch data.goals {
+    case "Weight Loss":
+        goalFactorDescription = "Weight Loss (0.8)"
+        goalFactor = 0.8
+    case "Weight Gain":
+        goalFactorDescription = "Weight Gain (1.2)"
+        goalFactor = 1.2
+    default:
+        goalFactorDescription = "default (1.0)"
+        goalFactor = 1.0
+    }
+    
+    let recommendedCalories = Int(bmr * activityFactor * goalFactor)
+    
+    print("Basal Metabolic Rate (BMR): \(bmr)")
+    print("Activity Level: \(activityFactorDescription)")
+    print("Goal: \(goalFactorDescription)")
+    print("Recommended Calories: \(recommendedCalories)")
+    recommendedCalorieIntake = recommendedCalories
+    return recommendedCalories
+    
+    
 }
+
+
+
 
 func calculateRecommendedCaloriesToBurn(data: UserProfile) -> Int {
+    let intake = calculateRecommendedCalorieIntake(data: data)
+    let bmr = Int(calculateBMR(data: data))
     
-    return 300
+    recommendedCaloriesToBurn = (intake - bmr)/2
+    return  (intake - bmr)/2
 }
 
-func calculateRecommendedDistanceToWalk() -> Int {
+func calculateRecommendedDistanceToWalk(data: UserProfile) -> Int {
+   
+    let stepsPerKilometer = 1300
     
-    return 10000
+
+    var recommendedStepsPerDay = 10000
+    
+    let age = Int(data.age) ?? 0
+    let gender = data.gender.lowercased()
+    let fitnessLevel = data.fitnessLevel.lowercased()
+    
+  
+    if age >= 65 {
+        recommendedStepsPerDay += 2000
+    }
+    
+    // Adjust recommended steps based on gender and fitness level
+    if gender == "male" {
+        if fitnessLevel == "beginner" {
+            recommendedStepsPerDay -= 1000 // Decrease for beginner males
+        } else if fitnessLevel == "advanced" {
+            recommendedStepsPerDay += 1000 // Increase for advanced males
+        }
+    } else {
+        if fitnessLevel == "beginner" {
+            recommendedStepsPerDay -= 500 // Decrease for beginner females
+        } else if fitnessLevel == "advanced" {
+            recommendedStepsPerDay += 500 // Increase for advanced females
+        }
+    }
+    
+    // Calculate the recommended distance to walk in kilometers
+    let recommendedDistanceInKilometers = Double(recommendedStepsPerDay) / Double(stepsPerKilometer)
+    
+    // Convert the distance to walk from kilometers to meters
+    let recommendedDistanceInMeters = Int(recommendedDistanceInKilometers * 1000)
+    recommendedDistanceToWalk = recommendedDistanceInMeters
+    
+    recommendedStepsToWalk = Int(1.2*Double(recommendedDistanceToWalk))
+    return recommendedDistanceInMeters
 }
+
+
+func calculateAge(from dateString: String) -> Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+
+        if let date = dateFormatter.date(from: dateString) {
+            dateFormatter.dateFormat = "MM/dd/yy"
+            let stringFormattedDate = dateFormatter.string(from: date)
+
+            if let dateOfBirth = dateFormatter.date(from: stringFormattedDate) {
+                let calendar = Calendar.current
+                let ageComponents = calendar.dateComponents([.year], from: dateOfBirth, to: Date())
+                return ageComponents.year ?? 0
+            } else {
+                return 0
+            }
+        } else {
+            return 0
+        }
+    }
+
+

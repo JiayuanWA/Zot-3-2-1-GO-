@@ -7,7 +7,7 @@ import SwiftUI
 struct workout_view: View {
     @EnvironmentObject var manager: HealthKit
     @State private var firstName: String = ""
-    @State private var username: String = "Alice"
+
     @State private var selectedDate: Date?
     @State private var showAlert = false
     @State private var isSurveyActive: Bool = false
