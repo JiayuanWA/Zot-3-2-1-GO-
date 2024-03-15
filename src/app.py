@@ -101,7 +101,6 @@ def create_app(test_config=None):
             user_info = cur.fetchone()
 
             # Log user_info for debugging
-            print("User Info:", user_info)
 
             if user_info:
                 cur.close()
@@ -111,7 +110,6 @@ def create_app(test_config=None):
                 return jsonify({"status": "fail", "message": "User not found"}), 404
         except Exception as e:
             # Log the exception for debugging
-            print("Error:", e)
             return jsonify({"status": "error", "message": "Internal Server Error"}), 500
 
 
@@ -512,7 +510,7 @@ def create_app(test_config=None):
                    f"Today's Intake Calories: {intake_calorie}, " \
                    f"Today's Exercise Calories: {exercise_calorie}, BMR: {daily_BMR}, "\
                    f"Conditions: {conditions_str}, "\
-                   f"I want you to choose from the following exercise and choose 10 exercises, and gives out recommended duration for rest of my day in json format in list called exercise_list with name and duration only: "\
+                   f"I want you to choose from the following exercise and choose top 10 most appropriate (by giving a score based on appropriateness) exercises based on previous description, and gives out recommended duration for rest of my day in json format in list called exercise_list with name, duration, and score only: "\
                    f"exercise list: {exercises}"
 
 
@@ -532,7 +530,6 @@ def create_app(test_config=None):
 
             # Parse the JSON string into a Python dictionary
             json_data = json.loads(json_str)
-            print(json_data)
             return jsonify(json_data), 201
         except (ValueError, json.JSONDecodeError) as e:
             # Handle cases where JSON parsing fails
@@ -567,7 +564,6 @@ def create_app(test_config=None):
         with open('exercise_dataset.csv', mode='r') as csvfile:
             csv_reader = csv.DictReader(csvfile)
             for row in csv_reader:
-                print(row['Activity, Exercise or Sport (1 hour)'])
                 if row['Activity, Exercise or Sport (1 hour)'] == exercise_name:
                     # Assuming the CSV contains a column for Calories per kg
                     # and the exercise matches exactly (consider implementing a more flexible search)
