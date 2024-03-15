@@ -305,7 +305,7 @@ def create_app(test_config=None):
         FROM daily_logs dl
         JOIN exercise_records er ON dl.log_id = er.log_id
         WHERE dl.user_id = %s
-        ORDER BY dl.date_logged, er.time_started;
+        ORDER BY dl.date_logged;
         """
         cur = mysql.connection.cursor()
         cur.execute(query, (user_id,))
@@ -572,7 +572,7 @@ def create_app(test_config=None):
                     # Assuming the CSV contains a column for Calories per kg
                     # and the exercise matches exactly (consider implementing a more flexible search)
                     calories_per_kg = float(row['Calories per kg'])
-                    return calories_per_kg * float(weight_kg) * 60
+                    return calories_per_kg * float(weight_kg) * 2.2 * 2.2
         return None
 
 
