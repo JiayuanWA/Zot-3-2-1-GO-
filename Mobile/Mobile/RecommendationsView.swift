@@ -9,8 +9,8 @@ struct RecommendationModel: Decodable {
 class RecommendationsEngine {
     func generateRecommendations() -> [RecommendationModel] {
         return [
-            //change the content and make it appear after post request
-            RecommendationModel(title: "Today Workout Recommendations", description: "...Waiting"),
+           
+            RecommendationModel(title: "Today Workout Recommendations", description: "...Give us some time to retrieve your personalized exercise recommendations"),
 //            RecommendationModel(title: "Mindful Meditation", description: "Try a 10-minute mindfulness meditation."),
 //            RecommendationModel(title: "Strength Training", description: "Incorporate strength exercises into your routine.")
         ]
@@ -20,16 +20,16 @@ class RecommendationsEngine {
 struct RecommendationsView: View {
     let recommendationsEngine = RecommendationsEngine()
     @EnvironmentObject var userSettings: UserSettings
-    @State private var showRecords = false
     @State private var recommendations: [RecommendationModel] = []
     let brownColor = Color(red: 0.6, green: 0.4, blue: 0.2)
-
+    @StateObject var userPreferences = UserPreferences()
+    
     var body: some View {
         VStack {
             Text("Personalized Recommendations")
-                .font(.title)
+                .font(.custom("UhBee Se_hyun", size: 18))
+                .fontWeight(.bold)
                 .padding()
-            
            
             
             List(recommendations, id: \.title) { recommendation in
@@ -44,38 +44,18 @@ struct RecommendationsView: View {
                 
                 
             }
-            
-            Button(action: {
-                            showRecords.toggle()
-                        }) {
-                            Text("Show Exercise Records")
-                                .padding()
-                                .background(brownColor)
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
-                        }
-                        
-                        if showRecords && !exerciseRecords.isEmpty {
-                            RecordListView(records: exerciseRecords)
-                                .padding(.top, 20)
-                        }
-//            Text("Recommended Exercise Time: \(calculateRecommendedExerciseTime(activityLevel: data.activityLevel)) minutes/day")
-//                           Text("Recommended Sleep Time: \(calculateRecommendedSleepTime(age: calculateAge(from: data.age))) hours/day")
-//                           Text("Recommended Calorie Intake: \(calculateRecommendedCalorieIntake(data: data)) Kcal/day")
-//                           Text("Recommended Calories to Burn: \(calculateRecommendedCaloriesToBurn(data: data)) Kcal/day")
-//            Text("Recommended Distance to Walk: \(Int(1.2*Double(calculateRecommendedDistanceToWalk(data: data))))steps/day")
-//           
+   
+      
         }
         .onAppear {
-            // Call the function to generate recommendations
-            recommendations = recommendationsEngine.generateRecommendations()
             
-            // Send POST request to get personalized recommendations
+            recommendations = recommendationsEngine.generateRecommendations()
+        
             fetchPersonalizedRecommendations()
         }
     }
     
-    // Function to send POST request and update recommendations based on the response
+
     private func fetchPersonalizedRecommendations() {
         guard let url = URL(string: "http://52.14.25.178:5000/get_recommendation") else {
             print("Invalid URL")
@@ -84,7 +64,7 @@ struct RecommendationsView: View {
         
         let requestBody: [String: Any] = [
             "username": userSettings.username,
-            "date": "2024-03-14"
+            "date": userPreferences.selectedDate
         ]
         
         var request = URLRequest(url: url)

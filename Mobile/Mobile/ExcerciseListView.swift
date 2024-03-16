@@ -24,8 +24,8 @@ struct ExerciseListView: View {
     @State private var searchText: String = ""
     @State private var duration: String = ""
     @State private var caloriesBurned: Double?
-    @State private var isCaloriesCalculated: Bool = false // New state variable
-
+    @State private var isCaloriesCalculated: Bool = false 
+    @StateObject var userPreferences = UserPreferences()
     var filteredExercises: [Exercise] {
         if searchText.isEmpty {
             return exercises
@@ -38,11 +38,18 @@ struct ExerciseListView: View {
 
     var body: some View {
         VStack {
+            
+
+            Text("Search and Log Exercise")
+                .font(.custom("UhBee Se_hyun", size: 18))
+                .fontWeight(.bold)
+            
+            
             SearchBar(text: $searchText)
                 .padding(.horizontal)
             List(filteredExercises) { exercise in
                 VStack(alignment: .leading) {
-                    Text("\(exercise.activity)") // Use the combined activity
+                    Text("\(exercise.activity)")
                         .font(.headline)
                         .onTapGesture {
                             if selectedExercise == exercise {
@@ -103,7 +110,7 @@ struct ExerciseListView: View {
                                                let caloriesBurned = json["calories_burned"] as? Double {
                                                 DispatchQueue.main.async {
                                                     self.caloriesBurned = caloriesBurned
-                                                    self.isCaloriesCalculated = true // Update isCaloriesCalculated
+                                                    self.isCaloriesCalculated = true 
                                                 }
                                             } else {
                                                 print("Calories burned not found in response")
@@ -142,7 +149,7 @@ struct ExerciseListView: View {
                             
                             let data: [String: Any] = [
                                                                  "username": userSettings.username,
-                                                                 "date_logged": "2024-03-15",
+                                                                 "date_logged": userPreferences.selectedDate,
                                                                   "exercises": [[
                                                                          "type":  exercise.activity,
                                                                          "duration": duration,

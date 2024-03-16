@@ -24,12 +24,11 @@ struct ProfileView: View {
             
             if let data = profileData {
                 Text("Hi, \(data.firstName) \(data.lastName)")
-                    .font(.title)
+                    .font(.custom("UhBee Se_hyun", size: 18))
                     .fontWeight(.bold)
-                    .padding()
                 
-                
-                // Visual representation of BMI
+              
+              
                 if let height = Double(data.height ?? ""), let weight = Double(data.weight ?? "") {
                     let heightInMeters = height / 100 // Convert height from cm to meters
                     let bmi = calculateBMI(weight: weight, height: heightInMeters)
@@ -48,6 +47,8 @@ struct ProfileView: View {
                             .frame(height: 20)
                             .padding(.horizontal)
                             .padding(.bottom, 40)
+                        
+                        
                         Text("Recommended Calorie Intake: \(calculateRecommendedCalorieIntake(data: data)) Kcal/day")
                         
 

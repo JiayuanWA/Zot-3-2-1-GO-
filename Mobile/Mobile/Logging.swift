@@ -69,6 +69,10 @@ struct FoodLogging: View {
     @State private var caloriesConsumed: Double = 0.0
     @Environment(\.presentationMode) var presentationMode
     
+    
+  
+    
+    
     var body: some View {
         Form {
             Section(header: Text("Food Item")) {
@@ -234,7 +238,7 @@ struct BodyMetricLogging: View {
                                                 print("Response status code: \(httpResponse.statusCode)")
                                                 
                                                 if httpResponse.statusCode == 201 {
-                                                    // Log intake successful, show alert
+                                                    
                                                     DispatchQueue.main.async {
                                                                                        let alertController = UIAlertController(title: "Success", message: "Logged body metrics for \(dateString)", preferredStyle: .alert)
                                                                                        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

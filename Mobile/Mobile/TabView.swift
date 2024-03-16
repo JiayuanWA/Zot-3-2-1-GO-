@@ -21,7 +21,7 @@ struct MainTabView: View {
 
             HomeView()
                 .tabItem {
-                    Image(systemName: "house.fill")
+                    Image(systemName: "list.bullet.clipboard")
                     Text("Log")
                 }
                 .environmentObject(userSettings)
@@ -34,8 +34,11 @@ struct MainTabView: View {
                 .font(.custom("UhBee Se_hyun", size: 14))
 
             NavigationView {
-                    ExerciseListView()
-                        .navigationBarTitle("Exercise List", displayMode: .inline)
+                ExerciseListView()
+                    .navigationBarTitleDisplayMode(.inline)
+                    .font(.custom("UhBee Se_hyun", size: 14)) 
+
+
                 }
                 .tabItem {
                     Image(systemName: "star.fill")
@@ -54,14 +57,10 @@ struct MainTabView: View {
                                 Image(systemName: "heart.fill")
                                 Text("Recommendations")
                             }
-                            .environmentObject(userSettings)
-                            .background(
-                                Image("Wallpaper")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .edgesIgnoringSafeArea(.all)
-                            )
+                            
 
+                            .environmentObject(userSettings)
+                            
             ProfileView()
                 .tabItem {
                     Image(systemName: "person.fill")
@@ -74,6 +73,8 @@ struct MainTabView: View {
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all)
                 )
+      
+
             
         }
         .accentColor(.blue) 

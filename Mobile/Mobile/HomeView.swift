@@ -5,7 +5,7 @@ struct HomeView: View {
     class UserPreferences: ObservableObject {
         @Published var selectedDate: Date?
     }
-
+    @State private var showRecords = false
     @State private var showAlert = false
     @State private var isSurveyActive: Bool = false
     @State private var hasUserTakenSurveyToday = false
@@ -24,6 +24,8 @@ struct HomeView: View {
                 Text("Log your progress!")
                     .font(.custom("UhBee Se_hyun", size: 24))
                     .fontWeight(.bold)
+                
+                
                 
                 .sheet(isPresented: $isSurveyActive) {
                     DailyDecisionSurveyView(selectedDate: $userPreferences.selectedDate)
@@ -76,7 +78,7 @@ struct HomeView: View {
                 }
                 .frame(maxWidth: 300, maxHeight: 20)
                 .padding()
-                .background(.gray)
+                .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.black]), startPoint: .leading, endPoint: .trailing))
                 .cornerRadius(15)
                 .shadow(radius: 5)
                 .sheet(isPresented: $isLoggingWorkoutActive) {
@@ -128,6 +130,37 @@ struct HomeView: View {
                 .sheet(isPresented: $isLoggingBodyMetricsActive) {
                     BodyMetricLogging(selectedDate: $userPreferences.selectedDate)
                 }
+                
+                
+                Button(action: {
+                                showRecords.toggle()
+                            }) {
+                                HStack {
+                                    Text("Full Workout Record")
+                                        .font(.custom("UhBee Se_hyun", size: 18))
+                                        .foregroundColor(.white)
+                                   Image(systemName: "list.bullet.clipboard")
+                                        .font(.custom("UhBee Se_hyun", size: 18))
+                                        .foregroundColor(.white)
+                                        .padding(.trailing, 10)
+                                }
+                            }.frame(maxWidth: 300, maxHeight:20)
+                    .padding()
+                    .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.black]), startPoint: .leading, endPoint: .trailing))
+                    .cornerRadius(15)
+                    .shadow(radius: 5)
+                    .sheet(isPresented: $isLoggingBodyMetricsActive) {
+                        BodyMetricLogging(selectedDate: $userPreferences.selectedDate)
+                    }
+                            
+                            if showRecords && !exerciseRecords.isEmpty {
+                                RecordListView(records: exerciseRecords)
+                                    .padding(.top, 20)
+                                    
+                            }
+                
+                
+                
                 Spacer()
             }
             .onAppear {
@@ -137,5 +170,4 @@ struct HomeView: View {
             }
         }
     }
-
 

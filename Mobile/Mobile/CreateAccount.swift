@@ -63,24 +63,7 @@ struct CreateAccount: View {
                     if password == confirmPassword {
                         isAccountCreated = true
                         print("here")
-//                        networkManager.registerUser(
-//                            username: username,
-//                            password: password,
-//                            first_name:first_name,
-//                            last_name: last_name,
-//                            gender: gender,
-//                            date_of_birth: date_of_birth,
-//                            height: height,
-//                            weight: weight,
-//                            activity_level: activity_level,
-//                            goals: goals,
-//                            fitness_level: fitness_level
-//                        )
-                        
-                    
-                        
-//                        networkManager.registerUser(username: username, password: password, firstName: "NA", lastName: "NA", gender: "male", dateOfBirth: "2002-12-21", height: 0, weight: 0, activityLevel: "moderate", goals: ["lose weight", "improve cardio"], fitnessLevel:"intermediate")
-//                       
+
                         
                     } else {
                         print("Passwords don't match")

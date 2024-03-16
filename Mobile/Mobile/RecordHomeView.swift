@@ -43,7 +43,7 @@ struct RecordHomeView: View {
         VStack(alignment: .center) {
             
             
-            Text("Welcome, \(firstName)")
+            Text("Welcome, \(userSettings.username)")
                 .font(.custom("UhBee Se_hyun", size: 24))
                 .fontWeight(.bold)
             
@@ -58,14 +58,7 @@ struct RecordHomeView: View {
             
             
             if let userProfile = profileData{
-//                               
-//                                Text("Recommended Calorie Intake: \(calculateRecommendedCalorieIntake(data: userProfile)) Kcal/day")
-//                                Text("Recommended Calories to Burn: \(calculateRecommendedCaloriesToBurn(data: userProfile)) Kcal/day")
-//                               
-//                            } else {
-//                                Text("User profile data not available")
-//                            }
-                
+
                 WeekProgressView(selectedDate: $userPreferences.selectedDate, startOfWeekDates: Date.startOfWeekDates())
                     .padding(.horizontal)
                     .padding(.top, 20)
@@ -138,14 +131,7 @@ struct RecordHomeView: View {
             manager.fetchSleepData(startDate: startOfDay, endDate: endOfDay)
             exerciseDuration = calculateExerciseDuration()
             totalCaloriesBurned = calculateTotalCaloriesBurned()
-//            if let userProfile = profileData{
-//            calculateRecommendedExerciseTime(activityLevel: userProfile.activityLevel)
-//            calculateRecommendedSleepTime(age: calculateAge(from: userProfile.age))
-//            calculateRecommendedCalorieIntake(data: userProfile)
-//            calculateRecommendedCaloriesToBurn(data: userProfile)
-//           // Int(1.2 * Double(calculateRecommendedDistanceToWalk(data: userProfile))
-//           
-//                }
+
         }
         
         .onReceive(manager.$activities) { _ in
@@ -233,8 +219,7 @@ struct RecordHomeView: View {
         guard let selectedDate = userPreferences.selectedDate else { return 0 }
 
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yy" // Adjust the format according to your needs
-
+        dateFormatter.dateFormat = "MM/dd/yy"
         let selectedDateString = dateFormatter.string(from: selectedDate)
 
         let totalDuration = exerciseRecords.reduce(0.0) { (result, record) in
@@ -254,7 +239,7 @@ struct RecordHomeView: View {
     }
 
     func fetchExerciseDuration(for username: String) {
-        exerciseRecords.removeAll() // Clear the exerciseRecords array
+        exerciseRecords.removeAll() 
 
         let urlString = "http://52.14.25.178:5000/get_exercise_records/\(username)"
         guard let url = URL(string: urlString) else {
