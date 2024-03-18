@@ -24,11 +24,12 @@ struct RecordHomeView: View {
     @EnvironmentObject var userSettings: UserSettings
     @EnvironmentObject var userProfileData: UserProfileData
     @State private var profileData: UserProfile?
-    
+
     @EnvironmentObject var manager: HealthKit
     @State private var firstName: String = ""
 
     @StateObject var userPreferences = UserPreferences()
+
     @State private var showAlert = false
     @State private var isSurveyActive: Bool = false
     @State private var hasUserTakenSurveyToday = false
@@ -107,9 +108,7 @@ struct RecordHomeView: View {
             }
             
             
-            
-            
-            
+       
             Spacer()
             
         }
@@ -143,6 +142,7 @@ struct RecordHomeView: View {
     }
         func fetchData(for username: String) {
             // Construct the URL with username parameter
+            print("username is \(username)")
             let urlString = "http://52.14.25.178:5000/profile/\(username)"
             guard let url = URL(string: urlString) else {
                 print("Invalid URL")
@@ -270,7 +270,7 @@ struct RecordHomeView: View {
             do {
                 if let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[Any]] {
                     var recordID = 0
-
+                    print("Retrieved JjsonArray: \(jsonArray)")
                     for record in jsonArray {
                         if record.count >= 4,
                             let dateString = record[0] as? String,

@@ -4,16 +4,15 @@ import SwiftUI
 class UserSettings: ObservableObject {
     @Published var username: String = ""
 }
-
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject var manager = HealthKit()
     @EnvironmentObject var authManager: AuthManager
-
     @EnvironmentObject var userSettings: UserSettings
     
     @State private var password: String = ""
     @State public var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         NavigationView {
@@ -27,6 +26,13 @@ struct ContentView: View {
                             .scaledToFill()
                             .edgesIgnoringSafeArea(.all)
                     )
+                    .alert(isPresented: $showAlert) {
+                        Alert(
+                            title: Text("Error"),
+                            message: Text(alertMessage),
+                            dismissButton: .default(Text("OK"))
+                        )
+                    }
             }
         }
         .onAppear {
@@ -62,7 +68,11 @@ struct ContentView: View {
             }
 
             Button(action: {
-                authManager.loginUser(username: userSettings.username, password: password)
+                if userSettings.username.isEmpty {
+                    
+                } else {
+                    authManager.loginUser(username: userSettings.username, password: password)
+                }
             }) {
                 Text("Login")
                     .foregroundColor(.white)
@@ -79,7 +89,6 @@ struct ContentView: View {
         .padding()
     }
 }
-
 
 
 extension UIFont {

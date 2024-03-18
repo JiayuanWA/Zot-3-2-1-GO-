@@ -2,7 +2,9 @@ import Foundation
 
 class AuthManager: ObservableObject {
     @Published var isLoggedIn: Bool = false
-
+    @Published var showAlert = false
+        @Published var alertMessage = ""
+    
     func loginUser(username: String, password: String) {
         // Create a URL object with the login endpoint
         guard let loginURL = URL(string: "http://52.14.25.178:5000/login") else {
@@ -15,7 +17,6 @@ class AuthManager: ObservableObject {
         loginRequest.httpMethod = "POST"
         loginRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        // Create the login data to send
         let loginData: [String: String] = ["username": username, "password": password]
 
         // Convert loginData to JSON data
@@ -24,7 +25,7 @@ class AuthManager: ObservableObject {
             return
         }
 
-        // Attach JSON data to the request
+
         loginRequest.httpBody = jsonData
 
         // Perform the login request
@@ -38,15 +39,15 @@ class AuthManager: ObservableObject {
             if let httpResponse = response as? HTTPURLResponse {
                 if (200...299).contains(httpResponse.statusCode) {
                     print("login success ")
-                    // Login successful
-                    // Update isLoggedIn state
+                 
                     DispatchQueue.main.async {
                         self.isLoggedIn = true
-                        // Call initializeDailyLog after successful login
+                    
                         self.initializeDailyLog(username: username)
                     }
                 } else {
-                    // Login failed
+                    self.alertMessage = "Login failed with status code: \(httpResponse.statusCode)"
+                                       self.showAlert = true
                     print("Login failed with status code: \(httpResponse.statusCode)")
                 }
             }
@@ -59,34 +60,34 @@ class AuthManager: ObservableObject {
             return
         }
 
-        // Create a URLRequest with POST method
+
         var initializeRequest = URLRequest(url: initializeURL)
         initializeRequest.httpMethod = "POST"
         initializeRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        // Create the initialize data to send
+
         let initializeData: [String: String] = ["username": username]
 
-        // Convert initializeData to JSON data
+
         guard let jsonData = try? JSONSerialization.data(withJSONObject: initializeData) else {
             print("Error creating JSON data for initialize_daily_log")
             return
         }
 
-        // Attach JSON data to the request
+
         initializeRequest.httpBody = jsonData
 
-        // Perform the initialize daily log request
+
         URLSession.shared.dataTask(with: initializeRequest) { data, response, error in
             guard let data = data, error == nil else {
                 print("Error: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
 
-            // Parse the response JSON
+
             if let httpResponse = response as? HTTPURLResponse {
                 if (200...299).contains(httpResponse.statusCode) {
-                    // Initialization successful
+               
                     print("Daily log initialized successfully")
                 } else {
                     // Initialization failed

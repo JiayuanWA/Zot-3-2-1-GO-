@@ -26,6 +26,8 @@ struct ExerciseListView: View {
     @State private var caloriesBurned: Double?
     @State private var isCaloriesCalculated: Bool = false 
     @StateObject var userPreferences = UserPreferences()
+    
+
     var filteredExercises: [Exercise] {
         if searchText.isEmpty {
             return exercises
@@ -146,10 +148,11 @@ struct ExerciseListView: View {
                                 print("Please calculate calories first.")
                                 return
                             }
-                            
+                            print("User is \(userSettings.username)")
+                            print("Date is \(userPreferences.selectedDate)")
                             let data: [String: Any] = [
                                                                  "username": userSettings.username,
-                                                                 "date_logged": userPreferences.selectedDate,
+                                                                 "date_logged": "2024-03-17",
                                                                   "exercises": [[
                                                                          "type":  exercise.activity,
                                                                          "duration": duration,

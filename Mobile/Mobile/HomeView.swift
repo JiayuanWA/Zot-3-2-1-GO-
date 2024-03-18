@@ -149,14 +149,11 @@ struct HomeView: View {
                     .background(LinearGradient(gradient: Gradient(colors: [Color.gray, Color.black]), startPoint: .leading, endPoint: .trailing))
                     .cornerRadius(15)
                     .shadow(radius: 5)
-                    .sheet(isPresented: $isLoggingBodyMetricsActive) {
-                        BodyMetricLogging(selectedDate: $userPreferences.selectedDate)
-                    }
-                            
+                           
                             if showRecords && !exerciseRecords.isEmpty {
                                 RecordListView(records: exerciseRecords)
                                     .padding(.top, 20)
-                                    
+                                   
                             }
                 
                 
